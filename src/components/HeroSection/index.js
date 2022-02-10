@@ -5,6 +5,7 @@ import {
 } from './HeroElements';
 import logo from '../../images/Boiler Breakouts-logos.jpeg';
 
+
 function HeroSection() {
 
 
@@ -15,6 +16,7 @@ function HeroSection() {
             <HeroContent>
 
                 <HeroSLogo src={logo}/>
+
             </HeroContent>
 
 
