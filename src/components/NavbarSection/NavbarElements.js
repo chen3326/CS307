@@ -3,11 +3,11 @@ import { Link as LinkR } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const Nav = styled.nav`
-  background: rgba(234,159,68,0.72);
+  background: darkslategray;
 
   backdrop-filter: saturate(180%) blur(20px);
   height: 40px;
-  margin-top: -40px;
+  margin-top: -0px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -40,7 +40,7 @@ export const NavLogo = styled(LinkR)`
   cursor: pointer;
   font-size: 1.5rem;
   display: flex;
-  align-items: center;
+  align-items: start;
   margin-left: 24px;
   font-weight: bold;
   text-decoration: none;
