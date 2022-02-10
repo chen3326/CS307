@@ -6,7 +6,7 @@ export const AboutContainer = styled.div`
   display: flex;
   align-items: center;
   height: 1050px;
-  background: #232323;
+  background: rgb(234,159,68);
 
  
 `;
