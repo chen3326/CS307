@@ -11,10 +11,11 @@ function Home() {
         <>
 
             <NavSection/>
-            <PostSection/>
+
             <SidebarSection/>
             <HeroSection/>
             <AboutSection/>
+            <PostSection/>
 
 
         </>
