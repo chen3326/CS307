@@ -1,17 +1,21 @@
 import React from 'react';
 import CreatePostIcon from '@mui/icons-material/Create';
-import Fab from '@material-ui/core/Fab'
-
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import { Container, Button, Link } from 'react-floating-action-button'
 
 function Post(){
 
     return (
-        <div className= "Post">
-            <Fab style={{marginTop: 600,marginLeft: 1450, position : "absolute"}} color = 'primary' aria-label = 'add' size = 'large' >
-                <CreatePostIcon/>
-            </Fab>
-        </div>
-
+        <Container styles={{color: 'darkblue'}}>
+            <CreatePostIcon/> Make a Post Here <ArrowDownwardIcon/>
+            <Button
+                tooltip="Click to make a new post"
+                icon="fa-plus"
+                rotate={true}
+                styles={{backgroundColor: 'darkblue' }}
+                onClick={() => alert('Add post here') }
+            />
+        </Container>
     );
 }
 
