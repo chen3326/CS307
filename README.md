@@ -21,8 +21,8 @@ npm install @mui/material @emotion/react @emotion/styled
 
 and
 
-npm install @mui/material @mui/styled-engine-sc styled-components
-
 npm install @mui/icons-material
 
+This website to search icons you want to use
 
+https://mui.com/components/material-icons/
