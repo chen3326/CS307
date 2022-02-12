@@ -17,12 +17,13 @@ function AboutSection() {
         <AboutContainer id='aboutMe'>
             <AboutContent>
                 <AboutTitle>Boiler Breakouts</AboutTitle>
-                <AboutTitle>a</AboutTitle>
+                <AboutTitle>a rabbit</AboutTitle>
 
-                <AboutText> sdfsdfsadfasdfsdafsadfasdfasdfsadfdsfsadf
-                    sdafsdafdsafdsafsadfasdfsadf
+                <AboutText> wow wow
 
                 </AboutText>
+                <button>LOOK</button>
+                <button>red</button>
 
             </AboutContent>
 

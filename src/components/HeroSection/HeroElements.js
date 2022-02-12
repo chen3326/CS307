@@ -2,8 +2,8 @@ import styled from 'styled-components';
 
 
 export const HeroContainer = styled.div`
-  
-  background-color: #232323;
+
+  background: rgb(234,159,68);
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -31,7 +31,7 @@ export const HeroContent = styled.div`
 
 export const HeroH1 = styled.div`
 
-  color: red;
+
 
   font-size: 100px;
 
