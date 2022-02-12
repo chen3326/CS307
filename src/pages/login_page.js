@@ -12,12 +12,13 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 //main welcome page with login and link to signing in
+//stying margins for ux
 const styles =  {
     form: {
         textAlign: 'center'
     },
     image: {
-        margin: '20px auto 20px auto'
+        margin: '70px auto 20px auto'
     },
     pageTitle: {
         margin: '10px auto 10px auto'
@@ -26,7 +27,7 @@ const styles =  {
         margin: '10px auto 10px auto'
     },
     button: {
-        margin: '10px auto 10px auto'
+        marginTop: '10px auto 10px auto'
     }
 };
 
@@ -48,26 +49,27 @@ class Login extends Component
     {
         console.log('hi');
     };
-
     handleChange = (event) =>
     {
         this.setState({[event.target.name]: event.target.value});
     };
 
+    //actual loading of screen
     render()
     {
         const { classes } = this.props;
         return (
             <Grid container className={classes.form}>
                 <Grid item sm />
-                <Grid item sm></Grid>
+                <Grid item sm> {/*middle of grids so centered*/}
                     {/**todo:resize logo*/}
-                    {/*<img src={AppLogo} alt="logo"/>*/}
+                    <img src={AppLogo} alt="logo"/>
 
                     <Typography variant="h2" className={classes.pageTitle}>
                         Login
                     </Typography>
                     <form noValidate onSubmit={this.handleSubmit}>
+
                         <TextField
                             id="email"
                             name="email"
@@ -96,8 +98,9 @@ class Login extends Component
                         >
                             Login
                         </Button>
-                    </form>
 
+                    </form>
+                </Grid>
                 <Grid item sm/>
             </Grid>
         );
