@@ -63,7 +63,7 @@ class Login extends Component
                 <Grid item sm />
                 <Grid item sm> {/*middle of grids so centered*/}
                     {/**todo:resize logo*/}
-                    <img src={AppLogo} alt="logo"/>
+                    <img src={AppLogo} alt="logo" width='150px'/>
 
                     <Typography variant="h2" className={classes.pageTitle}>
                         Login
