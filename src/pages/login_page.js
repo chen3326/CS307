@@ -93,12 +93,12 @@ class Login extends Component
                             variant="contained"
                             color="primary"
                             className={classes.button}
-                            disabled={loading}
                         >
                             Login
                         </Button>
-                </Grid item sm>
-                <Grid item sm />
+                    </form>
+
+                <Grid item sm/>
             </Grid>
         );
     }
