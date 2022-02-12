@@ -1,51 +1,112 @@
 import React, { Component } from 'react';
+import AppLogo from '../images/Boiler Breakouts-logos.jpeg';
+import PropTypes from 'prop-types';
+
+//import AuthSection from "../components/AuthSection";
+
+//MUX extentions
+import withStyles from '@material-ui/core/styles/withStyles';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
 //main welcome page with login and link to signing in
+const styles =  {
+    form: {
+        textAlign: 'center'
+    },
+    image: {
+        margin: '20px auto 20px auto'
+    },
+    pageTitle: {
+        margin: '10px auto 10px auto'
+    },
+    textField: {
+        margin: '10px auto 10px auto'
+    },
+    button: {
+        margin: '10px auto 10px auto'
+    }
+};
+
 class Login extends Component
 {
     constructor()
     {
         super();
+        //todo:make username section
         this.state={
             email: '',
-            password: ''
+            password: '',
+            loading: false,
+            errors: {}
         };
     }
 
     handleSubmit = (event) =>
     {
-        event.preventDefault();
-        const user = {
-            email: this.state.email,
-            //username: this.state.name,
-            password: this.state.pwd
-        };
-        //this.props.loginUser(userData, this.props.history);
-
+        console.log('hi');
     };
 
-    handleChange = (event) => {
+    handleChange = (event) =>
+    {
         this.setState({[event.target.name]: event.target.value});
     };
 
     render()
     {
-        return(
-            <div>
-                <div>
-                    {/*todo: put some logo here*/}
-                </div>
-                <div>
-                    <form onSubmit = {this.handelSubmit}>
-                        {/*todo: find a way so that name/amil can be but either way*/}
-                        <input type = 'email' placeholder = 'email' required onChange={this.handleChange}/>
-                        <input type = 'password' name = 'password' placeholder = 'password' required onChange={this.handelChange}/>
-                        <button onSubmit = {this.handelSubmit}>Log In</button>
-                    </form>
-                </div>
-            </div>
-        )
+        const { classes } = this.props;
+        return (
+            <Grid container className={classes.form}>
+                <Grid item sm />
+                <Grid item sm></Grid>
+                    {/**todo:resize logo*/}
+                    {/*<img src={AppLogo} alt="logo"/>*/}
+
+                    <Typography variant="h2" className={classes.pageTitle}>
+                        Login
+                    </Typography>
+                    <form noValidate onSubmit={this.handleSubmit}>
+                        <TextField
+                            id="email"
+                            name="email"
+                            type="email"
+                            label="Email"
+                            className={classes.textField}
+                            value={this.state.email}
+                            onChange={this.handleChange}
+                            fullWidth
+                        />
+                        <TextField
+                            id="password"
+                            name="password"
+                            type="password"
+                            label="Password"
+                            className={classes.textField}
+                            value={this.state.password}
+                            onChange={this.handleChange}
+                            fullWidth
+                        />
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            className={classes.button}
+                            disabled={loading}
+                        >
+                            Login
+                        </Button>
+                </Grid item sm>
+                <Grid item sm />
+            </Grid>
+        );
     }
 }
 
-export default Login;
+//for functions
+Login.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(Login);
