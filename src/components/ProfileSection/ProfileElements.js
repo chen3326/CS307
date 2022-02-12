@@ -5,9 +5,9 @@ export const ProfileContainer = styled.div`
   display: flex;
   //align-items: center;
   height: 1050px;
-  background: #232323;
-  //margin: 80px auto 0 auto;
-  //max-width: 1200px;
+  //background: #232323;
+  margin: 80px auto 0 auto;
+  max-width: 1200px;
 
  
 `;
@@ -40,6 +40,7 @@ export const ProfilePic = styled.img`
   align-items: stretch;
   justify-content: flex-start;
   height: 20vh;
+  border-radius: 10px;
   
 `;
 
@@ -56,13 +57,13 @@ export const ProfileContent = styled.div`
 
 `
 export const UserName = styled.div`
-  display: flex;
+{/*display: flex;
   flex-direction: row;
   justify-content: center;
+*/}
 
-
-  width: 40vw;
-  color: white;
+  width: 30vw;
+  color: black;
   font-size: 5rem;
   font-weight: bold;
 
@@ -79,21 +80,14 @@ export const ProfileText = styled.div`
   
 `
 
-export const FollowButton = styled.div`
-
-`;
 
 export const ProfileStats = styled.div`
 
 `;
 
 export const UserStats = styled.div`
-
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  margin: 10px auto 10px auto;
+  
+  margin: 10px 0px 10px 0px;
 
     
 ` ;
@@ -119,10 +113,12 @@ export const Posts = styled.div`
 export const Liked = styled.div`
 
 `;
-export const Comments = styled.div`
+export const TabCard = styled.div`
+  margin: 10px 0px 10px 0px;
 
 `;
-export const Saved = styled.div`
+export const FollowButton = styled.div`
+    margin: 10px 0px 20px 0px; 
 
 `;
 

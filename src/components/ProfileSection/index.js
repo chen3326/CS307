@@ -10,7 +10,9 @@ import BookmarkRoundedIcon from '@mui/icons-material/BookmarkRounded';
 import PropTypes from 'prop-types';
 
 import {
-    ProfilePic, UserStats,
+    FollowButton,
+    ProfileContainer,
+    ProfilePic, TabCard, UserName, UserStats,
 } from './ProfileElements';
 
 import pic from "../../images/cat_pic.jpg";
@@ -63,8 +65,8 @@ function FullWidthTabs() {
 
     return (
 
-        <Box sx={{ bgcolor: 'orange'}}>
-            <AppBar position="static">
+        <Box sx={{ bgcolor: 'orange', borderRadius: '10px'}}>
+            <AppBar position="static"sx={{borderRadius: '10px'}}>
                 <Tabs
                     value={value}
                     onChange={handleChange}
@@ -80,17 +82,27 @@ function FullWidthTabs() {
                 </Tabs>
             </AppBar>
                 <TabPanel value={value} index={0} dir={theme.direction}>
-                    <OutlinedCard></OutlinedCard>
-                    <OutlinedCard></OutlinedCard>
+                    <TabCard>
+                        <OutlinedCard/>
+                    </TabCard>
+                    <TabCard>
+                        <OutlinedCard/>
+                    </TabCard>
                 </TabPanel>
                 <TabPanel value={value} index={1} dir={theme.direction}>
-                    <OutlinedCard></OutlinedCard>
+                <TabCard>
+                    <OutlinedCard/>
+                </TabCard>
                 </TabPanel>
                 <TabPanel value={value} index={2} dir={theme.direction}>
-                    <OutlinedCard></OutlinedCard>
+                <TabCard>
+                    <OutlinedCard/>
+                </TabCard>
                 </TabPanel>
                 <TabPanel value={value} index={3} dir={theme.direction}>
-                    <OutlinedCard></OutlinedCard>
+                <TabCard>
+                    <OutlinedCard/>
+                </TabCard>
                 </TabPanel>
         </Box>
     );
@@ -113,8 +125,8 @@ const card = (
                     direction="row"
                     justifyContent="flex-start"
                     alignItems="center">
-                    <ThumbUpAltRoundedIcon></ThumbUpAltRoundedIcon>
-                    <TextsmsRoundedIcon></TextsmsRoundedIcon>
+                    <ThumbUpAltRoundedIcon/>
+                    <TextsmsRoundedIcon/>
                 </Grid>
             </Container>
             <Container>
@@ -123,7 +135,7 @@ const card = (
                     direction="row"
                     justifyContent="flex-end"
                     alignItems="center">
-                    <BookmarkRoundedIcon></BookmarkRoundedIcon>
+                    <BookmarkRoundedIcon/>
                 </Grid>
             </Container>
         </CardActions>
@@ -143,114 +155,116 @@ function ProfileSection() {
 
 
     return (
-
-        <Container fixed>
-            <Grid
-                container
-                direction="row"
-                justifyContent="center"
-                alignItems="flex-start"
-                spacing={2}
-            >
-
+        <ProfileContainer>
+            <Container fixed>
                 <Grid
-                    // LHS Column
                     container
-                    direction="column"
-                    justifyContent="flex-start"
-                    alignItems="center"
-                    item xs={4}
-                >
-                    <ProfilePic src={pic}/>
-
-                </Grid>
-
-                <Grid
-                    // RHS Column
-                    container
-                    direction="column"
-                    justifyContent="flex-start"
-                    alignItems="stretch"
-                    item xs={8}
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="flex-start"
+                    spacing={2}
                 >
 
                     <Grid
-                        // Name and Follow Button
+                        // LHS Column
                         container
                         direction="column"
                         justifyContent="flex-start"
-                        alignItems="flex-start"
+                        alignItems="center"
+                        item xs={4}
                     >
-                        <h1>Cat Dude</h1>
+                        <ProfilePic src={pic}/>
+
+                    </Grid>
+
+                    <Grid
+                        // RHS Column
+                        container
+                        direction="column"
+                        justifyContent="flex-start"
+                        alignItems="stretch"
+                        item xs={8}
+                    >
 
                         <Grid
-                            // Follow Button container
+                            // Name and Follow Button
                             container
                             direction="column"
                             justifyContent="flex-start"
                             alignItems="flex-start"
                         >
+                            <UserName>Cat Dude</UserName>
 
-                            <Button
+                            <Grid
+                                // Follow Button container
                                 container
                                 direction="column"
-                                justifyContent="center"
-                                alignItems="center"
-                                // fullWidth={true}
+                                justifyContent="flex-start"
+                                alignItems="flex-start"
+                            >
+                                <FollowButton>
+                                    <Button
+                                        container
+                                        direction="column"
+                                        justifyContent="center"
+                                        alignItems="center"
+                                        // fullWidth={true}
 
-                                variant="outlined">Follow</Button>
+                                        variant="outlined">Follow</Button>
+                                </FollowButton>
+
+                            </Grid>
 
                         </Grid>
 
-                    </Grid>
 
-
-                    {/*<UserStats>*/}
-                    <Grid
-                        // User Stats
-                        container
-                        direction="row"
-                        alignItems="center"
-                        justifyContent="center"
-                        spacing={2}
-                    >
+                        <UserStats>
                         <Grid
+                            // User Stats
                             container
-                            direction="column"
+                            direction="row"
                             alignItems="center"
                             justifyContent="center"
-                            item xs={4}
+                            spacing={2}
                         >
-                            <p>Posts:</p>
-                            <Button variant="text">####</Button>
+                            <Grid
+                                container
+                                direction="column"
+                                alignItems="center"
+                                justifyContent="center"
+                                item xs={4}
+                            >
+                                <p>Posts:</p>
+                                <Button variant="text">####</Button>
+                            </Grid>
+                            <Grid container
+                                  direction="column"
+                                  alignItems="center"
+                                  justifyContent="center"
+                                  item xs={4}
+                            >
+                                <p>Followers:</p>
+                                <Button variant="text">####</Button>
+                            </Grid>
+                            <Grid container
+                                  direction="column"
+                                  alignItems="center"
+                                  justifyContent="center"
+                                  item xs={4}
+                            >
+                                <p>Following:</p>
+                                <Button variant="text">####</Button>
+                            </Grid>
                         </Grid>
-                        <Grid container
-                              direction="column"
-                              alignItems="center"
-                              justifyContent="center"
-                              item xs={4}
-                        >
-                            <p>Followers:</p>
-                            <Button variant="text">####</Button>
-                        </Grid>
-                        <Grid container
-                              direction="column"
-                              alignItems="center"
-                              justifyContent="center"
-                              item xs={4}
-                        >
-                            <p>Following:</p>
-                            <Button variant="text">####</Button>
-                        </Grid>
+                        </UserStats>
+
+
+                        <FullWidthTabs/>
+
                     </Grid>
-                    {/*</UserStats>*/}
-
-
-                    <FullWidthTabs></FullWidthTabs>
-
                 </Grid>
-            </Grid>
-        </Container>
+            </Container>
+        </ProfileContainer>
 
 
         // <ProfileContainer> {/*Page*/}
