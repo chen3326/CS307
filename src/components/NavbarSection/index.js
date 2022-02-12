@@ -1,5 +1,5 @@
 import React from 'react';
-
+import LogoPhoto from '../../images/Boiler Breakouts-logos.jpeg';
 
 import {
     Nav,
@@ -18,6 +18,7 @@ function Navbar(){
         <>
                 <Nav >
                     <NavbarContainer>
+                        <img src = {LogoPhoto} alt=''/>
                         <NavLogo>
                             Boiler Breakouts
                         </NavLogo>
@@ -37,7 +38,7 @@ function Navbar(){
 
                         </NavMenu>
                         <NavBtn>
-                            <NavBtnLink href=""> Settings </NavBtnLink>
+                            <NavBtnLink href="" > Settings </NavBtnLink>
                         </NavBtn>
                         <NavBtn>
                             <NavBtnLink href=""> Notifications</NavBtnLink>

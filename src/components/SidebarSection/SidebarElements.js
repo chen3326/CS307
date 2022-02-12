@@ -3,11 +3,11 @@ import { Link as LinkR } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const Side = styled.nav`
-  background: darkslategray;
+  background: #0D67B5;
 
   backdrop-filter: saturate(180%) blur(20px);
-  width: 10%;
-  margin-top: 1px;
+  width: 62px;
+  margin-top: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,12 +24,13 @@ export const SidebarContainer = styled.div`
 
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   height: 100vh;
+  margin-top: 40px;
   z-index: 1;
   width: 25vw;
   padding: 0 24px;
-  max-width: 300px;
+  max-width: 1200px;
 `;
 
 export const SideLogo = styled(LinkR)`
@@ -40,8 +41,8 @@ export const SideLogo = styled(LinkR)`
   cursor: pointer;
   font-size: 1.5rem;
   display: flex;
-  align-items: center;
-  margin-left: 10px;
+  align-items: Start;
+  margin-top: 10px;
   font-weight: bold;
   text-decoration: none;
 `;
@@ -53,7 +54,7 @@ export const SideMenu = styled.ul`
   align-items: center;
   list-style: none;
   text-align: center;
-  margin-right: 1px;
+  margin-right: -22px;
 
   @media screen and (max-width: 768px) {
     display: none;
@@ -78,24 +79,24 @@ export const SideLinks = styled(LinkS)`
   display: flex;
   align-items: center;
   text-decoration: none;
-  padding: 0 1rem;
-  height: 10%;
+  padding: 0 1.5rem;
+  height: 100%;
   cursor: pointer;
 
   &.active {
-    border-bottom: 3px solid white;
+    //border-bottom: 3px solid white;
     font-weight: bold;
-    transition: all 0.5s ease-in-out;
+    //transition: all 0.5s ease-in-out;
   }
 `;
 
 export const SideBtnLink = styled.a`
   display:inline-block;
-  padding:0.35em 1.2em;
-  border:0.1em solid #FFFFFF;
+  padding:0.5em 1.2em;
+ // border:0.1em solid #FFFFFF;
   margin:0.3em 0.3em 0.3em 0.3em;
   border-radius:0.12em;
-  box-sizing: border-box;
+  //box-sizing: border-box;
   text-decoration:none;
   font-family:'Roboto',sans-serif;
   font-weight:300;

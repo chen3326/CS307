@@ -1,6 +1,4 @@
 import React from 'react';
-
-
 import {
     Side,
     SidebarContainer,
@@ -13,10 +11,10 @@ import {
 } from './SidebarElements';
 
 import HomeIcon from '@mui/icons-material/Home';
-import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+import SavedIcon from '@mui/icons-material/BookmarkAdded';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import CommentIcon from '@mui/icons-material/Comment';
-import GavelIcon from '@mui/icons-material/Gavel';
+
 function Sidebar(){
 
     return (
@@ -24,7 +22,6 @@ function Sidebar(){
             <Side >
                 <SidebarContainer>
                     <SideLogo>
-                        <GavelIcon/>
                     </SideLogo>
                     <SideMenu>
                         <SideItem>
@@ -36,19 +33,19 @@ function Sidebar(){
                                 exact='true'
                                 offset={-80}
                             >
-                                <HomeIcon/> Home
+                                <HomeIcon/>
                             </SideLinks>
                         </SideItem>
 
                     </SideMenu>
                     <SideBtn>
-                        <SideBtnLink href=""> <BookmarkAddedIcon/> Saves </SideBtnLink>
+                        <SideBtnLink href=""> <SavedIcon/></SideBtnLink>
                     </SideBtn>
                     <SideBtn>
-                        <SideBtnLink href=""> <ThumbUpIcon/> Likes</SideBtnLink>
+                        <SideBtnLink href=""> <ThumbUpIcon/></SideBtnLink>
                     </SideBtn>
                     <SideBtn>
-                        <SideBtnLink href=""> <CommentIcon/> Comments </SideBtnLink>
+                        <SideBtnLink href=""> <CommentIcon/></SideBtnLink>
                     </SideBtn>
                 </SidebarContainer>
             </Side>

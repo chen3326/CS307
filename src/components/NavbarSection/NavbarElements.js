@@ -3,10 +3,11 @@ import { Link as LinkR } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const Nav = styled.nav`
-  background: darkslategray;
+  background: #0D67B5;
 
   backdrop-filter: saturate(180%) blur(20px);
-  height: 40px;
+  height: 62px;
+  margin-left: -360px;
   margin-top: -0px;
   display: flex;
   justify-content: center;
