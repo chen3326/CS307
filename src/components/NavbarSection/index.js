@@ -44,7 +44,7 @@ function Navbar(){
                             <NavBtnLink href=""> Notifications</NavBtnLink>
                         </NavBtn>
                         <NavBtn>
-                            <NavBtnLink href=""> Profile </NavBtnLink>
+                            <NavBtnLink href="profile"> Profile </NavBtnLink>
                         </NavBtn>
                     </NavbarContainer>
                 </Nav>
