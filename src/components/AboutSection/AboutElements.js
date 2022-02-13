@@ -6,7 +6,8 @@ export const AboutContainer = styled.div`
   display: flex;
   align-items: center;
   height: 1050px;
-  background: rgb(234,159,68);
+  background: white;
+
 
  
 `;
@@ -31,7 +32,7 @@ export const AboutTitle = styled.div`
 
 
   width: 100vw;
-  color: white;
+  color: darkorchid;
   font-size: 5rem;
   font-weight: bold;
 
