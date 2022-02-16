@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 export const HeroContainer = styled.div`
 
-  background: rgb(234,159,68);
+  background: white;//rgb(234,159,68);
   display: flex;
   flex-direction: row;
   justify-content: space-around;
