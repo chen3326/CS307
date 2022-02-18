@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-
+import { getFirestore } from "firebase/firestore";
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import Home from './pages/index';
 import login_page from './pages/login_page.js';
