@@ -3,7 +3,7 @@ import React from 'react';
 
 import {
     AboutContainer,
-    AboutContent, AboutText, AboutTitle,
+    AboutContent, AboutText, AboutTitle, PostBtnLink,
 
 
 } from './AboutElements';
@@ -16,13 +16,12 @@ function AboutSection() {
 
         <AboutContainer id='aboutMe'>
             <AboutContent>
-                <AboutTitle>Boiler Breakouts</AboutTitle>
+                <AboutTitle>Posts</AboutTitle>
 
 
-                <AboutText> in AboutText
 
-                </AboutText>
-                <button>LOOK</button>
+
+                <PostBtnLink href="makePost">Make a post</PostBtnLink>
 
 
             </AboutContent>
