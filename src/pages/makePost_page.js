@@ -17,6 +17,8 @@ function CreatePost({ isAuth }) {
 
         });
 
+        window.location.pathname = "/home";
+
     };
 
 

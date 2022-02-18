@@ -21,7 +21,7 @@ function AboutSection() {
 
 
 
-                <PostBtnLink href="makePost">Make a post</PostBtnLink>
+
 
 
             </AboutContent>
