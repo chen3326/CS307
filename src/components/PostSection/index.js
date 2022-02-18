@@ -1,7 +1,8 @@
 import CreatePostIcon from '@mui/icons-material/Create';
 import { Container, Button, Link } from 'react-floating-action-button'
-import buttoninner from '@mui/material/Button';
+import buttonInner from '@mui/material/Button';
 import React, { useState, useEffect } from "react";
+import { styled } from '@mui/material/styles';
 import { addDoc, collection } from "firebase/firestore";
 import { database } from "../../firebase.js";
 import Box from '@mui/material/Box';
@@ -20,7 +21,12 @@ const style = {
     boxShadow: 24,
     p: 4,
     borderRadius: 5,
+    variant: 'contained',
 };
+
+const Input = styled('input')({
+    display: 'none',
+});
 
 function Post(){
     const [title, setTitle] = useState("");
@@ -90,9 +96,19 @@ function Post(){
                             />
                         </div>
                     </Typography>
-                    <Stack  spacing={2} direction="row" >
-                        <buttoninner onClick={createPost} variant='contained' style={{marginLeft:'68%', width:'300px', marginBottom:'5px', color:'#0D67B5'}}>Submit</buttoninner>
-                        <buttoninner onClick={closePost} variant='outlined' style={{background: "white",color:'red', marginRight:'5%', marginBottom:'5px'}}> Close </buttoninner>
+                    <Stack  spacing={3} direction="row" alignItems='center'>
+
+                        <label htmlFor="contained-button-file">
+                            <Input accept="image/*" id="contained-button-file" multiple type="file" />
+                            <buttonInner varient='contained' style={{color: 'purple'}} component='span'>Add Photos</buttonInner>
+                        </label>
+                        <label>
+                            <buttonInner onClick={createPost} style={{color:'#0D67B5'}}>SUBMIT</buttonInner>
+                            <buttonInner onClick={handleClose} style={{color:'red'}}> CLOSE </buttonInner>
+                        </label>
+
+
+
                     </Stack>
                 </Box>
             </Modal>
