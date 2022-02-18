@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import AppLogo from '../../images/Boiler Breakouts-logos.jpeg';
 import PropTypes from 'prop-types';
-import new_user_page from './AuthenSection/new_user_page.js';
-
+// import new_user_page from './AuthenSection/new_user_page.js';
+//
 
 //import AuthSection from "../components/AuthSection";
 
