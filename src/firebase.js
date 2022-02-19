@@ -10,7 +10,6 @@ const firebaseConfig = {
     authDomain: "cs307-bdbca.firebaseapp.com",
     projectId: "cs307-bdbca",
     storageBucket: "cs307-bdbca.appspot.com",
-    databaseURL: "gs://cs307-bdbca.appspot.com",
     messagingSenderId: "162185983080",
     appId: "1:162185983080:web:af175f3e595466abb937dd"
 };
