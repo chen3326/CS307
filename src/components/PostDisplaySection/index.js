@@ -4,6 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {database} from "../../firebase";
 import { getDocs, collection, deleteDoc, doc } from "firebase/firestore";
 import {Post, PostDisplayContainer, PostHeader, PostHeaderTitle} from "./PostDisplayElements";
+import buttonInner from "@mui/material/Button";
 
 
 
@@ -49,7 +50,10 @@ function PostDisplaySection( ) {
                             </PostHeader>
                             <PostDisplayContainer>
                                 {post.postText}
+                                <button>reply</button>
                             </PostDisplayContainer>
+
+
 
 
                             {/*<h3>@{post.author.name}</h3>*/}

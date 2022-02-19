@@ -23,19 +23,7 @@ function Navbar(){
                             Boiler Breakouts
                         </NavLogo>
                         <NavMenu>
-                            <NavItem>
-                                <NavLinks
-                                    to='aboutMe'
-                                    smooth={true}
-                                    duration={500}
-                                    spy={true}
-                                    exact='true'
-                                    offset={-80}
-                                >
-                                    About
-                                </NavLinks>
-                            </NavItem>
-
+                            <NavBtnLink href="home" > Homepage </NavBtnLink>
                         </NavMenu>
                         <NavBtn>
                             <NavBtnLink href="settings" > Settings </NavBtnLink>
