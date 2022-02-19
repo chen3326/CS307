@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const ProfileContainer = styled.div`
+export const SettingsContainer = styled.div`
   
   display: flex;
   //align-items: center;
@@ -57,16 +57,10 @@ export const ProfileContent = styled.div`
 
 `
 export const UserName = styled.div`
-{/*display: flex;
-  flex-direction: row;
-  justify-content: center;
-*/}
-
   width: 30vw;
   color: black;
   font-size: 5rem;
   font-weight: bold;
-
 `
 
 export const ProfileText = styled.div`
@@ -85,8 +79,7 @@ export const ProfileStats = styled.div`
 
 `;
 
-export const UserStats = styled.div`
-  
+export const UserSettings = styled.div`
   margin: 10px 0 10px 0;
 
     
@@ -117,7 +110,7 @@ export const TabCard = styled.div`
   margin: 10px 0 10px 0;
 
 `;
-export const FollowButton = styled.div`
+export const SaveButton = styled.div`
     margin: 10px 0 20px 0; 
 
 `;

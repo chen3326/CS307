@@ -1,161 +1,73 @@
 import * as React from 'react';
-import {AppBar, Box, Button, Card, CardActions, CardContent, Container, useTheme} from "@mui/material";
+import {
+    AppBar, Box, Button, Container, useTheme,
+    IconButton, Input, FilledInput, OutlinedInput, InputLabel, InputAdornment,
+    FormHelperText, FormControl, TextField, MenuItem, FormControlLabel, FormGroup
+} from "@mui/material";
 import Grid from '@mui/material/Grid';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import ThumbUpAltRoundedIcon from '@mui/icons-material/ThumbUpAltRounded';
-import TextsmsRoundedIcon from '@mui/icons-material/TextsmsRounded';
-import BookmarkRoundedIcon from '@mui/icons-material/BookmarkRounded';
 import PropTypes from 'prop-types';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import {
-    FollowButton,
-    ProfileContainer,
-    ProfilePic, TabCard, UserName, UserStats,
+    SaveButton,
+    SettingsContainer,
+    ProfilePic, UserName, UserSettings,
 } from './SettingsElements';
 
 import pic from "../../images/cat_pic.jpg";
+import {Switch} from "react-router-dom";
 
-
-function TabPanel(props) {
-    const { children, value, index, ...other } = props;
-
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`full-width-tabpanel-${index}`}
-            aria-labelledby={`full-width-tab-${index}`}
-            {...other}
-        >
-            {value === index && (
-                <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
-                </Box>
-            )}
-        </div>
-    );
-}
-
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.number.isRequired,
-    value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-    return {
-        id: `full-width-tab-${index}`,
-        'aria-controls': `full-width-tabpanel-${index}`,
-    };
-}
-
-function FullWidthTabs() {
-    const theme = useTheme();
-    const [value, setValue] = React.useState(0);
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
-
-    const handleChangeIndex = (index) => {
-        setValue(index);
-    };
-
-    return (
-
-        <Box sx={{ bgcolor: 'orange', borderRadius: '10px'}}>
-            <AppBar position="static" sx={{borderRadius: '10px'}}>
-                <Tabs
-                    value={value}
-                    onChange={handleChange}
-                    indicatorColor="secondary"
-                    textColor="inherit"
-                    variant="fullWidth"
-                    aria-label="full width tabs example"
-                >
-                    <Tab label="Posts" {...a11yProps(0)} />
-                    <Tab label="Liked" {...a11yProps(1)} />
-                    <Tab label="Saved" {...a11yProps(2)} />
-                    <Tab label="Comments" {...a11yProps(3)} />
-                </Tabs>
-            </AppBar>
-                <TabPanel value={value} index={0} dir={theme.direction}>
-                    <TabCard>
-                        <OutlinedCard/>
-                    </TabCard>
-                    <TabCard>
-                        <OutlinedCard/>
-                    </TabCard>
-                </TabPanel>
-                <TabPanel value={value} index={1} dir={theme.direction}>
-                <TabCard>
-                    <OutlinedCard/>
-                </TabCard>
-                </TabPanel>
-                <TabPanel value={value} index={2} dir={theme.direction}>
-                <TabCard>
-                    <OutlinedCard/>
-                </TabCard>
-                </TabPanel>
-                <TabPanel value={value} index={3} dir={theme.direction}>
-                <TabCard>
-                    <OutlinedCard/>
-                </TabCard>
-                </TabPanel>
-        </Box>
-    );
-}
-
-const card = (
-    <React.Fragment>
-        <CardContent>
-            {/*<Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>*/}
-            {/*    Lorem Ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.*/}
-            {/*</Typography>*/}
-            <Typography variant="h6" component="div">
-                Lorem Ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </Typography>
-        </CardContent>
-        <CardActions>
-            <Container>
-                <Grid
-                    container
-                    direction="row"
-                    justifyContent="flex-start"
-                    alignItems="center">
-                    <ThumbUpAltRoundedIcon/>
-                    <TextsmsRoundedIcon/>
-                </Grid>
-            </Container>
-            <Container>
-                <Grid
-                    container
-                    direction="row"
-                    justifyContent="flex-end"
-                    alignItems="center">
-                    <BookmarkRoundedIcon/>
-                </Grid>
-            </Container>
-        </CardActions>
-    </React.Fragment>
-);
-
-function OutlinedCard() {
-    return (
-        <Box sx={{ minWidth: 275 }}>
-            <Card variant="outlined">{card}</Card>
-        </Box>
-    );
-}
-
+const years = [
+    {
+        value: 'freshman',
+        label: 'Freshman',
+    },
+    {
+        value: 'sophomore',
+        label: 'Sophomore',
+    },
+    {
+        value: 'junior',
+        label: 'Junior',
+    },
+    {
+        value: 'senior',
+        label: 'Senior',
+    },
+    {
+        value: 'superSenior',
+        label: 'Super Senior',
+    },
+];
 
 function SettingsSection() {
 
+    const [year, setYear] = React.useState('freshman');
+
+    const [values, setValues] = React.useState({
+        password: '',
+        showPassword: false,
+    });
+
+    const handleChange = (prop) => (event) => {
+        setValues({ ...values, [prop]: event.target.value });
+        setYear(event.target.value);
+    };
+
+    const handleClickShowPassword = () => {
+        setValues({
+            ...values,
+            showPassword: !values.showPassword,
+        });
+    };
+
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+    };
 
     return (
-        <ProfileContainer>
+        <SettingsContainer>
             <Container fixed>
                 <Grid
                     container
@@ -187,13 +99,228 @@ function SettingsSection() {
                     >
 
                         <Grid
-                            // Name and Follow Button
+                            // User Name
                             container
                             direction="column"
                             justifyContent="flex-start"
                             alignItems="flex-start"
                         >
                             <UserName>Cat Dude</UserName>
+
+                        </Grid>
+
+
+                        <UserSettings>
+                            <Grid
+                                // Settings
+                                container
+                                direction="column"
+                                alignItems="flex-start"
+                                justifyContent="flex-start"
+                                spacing={2}
+                            >
+                                <Grid
+                                    container
+                                    direction="column"
+                                    alignItems="flex-start"
+                                    justifyContent="flex-start"
+                                    item xs={4}
+                                >
+                                    <p>User Name:</p>
+
+                                    {/*<FormControl fullWidth sx={{ m: 1 }}>*/}
+                                    {/*    <InputLabel htmlFor="outlined-adornment-amount">User Name</InputLabel>*/}
+                                    {/*    <OutlinedInput*/}
+                                    {/*        id="outlined-adornment-amount"*/}
+                                    {/*        value={values.amount}*/}
+                                    {/*        onChange={handleChange('amount')}*/}
+                                    {/*        startAdornment={<InputAdornment position="start">$</InputAdornment>}*/}
+                                    {/*        label="Amount"*/}
+                                    {/*    />*/}
+                                    {/*</FormControl>*/}
+
+                                    <TextField
+                                        label="User Name"
+                                        id="filled-start-adornment"
+                                        sx={{ m: 1, width: '25ch' }}
+                                        variant="filled"
+                                    />
+                                </Grid>
+
+                                <Grid container
+                                      direction="column"
+                                      alignItems="flex-start"
+                                      justifyContent="center"
+                                      item xs={4}
+                                >
+                                    <p>Password:</p>
+
+                                    <FormControl sx={{ m: 1, width: '25ch' }} variant="filled">
+                                        <InputLabel htmlFor="filled-adornment-password">Password</InputLabel>
+                                        <FilledInput
+                                            id="filled-adornment-password"
+                                            type={values.showPassword ? 'text' : 'password'}
+                                            value={values.password}
+                                            onChange={handleChange('password')}
+                                            endAdornment={
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        aria-label="toggle password visibility"
+                                                        onClick={handleClickShowPassword}
+                                                        onMouseDown={handleMouseDownPassword}
+                                                        edge="end"
+                                                    >
+                                                        {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            }
+                                        />
+                                    </FormControl>
+                                </Grid>
+
+                                <Grid container
+                                      direction="column"
+                                      alignItems="flex-start"
+                                      justifyContent="center"
+                                      item xs={4}
+                                >
+                                    <p>Profile Privacy:</p>
+                                    <FormGroup>
+                                        <FormControlLabel control={<Switch defaultChecked />} label="Label" />
+                                        <FormControlLabel disabled control={<Switch />} label="Disabled" />
+                                    </FormGroup>
+                                </Grid>
+
+                                <Grid container
+                                      direction="column"
+                                      alignItems="flex-start"
+                                      justifyContent="center"
+                                      item xs={4}
+                                >
+                                    <p>Age:</p>
+                                    <TextField
+                                        id="filled-number"
+                                        // label="Number"
+                                        type="number"
+                                        sx={{ m: 1, width: '25ch' }}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="filled"
+                                    />
+                                </Grid>
+
+                                <Grid container
+                                      direction="column"
+                                      alignItems="flex-start"
+                                      justifyContent="center"
+                                      item xs={4}
+                                >
+                                    <p>Major:</p>
+                                    <TextField
+                                        id="filled-number"
+                                        // label="Number"
+                                        type="number"
+                                        sx={{ m: 1, width: '25ch' }}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        variant="filled"
+                                    />
+                                </Grid>
+
+                                <Grid container
+                                      direction="column"
+                                      alignItems="flex-start"
+                                      justifyContent="center"
+                                      item xs={4}
+                                >
+                                    <p>Year:</p>
+
+                                    <Box
+                                        component="form"
+                                        sx={{
+                                            '& .MuiTextField-root': { m: 1, width: '25ch' },
+                                        }}
+                                        noValidate
+                                        autoComplete="off"
+                                    >
+                                        <div>
+                                            <TextField
+                                                id="filled-select-currency"
+                                                select
+                                                label="Select"
+                                                value={year}
+                                                onChange={handleChange}
+                                                // helperText="Please select your currency"
+                                                variant="filled"
+                                            >
+                                                {years.map((option) => (
+                                                    <MenuItem key={option.value} value={option.value}>
+                                                        {option.label}
+                                                    </MenuItem>
+                                                ))}
+                                            </TextField>
+                                        </div>
+                                    </Box>
+                                </Grid>
+
+                                <Grid
+                                    container
+                                    direction="column"
+                                    alignItems="flex-start"
+                                    justifyContent="flex-start"
+                                    item xs={4}
+                                >
+                                    <p>Classes:</p>
+                                    <TextField
+                                        label="Class 1"
+                                        id="filled-start-adornment"
+                                        sx={{ m: 1, width: '25ch' }}
+                                        variant="filled"
+                                    />
+                                    <TextField
+                                        label="Class 2"
+                                        id="filled-start-adornment"
+                                        sx={{ m: 1, width: '25ch' }}
+                                        variant="filled"
+                                    />
+                                    <TextField
+                                        label="Class 3"
+                                        id="filled-start-adornment"
+                                        sx={{ m: 1, width: '25ch' }}
+                                        variant="filled"
+                                    />
+                                    <TextField
+                                        label="Class 4"
+                                        id="filled-start-adornment"
+                                        sx={{ m: 1, width: '25ch' }}
+                                        variant="filled"
+                                    />
+                                    <TextField
+                                        label="Class 5"
+                                        id="filled-start-adornment"
+                                        sx={{ m: 1, width: '25ch' }}
+                                        variant="filled"
+                                    />
+                                    <TextField
+                                        label="Class 6"
+                                        id="filled-start-adornment"
+                                        sx={{ m: 1, width: '25ch' }}
+                                        variant="filled"
+                                    />
+                                </Grid>
+
+                            </Grid>
+                        </UserSettings>
+
+                        <Grid
+                            // Save Settings Button
+                            container
+                            direction="column"
+                            justifyContent="flex-start"
+                            alignItems="flex-start"
+                        >
 
                             <Grid
                                 // Follow Button container
@@ -202,117 +329,23 @@ function SettingsSection() {
                                 justifyContent="flex-start"
                                 alignItems="flex-start"
                             >
-                                <FollowButton>
+                                <SaveButton>
                                     <Button
                                         container
                                         direction="column"
                                         justifyContent="center"
                                         alignItems="center"
-                                        // fullWidth={true}
-
-                                        variant="outlined">Follow</Button>
-                                </FollowButton>
+                                        variant="outlined">Save Settings</Button>
+                                </SaveButton>
 
                             </Grid>
 
                         </Grid>
-
-
-                        <UserStats>
-                        <Grid
-                            // User Stats
-                            container
-                            direction="row"
-                            alignItems="center"
-                            justifyContent="center"
-                            spacing={2}
-                        >
-                            <Grid
-                                container
-                                direction="column"
-                                alignItems="center"
-                                justifyContent="center"
-                                item xs={4}
-                            >
-                                <p>Posts:</p>
-                                <Button variant="text">####</Button>
-                            </Grid>
-                            <Grid container
-                                  direction="column"
-                                  alignItems="center"
-                                  justifyContent="center"
-                                  item xs={4}
-                            >
-                                <p>Followers:</p>
-                                <Button variant="text">####</Button>
-                            </Grid>
-                            <Grid container
-                                  direction="column"
-                                  alignItems="center"
-                                  justifyContent="center"
-                                  item xs={4}
-                            >
-                                <p>Following:</p>
-                                <Button variant="text">####</Button>
-                            </Grid>
-                        </Grid>
-                        </UserStats>
-
-
-                        <FullWidthTabs/>
 
                     </Grid>
                 </Grid>
             </Container>
-        </ProfileContainer>
-
-
-        // <ProfileContainer> {/*Page*/}
-        //     <ProfileContentContainer>
-        //         {/*Content Wrapper*/}
-        //
-        //         {/*<ProfilePic src={pic}/>*/}
-        //         <ProfilePicContainer>
-        //
-        //             <ProfilePic src={pic}/>
-        //         </ProfilePicContainer>
-        //
-        //         <ProfileContent>
-        //
-        //             <UserName>Cat Dude</UserName>
-        //
-        //             <FollowButton>Follow</FollowButton>
-        //
-        //             <ProfileStats>
-        //                 <PostsStat>Posts: 87</PostsStat>
-        //                 <FollowersStat>90</FollowersStat>
-        //                 <FollowingStat>10</FollowingStat>
-        //             </ProfileStats>
-        //
-        //             <PostContainer>
-        //                 <Tabs>
-        //                     <Posts></Posts>
-        //                     <Liked></Liked>
-        //                     <Comments></Comments>
-        //                     <Saved></Saved>
-        //                 </Tabs>
-        //
-        //             </PostContainer>
-        //
-        //             <ProfileText>
-        //                 stuff
-        //
-        //             </ProfileText>
-        //
-        //         </ProfileContent>
-        //
-        //    </ProfileContentContainer>
-        //
-        //
-        //
-        //
-        //
-        // </ProfileContainer>
+        </SettingsContainer>
     );
 }
 
