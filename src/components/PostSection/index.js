@@ -15,7 +15,7 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 530,
     bgcolor: 'background.paper',
     border: '2px solid darkblue',
     boxShadow: 24,
@@ -25,7 +25,7 @@ const style = {
 };
 
 const Input = styled('input')({
-    display: 'none',
+    display: 'none',//"display-true",
 });
 
 function Post(){
@@ -43,11 +43,6 @@ function Post(){
             postText,
 
         });
-
-        window.location.pathname = "/home";
-
-    };
-    const closePost = async () => {
 
         window.location.pathname = "/home";
 
@@ -75,20 +70,25 @@ function Post(){
                         Create A Post
                     </Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                        <label> Title:</label>
                         <div className="inputGp">
-                            <label> Title:</label>
+
                             <input
+                                style={{width:'450px', height:'30px', marginTop:'5px',marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
                                 placeholder="Title..."
                                 width=""
                                 onChange={(event) => {
                                     setTitle(event.target.value);
                                 }}
+
                             />
                         </div>
 
-                        <div className="inputGp">
-                            <label> Post:</label>
+                        <label> Post:</label>
+                        <div className="inputGp" >
+
                             <textarea
+                                style={{width:'450px', height:'300px', marginTop:'5px', marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
                                 placeholder="Post..."
                                 onChange={(event) => {
                                     setPostText(event.target.value);
@@ -104,6 +104,8 @@ function Post(){
                         </label>
                         <label>
                             <buttonInner onClick={createPost} style={{color:'#0D67B5'}}>SUBMIT</buttonInner>
+                        </label>
+                        <label>
                             <buttonInner onClick={handleClose} style={{color:'red'}}> CLOSE </buttonInner>
                         </label>
 
