@@ -8,29 +8,6 @@ export const SettingsContainer = styled.div`
   //background: #232323;
   margin: 80px auto 0 auto;
   max-width: 1200px;
-
- 
-`;
-
-export const ProfileContentContainer = styled.div`
-
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  position: relative;
-  //align-items: center;
-  margin: auto;
-`;
-
-export const ProfilePicContainer = styled.div`
-
-  display: flex;
-  flex-direction: column;
-  //position: relative;
-  //align-items: center;
-  //height: 900px;
-  
-  width: 25%;
 `;
 
 export const ProfilePic = styled.img`
@@ -41,7 +18,6 @@ export const ProfilePic = styled.img`
   justify-content: flex-start;
   height: 20vh;
   border-radius: 10px;
-  
 `;
 
 export const ProfileContent = styled.div`
@@ -55,59 +31,22 @@ export const ProfileContent = styled.div`
   width: 50%;
   
 
-`
+`;
 export const UserName = styled.div`
   width: 30vw;
   color: black;
   font-size: 5rem;
   font-weight: bold;
-`
-
-export const ProfileText = styled.div`
-  margin-top: 5vw;
-  line-height: 170%;
-  font-size: 2.5rem;
-  color: white;
-  width: 20vw;
-  max-width: 1200px;
-
-  
-`
-
-
-export const ProfileStats = styled.div`
-
 `;
-
 export const UserSettings = styled.div`
   margin: 10px 0 10px 0;
 
     
 ` ;
-
-export const PostsStat = styled.div`
-
-`;
-export const FollowersStat = styled.div`
-
-`;
-export const FollowingStat = styled.div`
-
-`;
 export const PostContainer = styled.div`
 
 `;
 export const Tabs = styled.div`
-
-`;
-export const Posts = styled.div`
-
-`;
-export const Liked = styled.div`
-
-`;
-export const TabCard = styled.div`
-  margin: 10px 0 10px 0;
 
 `;
 export const SaveButton = styled.div`

@@ -1,12 +1,10 @@
 import * as React from 'react';
 import {
-    Box, Button, Container,
-    Input, FilledInput, OutlinedInput, InputLabel, InputAdornment, Select,
-    FormHelperText, FormControl, TextField, MenuItem, FormControlLabel, FormGroup
+    Button, Container, Switch,
+    InputLabel, Select,
+    FormControl, TextField, MenuItem, FormControlLabel, FormGroup
 } from "@mui/material";
 import Grid from '@mui/material/Grid';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import {
     SaveButton,
@@ -15,7 +13,8 @@ import {
 } from './SettingsElements';
 
 import pic from "../../images/cat_pic.jpg";
-import {Switch} from "react-router-dom";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 
 const years = [
     {
@@ -47,32 +46,6 @@ function SettingsSection() {
     const handleYearChange = (event) => {
         setYear(event.target.value);
     };
-
-    const [age, setAge] = React.useState('');
-
-    const handleAgeChange = (event) => {
-        setAge(event.target.value);
-    };
-
-    // const [values, setValues] = React.useState({
-    //     password: '',
-    //     showPassword: false,
-    // });
-
-    // const handleChange = (prop) => (event) => {
-    //     setValues({ ...values, [prop]: event.target.value });
-    // };
-
-    // const handleClickShowPassword = () => {
-    //     setValues({
-    //         ...values,
-    //         showPassword: !values.showPassword,
-    //     });
-    // };
-    //
-    // const handleMouseDownPassword = (event) => {
-    //     event.preventDefault();
-    // };
 
     return (
         <SettingsContainer>
@@ -156,15 +129,6 @@ function SettingsSection() {
                                     item xs={2}
                                 >
                                     <p>Password:</p>
-                                    {/*<SaveButton>*/}
-                                    {/*    <Button*/}
-                                    {/*        container*/}
-                                    {/*        direction="column"*/}
-                                    {/*        justifyContent="center"*/}
-                                    {/*        alignItems="center"*/}
-                                    {/*        variant="outlined">Change Password*/}
-                                    {/*    </Button>*/}
-                                    {/*</SaveButton>*/}
                                 </Grid>
                                 <Grid
                                     container
@@ -192,26 +156,8 @@ function SettingsSection() {
                                       item xs={2}
                                 >
                                     <p>Email:</p>
-
                                     {/*TODO: Fix this so that the email populated is the one in database*/}
                                     {/*TODO: email should be visible, but not clickable*/}
-                                    {/*<TextField*/}
-                                    {/*    label="Email Address"*/}
-                                    {/*    id="filled-start-adornment"*/}
-                                    {/*    sx={{ m: 1, width: '25ch' }}*/}
-                                    {/*    variant="filled"*/}
-                                    {/*/>*/}
-
-                                    {/*<SaveButton>*/}
-                                    {/*    <Button*/}
-                                    {/*        container*/}
-                                    {/*        direction="column"*/}
-                                    {/*        justifyContent="center"*/}
-                                    {/*        alignItems="center"*/}
-                                    {/*        variant="outlined"*/}
-                                    {/*        >Change Email*/}
-                                    {/*    </Button>*/}
-                                    {/*</SaveButton>*/}
                                 </Grid>
                                 <Grid
                                     container
@@ -221,8 +167,9 @@ function SettingsSection() {
                                     item xs={6}
                                 >
                                     <TextField
+                                        disabled
                                         label="Email Address"
-                                        id="filled-start-adornment"
+                                        id="filled-disabled"
                                         sx={{ m: 1, width: '25ch' }}
                                         variant="filled"
                                     />
@@ -245,20 +192,27 @@ function SettingsSection() {
                                         </Button>
                                     </SaveButton>
                                 </Grid>
-
-
                                 <Grid container
                                       direction="column"
                                       alignItems="flex-start"
                                       justifyContent="center"
-                                      item xs={12}
+                                      item xs={2}
                                 >
-                                    {/*TODO: Why tf is this broken? Fix...*/}
-                                    {/*TODO: link this setting to the database*/}
                                     <p>Profile Privacy:</p>
+                                </Grid>
+                                <Grid container
+                                      direction="column"
+                                      alignItems="flex-start"
+                                      justifyContent="center"
+                                      item xs={10}
+                                >
+                                    {/*TODO: link this setting to the database*/}
                                     <FormGroup>
-                                        <FormControlLabel control={<Switch defaultChecked />} label="Label" />
-                                        <FormControlLabel disabled control={<Switch />} label="Disabled" />
+                                        <Stack direction="row" spacing={1} alignItems="center">
+                                            <Typography>Public</Typography>
+                                            <FormControlLabel control={<Switch defaultChecked />} label="" />
+                                            <Typography>Private</Typography>
+                                        </Stack>
                                     </FormGroup>
                                 </Grid>
 
@@ -268,7 +222,6 @@ function SettingsSection() {
                                       justifyContent="center"
                                       item xs={4}
                                 >
-
                                     {/*TODO: Make it so that this does not allow values below 0...*/}
                                     {/*TODO: Styling looks odd here*/}
                                     <p>Age:</p>
