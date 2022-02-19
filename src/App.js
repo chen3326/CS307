@@ -7,6 +7,7 @@ import login_page from './pages/login_page.js';
 import Profile from "./pages/profile_page";
 import makePost_page from "./pages/makePost_page";
 
+
 function App() {
     return (
         <Router>
