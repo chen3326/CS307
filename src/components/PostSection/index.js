@@ -1,5 +1,5 @@
 import CreatePostIcon from '@mui/icons-material/Create';
-import { Container, Button, Link } from 'react-floating-action-button'
+import { Container, Button} from 'react-floating-action-button'
 import buttonInner from '@mui/material/Button';
 import React, { useState, useEffect } from "react";
 import { styled } from '@mui/material/styles';
@@ -31,20 +31,24 @@ const Input = styled('input')({
 function Post(){
     const [title, setTitle] = useState("");
     const [postText, setPostText] = useState("");
+    
 
     const postsCollectionRef = collection(database, "posts");
+
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
+
     const createPost = async () => {
+        handleClose();
         await addDoc(postsCollectionRef, {
-            title,
-            postText,
+            title:title,
+            postText:postText,
 
         });
-
         window.location.pathname = "/home";
+
 
     };
 
@@ -75,7 +79,7 @@ function Post(){
 
                             <input
                                 style={{width:'450px', height:'30px', marginTop:'5px',marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
-                                placeholder="Title..."
+                                placeholder="  Title..."
                                 width=""
                                 onChange={(event) => {
                                     setTitle(event.target.value);
@@ -89,7 +93,7 @@ function Post(){
 
                             <textarea
                                 style={{width:'450px', height:'300px', marginTop:'5px', marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
-                                placeholder="Post..."
+                                placeholder="  Post..."
                                 onChange={(event) => {
                                     setPostText(event.target.value);
                                 }}

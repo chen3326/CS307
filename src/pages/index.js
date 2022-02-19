@@ -1,11 +1,11 @@
 import HeroSection from '../components/HeroSection';
-import AboutSection from "../components/AboutSection";
+
 import NavSection from "../components/NavbarSection";
 import SidebarSection from "../components/SidebarSection";
 import PostSection from "../components/PostSection";
+import PostDisplaySection from "../components/PostDisplaySection";
 
 
-document.querySelector('meta[name="theme-color"]').setAttribute('content', '#232323');
 
 function Home() {
 
@@ -13,9 +13,12 @@ function Home() {
         <>
             <SidebarSection/>
             <NavSection/>
+
             <HeroSection/>
-            <AboutSection/>
+            <PostDisplaySection/>
+
             <PostSection/>
+
 
 
 

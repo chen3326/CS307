@@ -8,6 +8,7 @@ import Profile from "./pages/profile_page";
 import makePost_page from "./pages/makePost_page";
 import Settings from "./pages/settings_page";
 
+
 function App() {
     return (
         <Router>
