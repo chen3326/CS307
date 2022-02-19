@@ -1,5 +1,5 @@
 import CreatePostIcon from '@mui/icons-material/Create';
-import { Container, Button, Link } from 'react-floating-action-button'
+import { Container, Button} from 'react-floating-action-button'
 import buttonInner from '@mui/material/Button';
 import React, { useState, useEffect } from "react";
 import { styled } from '@mui/material/styles';
@@ -41,13 +41,14 @@ function Post(){
 
 
     const createPost = async () => {
+        handleClose();
         await addDoc(postsCollectionRef, {
             title:title,
             postText:postText,
 
         });
-
         window.location.pathname = "/home";
+
 
     };
 
@@ -78,7 +79,7 @@ function Post(){
 
                             <input
                                 style={{width:'450px', height:'30px', marginTop:'5px',marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
-                                placeholder="Title..."
+                                placeholder="  Title..."
                                 width=""
                                 onChange={(event) => {
                                     setTitle(event.target.value);
@@ -92,7 +93,7 @@ function Post(){
 
                             <textarea
                                 style={{width:'450px', height:'300px', marginTop:'5px', marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
-                                placeholder="Post..."
+                                placeholder="  Post..."
                                 onChange={(event) => {
                                     setPostText(event.target.value);
                                 }}
