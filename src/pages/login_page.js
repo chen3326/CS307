@@ -1,4 +1,4 @@
-import Loginpage from "../components/AuthenSection";
+import Loginpage from "../components/AuthenSection/login";
 
 
 function Login_page() {
