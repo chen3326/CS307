@@ -1,10 +1,10 @@
-import ProfileSection from "../components/ProfileSection";
+import SettingsSection from "../components/SettingsSection";
 import SidebarSection from "../components/SidebarSection";
 import NavSection from "../components/NavbarSection";
 
 document.querySelector('meta[name="theme-color"]').setAttribute('content', '#232323');
 
-function Profile() {
+function Settings() {
 
     return (
         <>
@@ -12,11 +12,11 @@ function Profile() {
 
             <SidebarSection/>
             <NavSection/>
-            <ProfileSection/>
+            <SettingsSection/>
 
 
         </>
     );
 }
 
-export default Profile;
+export default Settings;

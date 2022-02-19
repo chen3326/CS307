@@ -38,7 +38,7 @@ function Navbar(){
 
                         </NavMenu>
                         <NavBtn>
-                            <NavBtnLink href="" > Settings </NavBtnLink>
+                            <NavBtnLink href="settings" > Settings </NavBtnLink>
                         </NavBtn>
                         <NavBtn>
                             <NavBtnLink href=""> Notifications</NavBtnLink>
