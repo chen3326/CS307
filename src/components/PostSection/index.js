@@ -31,16 +31,19 @@ const Input = styled('input')({
 function Post(){
     const [title, setTitle] = useState("");
     const [postText, setPostText] = useState("");
+    
 
     const postsCollectionRef = collection(database, "posts");
+
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
+
     const createPost = async () => {
         await addDoc(postsCollectionRef, {
-            title,
-            postText,
+            title:title,
+            postText:postText,
 
         });
 
