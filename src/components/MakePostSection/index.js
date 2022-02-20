@@ -25,7 +25,7 @@ const style = {
 };
 
 const Input = styled('input')({
-    display: 'none',//"display-true",
+    display: "none",
 });
 
 function MakePost(){
@@ -104,7 +104,7 @@ function MakePost(){
                             />
                         </div>
                     </Typography>
-                    <Stack  spacing={3} direction="row" alignItems='center'>
+                    <Stack  spacing={3} direction="row">
 
                         <label htmlFor="contained-button-file">
                             <Input accept="image/*" id="contained-button-file" multiple type="file" />

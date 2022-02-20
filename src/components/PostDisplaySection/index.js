@@ -4,7 +4,12 @@ import React, {useEffect, useState} from 'react';
 import {database} from "../../firebase";
 import { getDocs, collection, deleteDoc, doc } from "firebase/firestore";
 import {Post, PostDisplayContainer, PostHeader, PostHeaderTitle} from "./PostDisplayElements";
-import buttonInner from "@mui/material/Button";
+import Button from "@mui/material/Button";
+import CardActions from '@mui/material/CardActions';
+import LogoPhoto from '../../images/Boiler Breakouts-logos.jpeg';
+import Cat_pic from '../../images/cat_pic.jpg';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
 
 
 
@@ -50,7 +55,22 @@ function PostDisplaySection( ) {
                             </PostHeader>
                             <PostDisplayContainer>
                                 {post.postText}
-                                <button>reply</button>
+                                <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
+                                    {itemData.map((item) => (
+                                        <ImageListItem key={item.img}>
+                                            <img
+                                                src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
+                                                srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                                                alt={item.title}
+                                                loading="lazy"
+                                            />
+                                        </ImageListItem>
+                                    ))}
+                                </ImageList>
+                                <CardActions>
+                                    <Button> Reply </Button>
+                                </CardActions>
+
                             </PostDisplayContainer>
 
 
@@ -73,5 +93,59 @@ function PostDisplaySection( ) {
 
     );
 }
+
+const itemData = [
+    {
+        img: LogoPhoto,
+        title: 'BoilerBreakoutLogo',
+    },
+    {
+        img: Cat_pic,
+        title: 'Cat',
+    },
+    {
+        img: Cat_pic,
+        title: 'Cat',
+    },
+    {
+        img: Cat_pic,
+        title: 'Cat',
+    },
+    {
+        img: Cat_pic,
+        title: 'Cat',
+    },
+    {
+        img: Cat_pic,
+        title: 'Cat',
+    },
+    {
+        img: Cat_pic,
+        title: 'Cat',
+    },
+    {
+        img: Cat_pic,
+        title: 'Cat',
+    },
+    {
+        img: Cat_pic,
+        title: 'Cat',
+    },
+    {
+        img: Cat_pic,
+        title: 'Cat',
+    },{
+        img: Cat_pic,
+        title: 'Cat',
+    },
+    {
+        img: LogoPhoto,
+        title: 'BoilerBreakoutLogo',
+    },
+
+
+
+
+];
 
 export default PostDisplaySection;
