@@ -34,8 +34,7 @@ const styles = {
 export default function Login() {
     const [loading, setLoading] = useState(false);
     const currentUser = useAuth();
-
-    const emailRef = useRef();
+     const emailRef = useRef();
     const passwordRef = useRef();
 
     async function handleSignup() {
@@ -56,6 +55,22 @@ export default function Login() {
         setLoading(true);
         try {
             await login(emailRef.current.value, passwordRef.current.value);
+            setLoading(false);
+            window.location = "/home";
+
+        } catch {
+            alert("Error!");
+        }
+
+        setLoading(false);
+    }
+
+    async function anonymous_login () {
+        setLoading(true);
+
+        try {
+
+            await login("anonymous@unkown.com", "secret1234");
             setLoading(false);
             window.location = "/home";
 
@@ -186,7 +201,7 @@ export default function Login() {
                 <Button disabled={loading || currentUser} onClick={handleSignup}>Sign Up</Button>
                 <Button disabled={loading || currentUser} onClick={handleLogin}>Log In</Button>
                 <Button disabled={loading || !currentUser} onClick={handleLogout}>Log Out</Button>
-                <Button disabled={loading || currentUser} href="home">continue as guest</Button>
+                <Button disabled={loading || currentUser} onClick={anonymous_login}> continue as guest</Button>
 
             </Grid>
             <Grid item sm/>

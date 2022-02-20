@@ -4,7 +4,7 @@ import buttonInner from '@mui/material/Button';
 import React, { useState, useEffect } from "react";
 import { styled } from '@mui/material/styles';
 import { addDoc, collection } from "firebase/firestore";
-import { database } from "../../firebase.js";
+import {auth, database} from "../../firebase.js";
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
@@ -49,6 +49,7 @@ function MakePost(){
         await addDoc(postsCollectionRef, {
             title:title,
             postText:postText,
+            author: { name: auth.currentUser.displayName, id: auth.currentUser.uid },
 
         });
 

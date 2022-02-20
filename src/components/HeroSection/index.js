@@ -4,9 +4,11 @@ import {
     HeroSLogo,
 } from './HeroElements';
 import logo from '../../images/Boiler Breakouts-logos.jpeg';
+import {auth} from "../../firebase";
 
 
 function HeroSection() {
+    const email = auth.currentUser.email
 
 
     return (
@@ -14,6 +16,7 @@ function HeroSection() {
 
 
             <HeroContent>
+                <div> Hello!  { email}</div>
 
                 <HeroSLogo src={logo}/>
 
