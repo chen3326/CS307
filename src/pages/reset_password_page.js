@@ -1,13 +1,13 @@
-import forgotPassword from "../components/AuthenSection/forgotPassword";
-import resetPassword from "../components/AuthenSection/resetPassword";
+import ResetPassword from "../components/AuthenSection/resetPassword";
 
-function Reset_Password() {
+
+function Reset_password_page() {
 
     return (
-        <>
-            <resetPassword/>
-        </>
+       <ResetPassword/>
+
+
     );
 }
 
-export default Reset_Password;
+export default Reset_password_page;
