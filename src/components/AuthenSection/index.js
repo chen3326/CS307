@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import AppLogo from '../../images/Boiler Breakouts-logos.jpeg';
 import PropTypes from 'prop-types';
-// import new_user_page from './AuthenSection/new_user_page.js';
-//
-
-//import AuthSection from "../components/AuthSection";
 
 //MUX extentions
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -65,7 +61,8 @@ class Login extends Component
             <Grid container className={classes.form}>
                 <Grid item sm />
                 <Grid item sm> {/*middle of grids so centered*/}
-                    {/**todo:resize logo*/}
+
+                    {/**todo:get smaller logo*/}
                     <img src={AppLogo} alt="logo" width='150px'/>
 
                     <Typography variant="h2" className={classes.pageTitle}>
@@ -93,21 +90,31 @@ class Login extends Component
                             onChange={this.handleChange}
                             fullWidth
                         />
+
+                        {/*LONGIN SUBMIT BUTTON todo: backend connection authen*/}
                         <Button
                             type="submit"
                             variant="contained"
                             color="primary"
                             className={classes.button}
-
                         >
                             Login
                         </Button>
 
+                        {/*todo:link reset password page and signin page*/}
+
+                        {/*GUEST BUTTON*/}
                         <Button
                             href="home"
-
                         >
                             continue as guest
+                        </Button>
+
+                        {/*RESET PASSWORD BUTTON*/}
+                        <Button
+                            href="reset_password"
+                        >
+                            Forgot your password?
                         </Button>
 
                     </form>

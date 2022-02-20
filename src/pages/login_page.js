@@ -1,14 +1,10 @@
 import Loginpage from "../components/AuthenSection";
 
-
 function Login_page() {
 
     return (
         <>
-
-
             <Loginpage/>
-
 
         </>
     );
