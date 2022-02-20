@@ -30,15 +30,16 @@ const styles =  {
     }
 };
 
-class Login extends Component
+//privatized page that will be linked to email sent to user when they forgot their password
+class ResetPassword extends Component
 {
     constructor()
     {
         super();
         //todo:make username section
         this.state={
-            email: '',
-            password: '',
+            passwordNew: '',
+            passwordCon: '',
             loading: false,
             errors: {}
         };
@@ -66,27 +67,27 @@ class Login extends Component
                     <img src={AppLogo} alt="logo" width='150px'/>
 
                     <Typography variant="h2" className={classes.pageTitle}>
-                        Login
+                        Reset Password
                     </Typography>
                     <form noValidate onSubmit={this.handleSubmit}>
 
                         <TextField
-                            id="email"
-                            name="email"
-                            type="email"
-                            label="Email"
+                            id="passwordNew"
+                            name="passwordNew"
+                            type="passwordNew"
+                            label="set password"
                             className={classes.textField}
-                            value={this.state.email}
+                            value={this.state.passwordNew}
                             onChange={this.handleChange}
                             fullWidth
                         />
                         <TextField
-                            id="password"
-                            name="password"
-                            type="password"
-                            label="Password"
+                            id="passwordCon"
+                            name="passwordCon"
+                            type="passwordCon"
+                            label="repeat password"
                             className={classes.textField}
-                            value={this.state.password}
+                            value={this.state.passwordCon}
                             onChange={this.handleChange}
                             fullWidth
                         />
@@ -101,22 +102,12 @@ class Login extends Component
                             Login
                         </Button>
 
-                        {/*todo:link reset password page and signin page*/}
-
-                        {/*GUEST BUTTON*/}
+                        {/*back to LOGIN BUTTON*/}
                         <Button
-                            href="home"
+                            href=""
                         >
-                            continue as guest
+                            Log back in
                         </Button>
-
-                        {/*RESET PASSWORD BUTTON*/}
-                        <Button
-                            href="reset_password"
-                        >
-                            Forgot your password?
-                        </Button>
-
                     </form>
                 </Grid>
                 <Grid item sm/>
@@ -126,8 +117,8 @@ class Login extends Component
 }
 
 //for functions
-Login.propTypes = {
+ResetPassword.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Login);
+export default withStyles(styles)(ResetPassword);

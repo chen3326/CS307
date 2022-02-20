@@ -20,10 +20,6 @@ function Home() {
 
             <MakePost/>
 
-
-
-
-
         </>
     );
 }
