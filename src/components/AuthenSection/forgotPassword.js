@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { Component } from 'react';
 import {Button, TextField} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Grid from '@material-ui/core/Grid';
