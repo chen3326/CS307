@@ -209,26 +209,26 @@ export default function Login() {
     );
 }
 
-const config = {};
-const firebase = require('firebase');
-firebase.intializeApp(config);
-// signup Route
-app.post('/signup', (req, res) => {
-    const newUser = {
-        firstName : req.body.firstName,
-        lastName : req.body.lastName,
-        email: req.body.email,
-        username: req.body.username,
-        password: req.body.password,
-        confirmPassword : req.body.confirmPassword,
-    }
-    //TODO: Validate Data
-    firebase.auth().createUserWithEmailAndPassword(newUser.email, newUser.password)
-        .then(data => {
-            return res.status(200).json({message: `user ${data.user.uid} signed up successfully`})
-        })
-        .catch(err => {
-            console.error(err);
-            return res.status(500).json({error: err.code});
-        })
-})
+// const config = {};
+// const firebase = require('firebase');
+// firebase.intializeApp(config);
+// // signup Route
+// app.post('/signup', (req, res) => {
+//     const newUser = {
+//         firstName : req.body.firstName,
+//         lastName : req.body.lastName,
+//         email: req.body.email,
+//         username: req.body.username,
+//         password: req.body.password,
+//         confirmPassword : req.body.confirmPassword,
+//     }
+//     //TODO: Validate Data
+//     firebase.auth().createUserWithEmailAndPassword(newUser.email, newUser.password)
+//         .then(data => {
+//             return res.status(200).json({message: `user ${data.user.uid} signed up successfully`})
+//         })
+//         .catch(err => {
+//             console.error(err);
+//             return res.status(500).json({error: err.code});
+//         })
+// })
