@@ -16,7 +16,7 @@ function HeroSection() {
 
 
             <HeroContent>
-                <div> Hello!  { email}</div>
+                {/*<div> Hello!  { email}</div>*/}
 
                 <HeroSLogo src={logo}/>
 
