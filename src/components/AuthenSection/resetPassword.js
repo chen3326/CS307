@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper'
 import {Link} from "react-router-dom";
 
 //main welcome page with login and link to signing in
@@ -20,13 +21,13 @@ const styles =  {
         margin: '70px auto 20px auto'
     },
     pageTitle: {
-        margin: '10px auto 10px auto'
+        margin: '30px auto 50px auto'
     },
     textField: {
         margin: '10px auto 10px auto'
     },
     button: {
-        marginTop: '10px auto 10px auto'
+        margin: '50px auto 10px auto'
     }
 };
 
@@ -65,50 +66,55 @@ class ResetPassword extends Component
 
                     {/**todo:get smaller logo*/}
                     <img src={AppLogo} alt="logo" width='150px'/>
+                    <Paper elevation={3}
+                           style={{
+                               padding: 10
+                           }}
+                    >
+                        <Typography variant="h3" className={classes.pageTitle}>
+                            Reset Password
+                        </Typography>
+                        <form noValidate onSubmit={this.handleSubmit}>
+                            <div>
+                                <TextField
+                                    id="passwordNew"
+                                    name="passwordNew"
+                                    type="passwordNew"
+                                    label="set password"
+                                    variant="outlined"
+                                    className={classes.textField}
+                                    value={this.state.passwordNew}
+                                    onChange={this.handleChange}
+                                />
+                            </div>
+                            <div>
+                                <TextField
+                                    id="passwordCon"
+                                    name="passwordCon"
+                                    type="passwordCon"
+                                    label="repeat password"
+                                    variant="outlined"
+                                    className={classes.textField}
+                                    value={this.state.passwordCon}
+                                    onChange={this.handleChange}
+                                />
+                            </div>
 
-                    <Typography variant="h2" className={classes.pageTitle}>
-                        Reset Password
-                    </Typography>
-                    <form noValidate onSubmit={this.handleSubmit}>
 
-                        <TextField
-                            id="passwordNew"
-                            name="passwordNew"
-                            type="passwordNew"
-                            label="set password"
-                            className={classes.textField}
-                            value={this.state.passwordNew}
-                            onChange={this.handleChange}
-                            fullWidth
-                        />
-                        <TextField
-                            id="passwordCon"
-                            name="passwordCon"
-                            type="passwordCon"
-                            label="repeat password"
-                            className={classes.textField}
-                            value={this.state.passwordCon}
-                            onChange={this.handleChange}
-                            fullWidth
-                        />
+                            {/*LONGIN SUBMIT BUTTON todo: backend connection authen*/}
+                            {/*automatically logs user into home*/}
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                                className={classes.button}
+                                href={'home'}
+                            >
+                                Reset password
+                            </Button>
 
-                        {/*LONGIN SUBMIT BUTTON todo: backend connection authen*/}
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            color="primary"
-                            className={classes.button}
-                        >
-                            Login
-                        </Button>
-
-                        {/*back to LOGIN BUTTON*/}
-                        <Button
-                            href=""
-                        >
-                            Log back in
-                        </Button>
-                    </form>
+                        </form>
+                    </Paper>
                 </Grid>
                 <Grid item sm/>
             </Grid>

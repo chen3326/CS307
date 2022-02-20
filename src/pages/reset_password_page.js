@@ -1,6 +1,5 @@
 import ResetPassword from "../components/AuthenSection/resetPassword";
 
-
 function Reset_password_page() {
 
     return (

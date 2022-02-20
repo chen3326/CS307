@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper'
 import {Link} from "react-router-dom";
 
 //main welcome page with login and link to signing in
@@ -20,13 +21,13 @@ const styles =  {
         margin: '70px auto 20px auto'
     },
     pageTitle: {
-        margin: '10px auto 10px auto'
+        margin: '30px auto 50px auto'
     },
     textField: {
         margin: '10px auto 10px auto'
     },
     button: {
-        marginTop: '10px auto 10px auto'
+        margin: '50px auto 10px auto'
     }
 };
 
@@ -65,59 +66,72 @@ class Login extends Component
                     {/**todo:get smaller logo*/}
                     <img src={AppLogo} alt="logo" width='150px'/>
 
-                    <Typography variant="h2" className={classes.pageTitle}>
-                        Login
-                    </Typography>
-                    <form noValidate onSubmit={this.handleSubmit}>
+                    <Paper elevation={3} 
+                           style={{
+                            padding: 10
+                            }}
+                    >
 
-                        <TextField
-                            id="email"
-                            name="email"
-                            type="email"
-                            label="Email"
-                            className={classes.textField}
-                            value={this.state.email}
-                            onChange={this.handleChange}
-                            fullWidth
-                        />
-                        <TextField
-                            id="password"
-                            name="password"
-                            type="password"
-                            label="Password"
-                            className={classes.textField}
-                            value={this.state.password}
-                            onChange={this.handleChange}
-                            fullWidth
-                        />
-
-                        {/*LONGIN SUBMIT BUTTON todo: backend connection authen*/}
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            color="primary"
-                            className={classes.button}
-                        >
+                        <Typography variant="h3" className={classes.pageTitle}>
                             Login
-                        </Button>
+                        </Typography>
+                        <form noValidate onSubmit={this.handleSubmit}>
 
-                        {/*todo:link reset password page and signin page*/}
 
-                        {/*GUEST BUTTON*/}
-                        <Button
-                            href="home"
-                        >
-                            continue as guest
-                        </Button>
+                            <div>
+                                <TextField
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    label="Email"
+                                    variant="outlined"
+                                    className={classes.textField}
+                                    value={this.state.email}
+                                    onChange={this.handleChange}
+                                />
+                            </div>
+                            <div>
+                                <TextField
+                                    id="password"
+                                    name="password"
+                                    type="password"
+                                    label="Password"
+                                    variant="outlined"
+                                    className={classes.textField}
+                                    value={this.state.password}
+                                    onChange={this.handleChange}
+                                />
+                            </div>
+                            <div>
+                                {/*LONGIN SUBMIT BUTTON todo: backend connection authen*/}
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    color="primary"
+                                    className={classes.button}
+                                >
+                                    Login
+                                </Button>
+                            </div>
+                            <span/>
 
-                        {/*RESET PASSWORD BUTTON*/}
-                        <Button
-                            href="reset_password"
-                        >
-                            Forgot your password?
-                        </Button>
+                            {/*todo:link reset password page and signin page*/}
 
-                    </form>
+                            {/*GUEST BUTTON*/}
+                            <Button
+                                href="home"
+                            >
+                                continue as guest
+                            </Button>
+
+                            {/*RESET PASSWORD BUTTON*/}
+                            <Button
+                                href="forgot_password"
+                            >
+                                Forgot your password?
+                            </Button>
+                        </form>
+                    </Paper>
                 </Grid>
                 <Grid item sm/>
             </Grid>
