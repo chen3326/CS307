@@ -1,107 +1,68 @@
-import React, { Component } from 'react';
-import AppLogo from '../../images/Boiler Breakouts-logos.jpeg';
-import PropTypes from 'prop-types';
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
+import {Container} from "@material-ui/core";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import buttonInner from "@mui/material/Button";
+import {login, logout, signup, useAuth} from "../../firebase";
+import React, {useRef, useState} from "react";
 
-//main welcome page with login and link to signing in
-class new_user_page extends Component
-{
-    render() {
-        return (
-            <Grid container className={classes.form}>
-                <Grid item sm />
-                <Grid item sm> {/*middle of grids so centered*/}
-                    <img src={AppLogo} alt="logo" width='150px'/>
-
-                    <Typography variant="h2" className={classes.pageTitle}>
-                        New User
-                    </Typography>
-                    <form noValidate onSubmit={this.handleSubmit}>
-
-                        <TextField
-                            id="First Name"
-                            name="First Name"
-                            type="First Name"
-                            label="First Name"
-                            className={classes.textField}
-                            value={this.state.firstName}
-                            onChange={this.handleChange}
-                            fullWidth
-                        />
-                        <TextField
-                            id="Last Name"
-                            name="Last Name"
-                            type="Last Name"
-                            label="Last Name"
-                            className={classes.textField}
-                            value={this.state.lastName}
-                            onChange={this.handleChange}
-                            fullWidth
-                        />
-                        <TextField
-                            id="email"
-                            name="email"
-                            type="email"
-                            label="email"
-                            className={classes.textField}
-                            value={this.state.email}
-                            onChange={this.handleChange}
-                            fullWidth
-                        />
-                        <TextField
-                            id="password"
-                            name="password"
-                            type="password"
-                            label="password"
-                            className={classes.textField}
-                            value={this.state.password}
-                            onChange={this.handleChange}
-                            fullWidth
-                        />
-                        <TextField
-                            id="Confirm Password"
-                            name="Confirm Password"
-                            type="Confirm Password"
-                            label="Confirm Password"
-                            className={classes.textField}
-                            value={this.state.password}
-                            onChange={this.handleChange}
-                            fullWidth
-                        />
-                        <TextField
-                            id="username"
-                            name="username"
-                            type="username"
-                            label="username"
-                            className={classes.textField}
-                            value={this.state.username}
-                            onChange={this.handleChange}
-                            fullWidth
-                        />
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            color="primary"
-                            className={classes.button}
-
-                        >
-                            Next
-                        </Button>
-
-                        <Button
-                            href="login"
-
-                        >
-                            Back
-                        </Button>
-
-                    </form>
-                </Grid>
-                <Grid item sm/>
-            </Grid>
-        );
+const styles = {
+    form: {
+        textAlign: 'center'
+    },
+    image: {
+        margin: '70px auto 20px auto'
+    },
+    pageTitle: {
+        margin: '10px auto 10px auto'
+    },
+    textField: {
+        margin: '10px auto 10px auto'
+    },
+    button: {
+        marginTop: '10px auto 10px auto'
     }
+};
+
+export default function forgotPassword() {
+    const [loading, setLoading] = useState(false);
+    const currentUser = useAuth();
+    const emailRef = useRef();
+    const passwordRef = useRef();
+    const confirmPasswordRef = useRef();
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    async function changePassword() {
+        if (passwordRef === confirmPasswordRef) {
+            await useAuth(currentUser)
+        }
+    }
+
+    return (
+        <Container>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={styles}>
+                    <div id="fields">
+                        <input ref={passwordRef} type= "password" placeholder="Password"/>
+                        <input ref={confirmPasswordRef} placeholder=" Confirm Password"/>
+                    </div>
+                    <Stack  spacing={2} direction="row">
+                        <label>
+                            <buttonInner onClick={changePassword} style={{color:'#0D67B5'}}>SUBMIT</buttonInner>
+                        </label>
+                        <label>
+                            <buttonInner onClick={handleClose} style={{color:'red'}}> CLOSE </buttonInner>
+                        </label>
+                    </Stack>
+                </Box>
+            </Modal>
+        </Container>
+    )
 }

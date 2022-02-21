@@ -32,6 +32,8 @@ export function logout() {
     return signOut(auth);
 }
 
+// TODO: Add password change and update function
+
 // Custom Hook
 export function useAuth() {
     const [ currentUser, setCurrentUser ] = useState();

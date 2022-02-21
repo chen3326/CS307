@@ -8,7 +8,12 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import {login, logout, signup, useAuth} from "../../firebase";
-import {useRef, useState} from "react";
+import React, {useRef, useState} from "react";
+import {Container} from "@material-ui/core";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import buttonInner from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
 
 
 //main welcome page with login and link to signing in
@@ -34,7 +39,7 @@ const styles = {
 export default function Login() {
     const [loading, setLoading] = useState(false);
     const currentUser = useAuth();
-     const emailRef = useRef();
+    const emailRef = useRef();
     const passwordRef = useRef();
 
     async function handleSignup() {
@@ -47,8 +52,6 @@ export default function Login() {
             alert("Error!");
         }
         setLoading(false);
-
-
     }
 
     async function handleLogin() {
@@ -89,6 +92,10 @@ export default function Login() {
             alert("Error!");
         }
         setLoading(false);
+    }
+
+    async function handleFPClick() {
+
     }
 
 
@@ -202,9 +209,9 @@ export default function Login() {
                 <Button disabled={loading || currentUser} onClick={handleLogin}>Log In</Button>
                 <Button disabled={loading || !currentUser} onClick={handleLogout}>Log Out</Button>
                 <Button disabled={loading || currentUser} onClick={anonymous_login}> continue as guest</Button>
-
+                <Button disabled={loading || !currentUser} onClick={handleFPClick}>Forgot Password</Button>
             </Grid>
-            <Grid item sm/>
+            <Grid item sm/>n
         </Grid>
     );
 }
@@ -232,3 +239,4 @@ export default function Login() {
 //             return res.status(500).json({error: err.code});
 //         })
 // })
+
