@@ -9,6 +9,14 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Stack from '@mui/material/Stack';
+import Badge from '@mui/material/Badge';
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import CheckIcon from '@mui/icons-material/Check';
+import LogoPhoto from "../../images/Boiler Breakouts-logos.jpeg";
+import Cat_pic from "../../images/cat_pic.jpg";
+import ImageListItem from "@mui/material/ImageListItem";
+import ImageList from "@mui/material/ImageList";
 
 const style = {
     position: 'absolute',
@@ -42,7 +50,10 @@ function MakePost(){
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-
+    const [invisible, setInvisible] = React.useState(false);
+    const AnonymousSet = () => {
+        setInvisible(!invisible);
+    };
 
 
     const createPost = async () => {
@@ -97,7 +108,7 @@ function MakePost(){
                         <div className="inputGp" >
 
                             <textarea
-                                style={{width:'450px', height:'300px', marginTop:'5px', marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
+                                style={{width:'450px', height:'250px', marginTop:'5px', marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
                                 placeholder="Post..."
                                 onChange={(event) => {
                                     setPostText(event.target.value);
@@ -105,6 +116,31 @@ function MakePost(){
                             />
                         </div>
                     </Typography>
+                    <ImageList sx={{ height: 135 }} cols={3} rowHeight={135}>
+                        {itemData.map((item) => (
+                            <ImageListItem key={item.img}>
+                                <img
+                                    src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
+                                    srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                                    alt={item.title}
+                                    loading="lazy"
+                                />
+                            </ImageListItem>
+                        ))}
+                    </ImageList>
+                    <Stack spacing={1} direction="row">
+                        <div>
+                            <Badge color="primary" invisible={!invisible} variant="dot" >
+                                <CheckIcon/>
+                            </Badge>
+                            <FormControlLabel
+                                sx={{ color: 'primary' }}
+                                control={<Switch checked={invisible} onChange={AnonymousSet} />}
+                                label="Anonymous"
+                            />
+                        </div>
+                    </Stack>
+
                     <Stack  spacing={3} direction="row">
 
                         <label htmlFor="contained-button-file">
@@ -127,5 +163,26 @@ function MakePost(){
 
     );
 }
+
+const itemData = [
+    {
+        img: LogoPhoto,
+        title: 'BoilerBreakoutLogo',
+    },
+    {
+        img: Cat_pic,
+        title: 'Cat',
+    },
+    {
+        img: LogoPhoto,
+        title: 'BoilerBreakoutLogo',
+    },
+    {
+        img: Cat_pic,
+        title: 'Cat',
+    },
+
+
+];
 
 export default MakePost;
