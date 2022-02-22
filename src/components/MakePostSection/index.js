@@ -39,6 +39,7 @@ const Input = styled('input')({
 function MakePost(){
     const [title, setTitle] = useState("");
     const [postText, setPostText] = useState("");
+
     const [file,setFile] = useState("");
 
 
@@ -60,7 +61,7 @@ function MakePost(){
         await addDoc(postsCollectionRef, {
             title:title,
             postText:postText,
-            author: { name: auth.currentUser.displayName, id: auth.currentUser.uid },
+            author: { name: auth.currentUser.email, id: auth.currentUser.uid },
 
         });
 

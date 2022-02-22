@@ -10,6 +10,7 @@ import LogoPhoto from '../../images/Boiler Breakouts-logos.jpeg';
 import Cat_pic from '../../images/cat_pic.jpg';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
+import profile_page from "../../pages/profile_page";
 
 
 
@@ -38,6 +39,9 @@ function PostDisplaySection( ) {
                             <PostHeader>
                                 <PostHeaderTitle>
                                     <h1> {post.title}</h1>
+                                </PostHeaderTitle>
+                                <PostHeaderTitle>
+                                    <a href={"profile"}>  {post.author?.email}</a>
                                 </PostHeaderTitle>
 
                                 {/*<div className="deletePost">*/}
