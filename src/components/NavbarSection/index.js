@@ -9,10 +9,18 @@ import {
     NavLogo,
     NavMenu,
     NavBtn,
-    NavBtnLink
+    NavBtnLink, NavBtnLinkR
 } from './NavbarElements';
+import {auth, useAuth} from "../../firebase";
+import {
+
+
+    Link
+} from "react-router-dom";
 
 function Navbar(){
+    const currentUser = useAuth();
+    const email = currentUser?.email;
 
     return (
         <>
@@ -32,7 +40,15 @@ function Navbar(){
                             <NavBtnLink href=""> Notifications</NavBtnLink>
                         </NavBtn>
                         <NavBtn>
-                            <NavBtnLink href="profile"> Profile </NavBtnLink>
+                            <NavBtnLinkR
+                                to={{
+                                    pathname: "/profile",
+                                    state: email
+
+                                    // your data array of objects
+                                }}
+                            > profile </NavBtnLinkR>
+
                         </NavBtn>
                         {/*TODO: here bellow need to edit later to only show when signed in status*/}
                         <NavBtn style={{marginRight: '-300px'}}>

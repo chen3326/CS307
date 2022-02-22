@@ -16,6 +16,7 @@ import {
 } from './ProfileElements';
 
 import pic from "../../images/cat_pic.jpg";
+import {useLocation} from "react-router-dom";
 
 
 function TabPanel(props) {
@@ -152,6 +153,7 @@ function OutlinedCard() {
 
 
 function ProfileSection() {
+    const { state } = useLocation();
 
 
     return (
@@ -193,7 +195,7 @@ function ProfileSection() {
                             justifyContent="flex-start"
                             alignItems="flex-start"
                         >
-                            <UserName>Cat Dude</UserName>
+                            <UserName>{state}</UserName>
 
                             <Grid
                                 // Follow Button container
