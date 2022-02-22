@@ -36,16 +36,11 @@ const Input = styled('input')({
     display: "none",
 });
 
+
 function Topics(){
 
 
-    const [topic1, setTopic1] = useState("");
-
-    const [topic2, setTopic2] = useState("");
-    const [topic3, setTopic3] = useState("");
-    const [topic4, setTopic4] = useState("");
-    const [topic5, setTopic5] = useState("");
-
+    const [topic, setTopic] = useState("");
 
     //collections in firebase keep the data tied to the user
     //https://firebase.google.com/docs/firestore/data-model
@@ -60,7 +55,7 @@ function Topics(){
 
     const createPost = async () => {
         await addDoc(topicCollectionRef, {
-            topic1:topic1,
+            topic:topic,
             author: { name: auth.currentUser.email, id: auth.currentUser.uid },
 
         });
@@ -93,25 +88,82 @@ function Topics(){
                         Here you can add some of your interests, classes, clubs, etc. that will be tied to your account. Lets start off with five topics for now. You can add more later.
                     </Typography>
 
-                    {/*topics*/}
+                    {/*topicsog*/}
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                        <label> Topic:</label>
+                        <label> Topic 1:</label>
                         <div className="inputGp">
-
                             <input
                                 style={{width:'450px', height:'30px', marginTop:'5px',marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
                                 placeholder="Topic..."
                                 width=""
                                 onChange={(event) => {
-                                    setTopic1(event.target.value);
+                                    setTopic(event.target.value);
                                 }}
-
                             />
                         </div>
-
-
                     </Typography>
 
+                    {/*topics that show what could be*/}
+                    {/*todo: rn only notes the last topic because other topics are overwritten*/}
+                    {/*todo:delete null topics*/}
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                        <label> Topic 2:</label>
+                        <div className="inputGp">
+                            <input
+                                style={{width:'450px', height:'30px', marginTop:'5px',marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
+                                placeholder="Topic..."
+                                width=""
+                                onChange={(event) => {
+                                    setTopic(event.target.value);
+                                }}
+                            />
+                        </div>
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                        <label> Topic 3:</label>
+                        <div className="inputGp">
+                            <input
+                                style={{width:'450px', height:'30px', marginTop:'5px',marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
+                                placeholder="Topic..."
+                                width=""
+                                onChange={(event) => {
+                                    setTopic(event.target.value);
+                                }}
+                            />
+                        </div>
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                        <label> Topic 4:</label>
+                        <div className="inputGp">
+                            <input
+                                style={{width:'450px', height:'30px', marginTop:'5px',marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
+                                placeholder="Topic..."
+                                width=""
+                                onChange={(event) => {
+                                    setTopic(event.target.value);
+                                }}
+                            />
+                        </div>
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                        <label> Topic 5:</label>
+                        <div className="inputGp">
+                            <input
+                                style={{width:'450px', height:'30px', marginTop:'5px',marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
+                                placeholder="Topic..."
+                                width=""
+                                onChange={(event) => {
+                                    setTopic(event.target.value);
+                                }}
+                            />
+                        </div>
+                    </Typography>
+
+
+
+
+
+                    {/*submit and close buttons on the bottom to end window*/}
                     <Stack  spacing={3} direction="row">
                         <label>
                             <buttonInner onClick={createPost} style={{color:'#0D67B5'}}>SUBMIT</buttonInner>
@@ -120,7 +172,6 @@ function Topics(){
                             <buttonInner onClick={handleClose} style={{color:'red'}}> CLOSE </buttonInner>
                         </label>
                     </Stack>
-
                 </Box>
             </Modal>
         </Container>
