@@ -63,14 +63,14 @@ export default function SignUpUser() {
         //todo: <Link> add topics in window
         //adds all user input into collection
         //password not passed into collection for security/privacy
-        setLoading(true);
         await addDoc(userCollectionRef, {
-            author: { name: auth.currentUser.email, id: auth.currentUser.uid },
+            id: auth.currentUser.uid,
+            email: email,
             fName: fName,
             lName: lName,
-            email: email,
+            //topics: { email: auth.currentUser.email,  },
         });
-        setLoading(false);
+        window.location.pathname = "/home"; //redirects now logged in user to homepage
     };
 
     //create user in database authentication, but don't push to collections
@@ -82,12 +82,14 @@ export default function SignUpUser() {
             setLoading(false); //will move to next page if user creation w/email and password is ok, else page is same
             createUser(); //push inputs to ./users collection
 
-            window.location.pathname = "/home"; //redirects now logged in user to homepage
+            //window.location.pathname = "/home"; //redirects now logged in user to homepage
         } catch {
             alert("Error!");
         }
         setLoading(false);
     }
+
+
 
     return (
         <Grid container className={"form"}>
