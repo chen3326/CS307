@@ -47,7 +47,7 @@ export default function Login() {
         try {
             await signup(emailRef.current.value, passwordRef.current.value);
             setLoading(false);
-            window.location = "/home";
+            window.location = "/signup";
         } catch {
             alert("Error!");
         }
@@ -64,7 +64,6 @@ export default function Login() {
         } catch {
             alert("Error!");
         }
-
         setLoading(false);
     }
 

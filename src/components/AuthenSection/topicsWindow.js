@@ -39,20 +39,19 @@ const Input = styled('input')({
 
 function Topics(){
 
-
-    const [topic, setTopic] = useState("");
-
     //collections in firebase keep the data tied to the user
     //https://firebase.google.com/docs/firestore/data-model
+    const [topic, setTopic] = useState("");
     const topicCollectionRef = collection(database, "topics");
 
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    const [invisible, setInvisible] = React.useState(false);
+    const [invisible, setInvisible] = React.useState(false); //ask helen what this does
 
 
+    //
     const createPost = async () => {
         await addDoc(topicCollectionRef, {
             topic:topic,
