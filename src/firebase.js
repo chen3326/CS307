@@ -33,6 +33,24 @@ export function logout() {
 }
 
 // TODO: Add password change and update function
+export function passwordChange(password) {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            user.updatePassword(password)
+                .then(() => {
+                    return console.log("Password Updated")
+                })
+                .catch((err) => {
+                    console.error(err)
+                    return console.log("unable to change password")
+                })
+            const uid = user.uid;
+        } else {
+            return console.log("User not logged In")
+        }
+    });
+}
 
 // Custom Hook
 export function useAuth() {

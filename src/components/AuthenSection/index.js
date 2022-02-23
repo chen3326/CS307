@@ -70,7 +70,6 @@ export default function Login() {
 
     async function anonymous_login () {
         setLoading(true);
-
         try {
 
             await login("anonymous@unkown.com", "secret1234");
@@ -95,7 +94,7 @@ export default function Login() {
     }
 
     async function handleFPClick() {
-
+        window.location = "/forgot_password"
     }
 
 
