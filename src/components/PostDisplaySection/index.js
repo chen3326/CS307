@@ -105,7 +105,7 @@ function PostDisplaySection() {
                             <ImageList sx={{width: 500, height: 450}} cols={3} rowHeight={164}>
 
                                     <ImageListItem >
-                                        {post.imageUrl!=="" > 0 &&
+                                        {post.imageUrl!==""  &&
                                             <img
                                                 src={`${post.imageUrl}?w=164&h=164&fit=crop&auto=format`}
                                                 srcSet={`${post.imageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
@@ -113,7 +113,7 @@ function PostDisplaySection() {
                                                 loading="lazy"
                                             />
                                         }
-                                        {post.imageUrl2!=="" > 0 &&
+                                        {post.imageUrl2!==""  &&
                                             <img
                                                 src={`${post.imageUrl2}?w=164&h=164&fit=crop&auto=format`}
                                                 srcSet={`${post.imageUrl2}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
@@ -121,7 +121,7 @@ function PostDisplaySection() {
                                                 loading="lazy"
                                             />
                                         }
-                                        {post.imageUrl3!=="" > 0 &&
+                                        {post.imageUrl3!==""  &&
                                             <img
                                                 src={`${post.imageUrl3}?w=164&h=164&fit=crop&auto=format`}
                                                 srcSet={`${post.imageUrl3}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
