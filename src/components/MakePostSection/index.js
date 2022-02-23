@@ -12,7 +12,7 @@ import Stack from '@mui/material/Stack';
 import Badge from '@mui/material/Badge';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import CheckIcon from '@mui/icons-material/Check';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import LogoPhoto from "../../images/Boiler Breakouts-logos.jpeg";
 import Cat_pic from "../../images/cat_pic.jpg";
 import ImageListItem from "@mui/material/ImageListItem";
@@ -95,7 +95,7 @@ function MakePost(){
                         <div className="inputGp">
 
                             <input
-                                style={{width:'450px', height:'30px', marginTop:'5px',marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
+                                style={{width:'450px', height:'30px', marginTop:'5px',marginBottom:'15px', border: '2px solid #0D67B5', borderRadius:'5px'}}
                                 placeholder="Title..."
                                 width=""
                                 onChange={(event) => {
@@ -109,7 +109,7 @@ function MakePost(){
                         <div className="inputGp" >
 
                             <textarea
-                                style={{width:'450px', height:'250px', marginTop:'5px', marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
+                                style={{width:'450px', height:'250px', marginTop:'5px', marginBottom:'15px', border: '2px solid #0D67B5', borderRadius:'5px'}}
                                 placeholder="Post..."
                                 onChange={(event) => {
                                     setPostText(event.target.value);
@@ -117,7 +117,7 @@ function MakePost(){
                             />
                         </div>
                     </Typography>
-                    <ImageList sx={{ height: 135 }} cols={3} rowHeight={135}>
+                    <ImageList sx={{ height: 135 , maxWidth:450, marginBottom: 2}} cols={3} rowHeight={135}>
                         {itemData.map((item) => (
                             <ImageListItem key={item.img}>
                                 <img
@@ -129,13 +129,13 @@ function MakePost(){
                             </ImageListItem>
                         ))}
                     </ImageList>
-                    <Stack spacing={1} direction="row">
+                    <Stack spacing={1} direction="row" >
                         <div>
                             <Badge color="primary" invisible={!invisible} variant="dot" >
-                                <CheckIcon/>
+                                <AdminPanelSettingsIcon fontSize='medium'/>
                             </Badge>
                             <FormControlLabel
-                                sx={{ color: 'primary' }}
+                                sx={{ color: 'primary'}}
                                 control={<Switch checked={invisible} onChange={AnonymousSet} />}
                                 label="Anonymous"
                             />
@@ -154,8 +154,10 @@ function MakePost(){
                         <label>
                             <buttonInner onClick={handleClose} style={{color:'red'}}> CLOSE </buttonInner>
                         </label>
-                    </Stack>
 
+
+
+                    </Stack>
                 </Box>
             </Modal>
         </Container>
@@ -180,6 +182,16 @@ const itemData = [
         img: Cat_pic,
         title: 'Cat',
     },
+    {
+        img: LogoPhoto,
+        title: 'BoilerBreakoutLogo',
+    },
+    {
+        img: Cat_pic,
+        title: 'Cat',
+    },
+
+
 ];
 
 export default MakePost;
