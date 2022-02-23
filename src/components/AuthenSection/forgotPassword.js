@@ -19,7 +19,9 @@ const styles =  {
         textAlign: 'center'
     },
     image: {
-        margin: '70px auto 20px auto'
+        margin: '70px auto 20px auto',
+        maxWidth: '100px',
+        maxHeight: '100px'
     },
     pageTitle: {
         margin: '30px auto 10px auto'
