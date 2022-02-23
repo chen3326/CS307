@@ -60,7 +60,6 @@ export default function ForgotPassword()
     };
 
     async function handlePasswordChange() {
-        setLoading(true);
         try {
             if (confirmPassword === password) {
                 await passwordChange(password);
@@ -69,6 +68,7 @@ export default function ForgotPassword()
                 //will move to next page if user creation w/email and password is ok, else page is same
 
             } else {
+                alert("Passwords do not match!")
                 console.log("Password do not match");
             }
              //push inputs to ./users collection
@@ -77,7 +77,6 @@ export default function ForgotPassword()
         } catch {
             alert("Error!");
         }
-        setLoading(false);
     }
     async function handleBackClick() {
         setLoading(true);
@@ -110,6 +109,7 @@ export default function ForgotPassword()
                             style={{width:'450px', height:'30px', marginTop:'5px',marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
                             placeholder="New Password"
                             width=""
+                            type="password"
                             onChange={(event) => {
                                 setPassword(event.target.value);
                             }}
@@ -124,6 +124,7 @@ export default function ForgotPassword()
                             style={{width:'450px', height:'30px', marginTop:'5px',marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
                             placeholder="Confirm New Password"
                             width=""
+                            type="password"
                             onChange={(event) => {
                                 setConfirmPassword(event.target.value);
                             }}

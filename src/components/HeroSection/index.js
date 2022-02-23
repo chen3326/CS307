@@ -17,7 +17,7 @@ function HeroSection() {
 
 
             <HeroContent>
-                <div>Currently logged in as: { email  } </div>
+                <div>Currently logged in as: { email } </div>
 
                 <HeroSLogo src={logo}/>
 
