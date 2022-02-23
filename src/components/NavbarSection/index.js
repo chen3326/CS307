@@ -51,7 +51,7 @@ function Navbar(){
 
                         </NavBtn>
 
-                        <NavBtn style={{marginRight: '-300px'}}>
+                        <NavBtn style={{marginRight: '-200px'}}>
                             <NavBtnLink href="\"> Log out </NavBtnLink>
                         </NavBtn>
                     </NavbarContainer>
