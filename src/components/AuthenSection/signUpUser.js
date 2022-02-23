@@ -60,75 +60,39 @@ export default function SignUpUser() {
 
     //add user to database in ./users
     const createUser = async () => {
+        //add topics in window
+
+
+        //adds all user input into collection
+        //password not passed into collection for security/privacy
         await addDoc(userCollectionRef, {
             author: { name: auth.currentUser.email, id: auth.currentUser.uid },
             fName: fName,
             lName: lName,
             email: email,
-            password: password,
         });
-        //window.location.pathname = "/home";
+
+
+        window.location.pathname = "/home";
     };
 
-    /**
-    async function handleSignup() {
+    //create user in database authentication, but don't push to collections
+    //firebase will error if unsuccessful inputs ie. email is already taken or isn't an email
+    async function handleUserAuthen() {
         setLoading(true);
         try {
-            await signup(emailRef.current.value, passwordRef.current.value);
+            await signup(email, password);
+
+            //will move to next page if user creation w/email and password is ok, else page is same
             setLoading(false);
-            //window.location = "/home";
+            window.location = "/";
         } catch {
             alert("Error!");
         }
         setLoading(false);
     }
-
-    async function handleLogin() {
-        setLoading(true);
-        try {
-            await login(emailRef.current.value, passwordRef.current.value);
-            setLoading(false);
-            window.location = "/home";
-
-        } catch {
-            alert("Error!");
-        }
-        setLoading(false);
-    }
-
-    async function anonymous_login () {
-        setLoading(true);
-
-        try {
-
-            await login("anonymous@unkown.com", "secret1234");
-            setLoading(false);
-            window.location = "/home";
-
-        } catch {
-            alert("Error!");
-        }
-
-        setLoading(false);
-    }
-
-    async function handleLogout() {
-        setLoading(true);
-        try {
-            await logout();
-        } catch {
-            alert("Error!");
-        }
-        setLoading(false);
-    }
-
-    async function handleFPClick() {
-    }
-     **/
 
     return (
-
-
         <Grid container className={"form"}>
             <Grid item sm/>
             <Grid item sm> {/*middle of grids so centered*/}
@@ -199,6 +163,9 @@ export default function SignUpUser() {
                         />
                     </div>
                 </Typography>
+
+
+                <Button onClick={handleUserAuthen}>Sign Up</Button>
 
                 {/*submit and close buttons on the bottom to end window*/}
                 <Stack  spacing={3} direction="row">
