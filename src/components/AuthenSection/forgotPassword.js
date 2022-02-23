@@ -34,6 +34,8 @@ const styles =  {
     }
 };
 
+
+
 //privatized page that will be linked to email sent to user when they forgot their password
 class ForgotPassword extends Component
 {
@@ -83,16 +85,16 @@ class ForgotPassword extends Component
                         Forgot Password
                     </Typography>
                     <form noValidate onSubmit={this.handleSubmit}>
-                        <TextField id = "new password" name = "new password" type="new password" label="new password"
+                        <TextField id = "newPassword" name = "newPassword" type="newPassword" label="newPassword"
                                    className={classes.textField} value={this.state.newPassword}
                                    onChange={this.handleChange} fullWidth/>
-                        <TextField id = "confirm new password" name = "confirm new password" type="confirm new password" label="confirm new password"
+                        <TextField id = "confirmNewPassword" name = "confirmNewPassword" type="confirmNewPassword" label="confirmNewPassword"
                                    className={classes.textField} value={this.state.confirmNewPassword}
                                    onChange={this.handleChange} fullWidth/>
                         <Button type="submit" variant = "contained" color="primary" className={classes.button}>
                             Confirm Changes
                         </Button>
-                        <Button>Back</Button>
+                        <Button type="reset" variant='contained' color='secondary' className={classes.button} >Back</Button>
                     </form>
                 </Grid>
                 <Grid item sm />

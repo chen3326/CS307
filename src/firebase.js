@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import {getFirestore} from "firebase/firestore";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updatePassword} from "firebase/auth";
 
 import {useEffect, useState} from "react";
 
@@ -34,7 +34,6 @@ export function logout() {
 
 // TODO: Add password change and update function
 export function passwordChange(password) {
-    const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
         if (user) {
             user.updatePassword(password)
@@ -46,10 +45,10 @@ export function passwordChange(password) {
                     return console.log("unable to change password")
                 })
             const uid = user.uid;
-        } else {
-            return console.log("User not logged In")
         }
     });
+
+
 }
 
 // Custom Hook
