@@ -103,7 +103,14 @@ export default function Login() {
     }
 
     async function handleFPClick() {
-        window.location = "/forgot_password"
+        setLoading(true);
+        try {
+            window.location = "/forgot_password";
+        } catch {
+            alert("Error!");
+        }
+        setLoading(false);
+
     }
 
 
