@@ -4,7 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {auth, database} from "../../firebase";
 import {getDocs, collection, deleteDoc, doc, addDoc} from "firebase/firestore";
 import {Post, PostDisplayContainer, PostHeader, PostHeaderTitle} from "./PostDisplayElements";
-import {Comment, CommentDisplayContainer, CommentTextContainer} from "./CommentDisplayElements";
+//import {Comment, CommentDisplayContainer, CommentTextContainer} from "./CommentDisplayElements";
 import Button from "@mui/material/Button";
 import CardActions from '@mui/material/CardActions';
 import LogoPhoto from '../../images/Boiler Breakouts-logos.jpeg';
@@ -37,8 +37,6 @@ function PostDisplaySection() {
 
     const commentsCollectionRef = collection(database, "comments");
 
-    const [commentLists, setCommentList] = useState([]);
-
     useEffect(() => {
         const getPosts = async () => {
             const data = await getDocs(postsCollectionRef);
@@ -46,20 +44,14 @@ function PostDisplaySection() {
         };
 
         getPosts();
-        const getComments = async () => {
-            const data2 = await getDocs(commentsCollectionRef);
-            setCommentList(data2.docs.map((doc) => ({...doc.data2(), id: doc.id})));
-        };
-
-        getComments();
     });
 
     const [commentText, setCommentText] = useState("");
     const createComment = async () => {
+       // handleClose();
         await addDoc(commentsCollectionRef, {
             commentText:commentText,
             author: { name: auth.currentUser.email, id: auth.currentUser.uid },
-            //post: {frompost: postLists}
 
         });
 
@@ -108,7 +100,7 @@ function PostDisplaySection() {
                         </PostHeader>
                         <PostDisplayContainer>
                             {post.postText}
-                            <ImageList aria-rowindex={1}> {/*sx={{width: 500, height: 450}} cols={3} rowHeight={364}>*/}
+                            <ImageList sx={{width: 500, height: 450}} cols={3} rowHeight={164}>
 
                                 <ImageListItem>
                                     {post.imageUrl !== "" &&
@@ -184,12 +176,6 @@ function PostDisplaySection() {
                                     )}
                                 </Popper>
                             </CardActions>
-                            {commentLists.map((comment) => {
-                                return (
-                                    {comment}
-                                )
-
-                            })}
 
                         </PostDisplayContainer>
 

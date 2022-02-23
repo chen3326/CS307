@@ -47,15 +47,6 @@ function SettingsSection() {
         setYear(event.target.value);
     };
 
-    async function handleFPClick() {
-        try {
-            window.location = "/forgot_password";
-        } catch {
-            alert("Error!");
-        }
-
-    }
-
     return (
         <SettingsContainer>
             <Container fixed>
@@ -152,8 +143,7 @@ function SettingsSection() {
                                             direction="column"
                                             justifyContent="center"
                                             alignItems="center"
-                                            variant="outlined"
-                                        onClick={handleFPClick}>Change Password
+                                            variant="outlined">Change Password
                                         </Button>
                                     </SaveButton>
                                 </Grid>

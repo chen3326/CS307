@@ -11,7 +11,7 @@ import {
     NavBtn,
     NavBtnLink, NavBtnLinkR
 } from './NavbarElements';
-import {auth, useAuth, logout} from "../../firebase";
+import {auth, useAuth} from "../../firebase";
 import {
 
 
@@ -50,8 +50,8 @@ function Navbar(){
                             > profile </NavBtnLinkR>
 
                         </NavBtn>
-
-                        <NavBtn style={{marginRight: '-200px'}} onClick={logout()}>
+                        {/*TODO: here bellow need to edit later to only show when signed in status*/}
+                        <NavBtn style={{marginRight: '-300px'}}>
                             <NavBtnLink href="\"> Log out </NavBtnLink>
                         </NavBtn>
                     </NavbarContainer>

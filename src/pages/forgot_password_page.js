@@ -1,9 +1,10 @@
-import ForgotPassword from "../components/AuthenSection/forgotPassword.js";
+import ForgotPassword from "../components/AuthenSection/forgotPassword";
 
 function Forgot_password_page() {
 
     return (
         <ForgotPassword/>
+
 
     );
 }
