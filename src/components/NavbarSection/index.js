@@ -51,7 +51,7 @@ function Navbar(){
 
                         </NavBtn>
                         {/*TODO: here bellow need to edit later to only show when signed in status*/}
-                        <NavBtn style={{marginRight: '-300px'}}>
+                        <NavBtn style={{marginRight: '-200px'}}>
                             <NavBtnLink href="\"> Log out </NavBtnLink>
                         </NavBtn>
                     </NavbarContainer>
