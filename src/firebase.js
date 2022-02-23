@@ -3,7 +3,10 @@ import { initializeApp } from "firebase/app";
 import {getFirestore} from "firebase/firestore";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updatePassword} from "firebase/auth";
 
+
 import {useEffect, useState} from "react";
+
+import { getStorage, ref } from "firebase/storage";
 
 
 const firebaseConfig = {
@@ -63,3 +66,4 @@ export function useAuth() {
     return currentUser;
 }
 
+export const storage =  getStorage();

@@ -42,16 +42,26 @@ export default function Login() {
     const emailRef = useRef();
     const passwordRef = useRef();
 
+    //moves user to sign up page to create a user
     async function handleSignup() {
         setLoading(true);
         try {
-            await signup(emailRef.current.value, passwordRef.current.value);
-            setLoading(false);
-            window.location = "/home";
+            window.location = "/signup";
         } catch {
             alert("Error!");
         }
         setLoading(false);
+        /**
+        setLoading(true);
+        try {
+            await signup(emailRef.current.value, passwordRef.current.value);
+            setLoading(false);
+            window.location = "/signup";
+        } catch {
+            alert("Error!");
+        }
+        setLoading(false);
+         */
     }
 
     async function handleLogin() {
@@ -64,7 +74,6 @@ export default function Login() {
         } catch {
             alert("Error!");
         }
-
         setLoading(false);
     }
 

@@ -39,23 +39,31 @@ const Input = styled('input')({
 
 function Topics(){
 
-
-    const [topic, setTopic] = useState("");
-
     //collections in firebase keep the data tied to the user
     //https://firebase.google.com/docs/firestore/data-model
+    const [topic1, setTopic1] = useState("");
+    const [topic2, setTopic2] = useState("");
+    const [topic3, setTopic3] = useState("");
+    const [topic4, setTopic4] = useState("");
+    const [topic5, setTopic5] = useState("");
+
     const topicCollectionRef = collection(database, "topics");
 
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    const [invisible, setInvisible] = React.useState(false);
+    const [invisible, setInvisible] = React.useState(false); //ask helen what this does
 
 
+    //
     const createPost = async () => {
         await addDoc(topicCollectionRef, {
-            topic:topic,
+            topic1:topic1,
+            topic2:topic2,
+            topic3:topic3,
+            topic4:topic4,
+            topic5:topic5,
             author: { name: auth.currentUser.email, id: auth.currentUser.uid },
 
         });
@@ -97,7 +105,7 @@ function Topics(){
                                 placeholder="Topic..."
                                 width=""
                                 onChange={(event) => {
-                                    setTopic(event.target.value);
+                                    setTopic1(event.target.value);
                                 }}
                             />
                         </div>
@@ -114,7 +122,7 @@ function Topics(){
                                 placeholder="Topic..."
                                 width=""
                                 onChange={(event) => {
-                                    setTopic(event.target.value);
+                                    setTopic2(event.target.value);
                                 }}
                             />
                         </div>
@@ -127,7 +135,7 @@ function Topics(){
                                 placeholder="Topic..."
                                 width=""
                                 onChange={(event) => {
-                                    setTopic(event.target.value);
+                                    setTopic3(event.target.value);
                                 }}
                             />
                         </div>
@@ -140,7 +148,7 @@ function Topics(){
                                 placeholder="Topic..."
                                 width=""
                                 onChange={(event) => {
-                                    setTopic(event.target.value);
+                                    setTopic4(event.target.value);
                                 }}
                             />
                         </div>
@@ -153,14 +161,11 @@ function Topics(){
                                 placeholder="Topic..."
                                 width=""
                                 onChange={(event) => {
-                                    setTopic(event.target.value);
+                                    setTopic5(event.target.value);
                                 }}
                             />
                         </div>
                     </Typography>
-
-
-
 
 
                     {/*submit and close buttons on the bottom to end window*/}
