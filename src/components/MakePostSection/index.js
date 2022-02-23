@@ -218,14 +218,14 @@ function MakePost(){
                     </form>
                     <hr />
 
-                    <h2>Uploading done {progress}%</h2>
+
 
                     <form onSubmit={formHandler2}>
                         <input type="file" className="input" />
                         <button type="submit">Upload</button>
                     </form>
                     <hr />
-                    <h2>Uploading done {progress}%</h2>
+
 
                     <form onSubmit={formHandler3}>
                         <input type="file" className="input" />
