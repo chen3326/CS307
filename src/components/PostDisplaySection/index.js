@@ -88,8 +88,6 @@ function PostDisplaySection() {
                                 >
                                     {post.author?.email}
 
-
-
                                 </Link>
 
 
@@ -112,33 +110,43 @@ function PostDisplaySection() {
                             {post.postText}
                             <ImageList aria-rowindex={3}> {/*sx={{width: 500, height: 450}} cols={3} rowHeight={364}>*/}
 
-                                    <ImageListItem >
-                                        {post.imageUrl!==""  &&
-                                            <img
-                                                src={`${post.imageUrl}?w=164&h=164&fit=crop&auto=format`}
-                                                srcSet={`${post.imageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                                <ImageListItem>
+                                    {post.imageUrl !== "" &&
+                                        <img
+                                            src={`${post.imageUrl}?w=164&h=164&fit=crop&auto=format`}
+                                            srcSet={`${post.imageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
 
-                                                loading="lazy"
-                                            />
-                                        }
-                                        {post.imageUrl2!==""  &&
-                                            <img
-                                                src={`${post.imageUrl2}?w=164&h=164&fit=crop&auto=format`}
-                                                srcSet={`${post.imageUrl2}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                                            loading="lazy"
+                                        />
+                                    }
 
-                                                loading="lazy"
-                                            />
-                                        }
-                                        {post.imageUrl3!==""  &&
-                                            <img
-                                                src={`${post.imageUrl3}?w=164&h=164&fit=crop&auto=format`}
-                                                srcSet={`${post.imageUrl3}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
 
-                                                loading="lazy"
-                                            />
-                                        }
+                                </ImageListItem>
+                                <ImageListItem>
 
-                                    </ImageListItem>
+                                    {post.imageUrl2 !== "" &&
+                                        <img
+                                            src={`${post.imageUrl2}?w=164&h=164&fit=crop&auto=format`}
+                                            srcSet={`${post.imageUrl2}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+
+                                            loading="lazy"
+                                        />
+                                    }
+
+
+                                </ImageListItem>
+                                <ImageListItem >
+
+                                    {post.imageUrl3!==""  &&
+                                        <img
+                                            src={`${post.imageUrl3}?w=164&h=164&fit=crop&auto=format`}
+                                            srcSet={`${post.imageUrl3}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+
+                                            loading="lazy"
+                                        />
+                                    }
+
+                                </ImageListItem>
 
                             </ImageList>
                             <CardActions>
