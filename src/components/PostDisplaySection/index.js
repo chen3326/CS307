@@ -103,16 +103,35 @@ function PostDisplaySection() {
                         <PostDisplayContainer>
                             {post.postText}
                             <ImageList sx={{width: 500, height: 450}} cols={3} rowHeight={164}>
-                                {itemData.map((item) => (
-                                    <ImageListItem key={item.img}>
-                                        <img
-                                            src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
-                                            srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                                            alt={item.title}
-                                            loading="lazy"
-                                        />
+
+                                    <ImageListItem >
+                                        {post.imageUrl!=="" > 0 &&
+                                            <img
+                                                src={`${post.imageUrl}?w=164&h=164&fit=crop&auto=format`}
+                                                srcSet={`${post.imageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+
+                                                loading="lazy"
+                                            />
+                                        }
+                                        {post.imageUrl2!=="" > 0 &&
+                                            <img
+                                                src={`${post.imageUrl2}?w=164&h=164&fit=crop&auto=format`}
+                                                srcSet={`${post.imageUrl2}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+
+                                                loading="lazy"
+                                            />
+                                        }
+                                        {post.imageUrl3!=="" > 0 &&
+                                            <img
+                                                src={`${post.imageUrl3}?w=164&h=164&fit=crop&auto=format`}
+                                                srcSet={`${post.imageUrl3}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+
+                                                loading="lazy"
+                                            />
+                                        }
+
                                     </ImageListItem>
-                                ))}
+
                             </ImageList>
                             <CardActions>
                                 <Button onClick={handleClick('bottom')}> Reply </Button>
@@ -168,56 +187,5 @@ function PostDisplaySection() {
     );
 }
 
-const itemData = [
-    {
-        img: LogoPhoto,
-        title: 'BoilerBreakoutLogo',
-    },
-    {
-        img: Cat_pic,
-        title: 'Cat',
-    },
-    {
-        img: Cat_pic,
-        title: 'Cat',
-    },
-    {
-        img: Cat_pic,
-        title: 'Cat',
-    },
-    {
-        img: Cat_pic,
-        title: 'Cat',
-    },
-    {
-        img: Cat_pic,
-        title: 'Cat',
-    },
-    {
-        img: Cat_pic,
-        title: 'Cat',
-    },
-    {
-        img: Cat_pic,
-        title: 'Cat',
-    },
-    {
-        img: Cat_pic,
-        title: 'Cat',
-    },
-    {
-        img: Cat_pic,
-        title: 'Cat',
-    }, {
-        img: Cat_pic,
-        title: 'Cat',
-    },
-    {
-        img: LogoPhoto,
-        title: 'BoilerBreakoutLogo',
-    },
-
-
-];
 
 export default PostDisplaySection;

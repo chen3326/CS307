@@ -4,7 +4,7 @@ import buttonInner from '@mui/material/Button';
 import React, { useState, useEffect } from "react";
 import { styled } from '@mui/material/styles';
 import { addDoc, collection } from "firebase/firestore";
-import {auth, database} from "../../firebase.js";
+import {auth, database, storage} from "../../firebase.js";
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
@@ -12,11 +12,12 @@ import Stack from '@mui/material/Stack';
 import Badge from '@mui/material/Badge';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import CheckIcon from '@mui/icons-material/Check';
 import LogoPhoto from "../../images/Boiler Breakouts-logos.jpeg";
 import Cat_pic from "../../images/cat_pic.jpg";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageList from "@mui/material/ImageList";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
 const style = {
     position: 'absolute',
@@ -42,6 +43,12 @@ function MakePost(){
 
     const [file,setFile] = useState("");
 
+    const [imageUrl, setimageUrl] = useState("");
+    const [imageUrl2, setimageUrl2] = useState("");
+    const [imageUrl3, setimageUrl3] = useState("");
+
+
+
 
     
 
@@ -50,6 +57,7 @@ function MakePost(){
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
 
     const [invisible, setInvisible] = React.useState(false);
     const AnonymousSet = () => {
@@ -62,11 +70,97 @@ function MakePost(){
             title:title,
             postText:postText,
             author: { name: auth.currentUser.email, id: auth.currentUser.uid },
+            imageUrl:imageUrl,
+            imageUrl2:imageUrl2,
+            imageUrl3:imageUrl3
 
         });
 
         window.location.pathname = "/home";
 
+    };
+    const [progress, setProgress] = useState(0);
+    const formHandler = (e) => {
+        e.preventDefault();
+        const file = e.target[0].files[0];
+        uploadFiles(file);
+    };
+    const formHandler2 = (e) => {
+        e.preventDefault();
+        const file = e.target[0].files[0];
+        uploadFiles2(file);
+    };
+    const formHandler3 = (e) => {
+        e.preventDefault();
+        const file = e.target[0].files[0];
+        uploadFiles3(file);
+    };
+
+    const uploadFiles = (file) => {
+        //
+        if (!file) return;
+        const sotrageRef = ref(storage, `files/${file.name}`);
+        const uploadTask = uploadBytesResumable(sotrageRef, file);
+
+        uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+                const prog = Math.round(
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                );
+                setProgress(prog);
+            },
+            (error) => console.log(error),
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    setimageUrl(downloadURL);
+                });
+            }
+        );
+    };
+    const uploadFiles2 = (file) => {
+        //
+        if (!file) return;
+        const sotrageRef = ref(storage, `files/${file.name}`);
+        const uploadTask = uploadBytesResumable(sotrageRef, file);
+
+        uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+                const prog = Math.round(
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                );
+                setProgress(prog);
+            },
+            (error) => console.log(error),
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    setimageUrl2(downloadURL);
+                });
+            }
+        );
+    };
+    const uploadFiles3 = (file) => {
+        //
+        if (!file) return;
+        const sotrageRef = ref(storage, `files/${file.name}`);
+        const uploadTask = uploadBytesResumable(sotrageRef, file);
+
+        uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+                const prog = Math.round(
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                );
+                setProgress(prog);
+            },
+            (error) => console.log(error),
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    setimageUrl3(downloadURL);
+                });
+            }
+        );
     };
 
     return (
@@ -95,7 +189,7 @@ function MakePost(){
                         <div className="inputGp">
 
                             <input
-                                style={{width:'450px', height:'30px', marginTop:'5px',marginBottom:'15px', border: '2px solid #0D67B5', borderRadius:'5px'}}
+                                style={{width:'450px', height:'30px', marginTop:'5px',marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
                                 placeholder="Title..."
                                 width=""
                                 onChange={(event) => {
@@ -109,7 +203,7 @@ function MakePost(){
                         <div className="inputGp" >
 
                             <textarea
-                                style={{width:'450px', height:'250px', marginTop:'5px', marginBottom:'15px', border: '2px solid #0D67B5', borderRadius:'5px'}}
+                                style={{width:'450px', height:'250px', marginTop:'5px', marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
                                 placeholder="Post..."
                                 onChange={(event) => {
                                     setPostText(event.target.value);
@@ -117,25 +211,41 @@ function MakePost(){
                             />
                         </div>
                     </Typography>
-                    <ImageList sx={{ height: 135 , maxWidth:450, marginBottom: 2}} cols={3} rowHeight={135}>
-                        {itemData.map((item) => (
-                            <ImageListItem key={item.img}>
-                                <img
-                                    src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
-                                    srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                                    alt={item.title}
-                                    loading="lazy"
-                                />
-                            </ImageListItem>
-                        ))}
-                    </ImageList>
-                    <Stack spacing={1} direction="row" >
+
+                    <form onSubmit={formHandler}>
+                        <input type="file" className="input" />
+                        <button type="submit">Upload</button>
+                    </form>
+                    <hr />
+
+                    <h2>Uploading done {progress}%</h2>
+
+                    <form onSubmit={formHandler2}>
+                        <input type="file" className="input" />
+                        <button type="submit">Upload</button>
+                    </form>
+                    <hr />
+                    <h2>Uploading done {progress}%</h2>
+
+                    <form onSubmit={formHandler3}>
+                        <input type="file" className="input" />
+                        <button type="submit">Upload</button>
+                    </form>
+                    <hr />
+                    <h2>Uploading done {progress}%</h2>
+
+
+
+
+
+
+                    <Stack spacing={1} direction="row">
                         <div>
                             <Badge color="primary" invisible={!invisible} variant="dot" >
-                                <AdminPanelSettingsIcon fontSize='medium'/>
+                                <CheckIcon/>
                             </Badge>
                             <FormControlLabel
-                                sx={{ color: 'primary'}}
+                                sx={{ color: 'primary' }}
                                 control={<Switch checked={invisible} onChange={AnonymousSet} />}
                                 label="Anonymous"
                             />
@@ -154,10 +264,8 @@ function MakePost(){
                         <label>
                             <buttonInner onClick={handleClose} style={{color:'red'}}> CLOSE </buttonInner>
                         </label>
-
-
-
                     </Stack>
+
                 </Box>
             </Modal>
         </Container>
@@ -165,33 +273,6 @@ function MakePost(){
     );
 }
 
-const itemData = [
-    {
-        img: LogoPhoto,
-        title: 'BoilerBreakoutLogo',
-    },
-    {
-        img: Cat_pic,
-        title: 'Cat',
-    },
-    {
-        img: LogoPhoto,
-        title: 'BoilerBreakoutLogo',
-    },
-    {
-        img: Cat_pic,
-        title: 'Cat',
-    },
-    {
-        img: LogoPhoto,
-        title: 'BoilerBreakoutLogo',
-    },
-    {
-        img: Cat_pic,
-        title: 'Cat',
-    },
 
-
-];
 
 export default MakePost;
