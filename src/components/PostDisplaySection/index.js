@@ -108,7 +108,7 @@ function PostDisplaySection() {
                         </PostHeader>
                         <PostDisplayContainer>
                             {post.postText}
-                            <ImageList aria-rowindex={3}> {/*sx={{width: 500, height: 450}} cols={3} rowHeight={364}>*/}
+                            <ImageList aria-rowindex={1}> {/*sx={{width: 500, height: 450}} cols={3} rowHeight={364}>*/}
 
                                 <ImageListItem>
                                     {post.imageUrl !== "" &&
