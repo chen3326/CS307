@@ -36,7 +36,7 @@ export function logout() {
 export function passwordChange(password) {
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            user.updatePassword(password)
+            user.updatePassword(user, password)
                 .then(() => {
                     return console.log("Password Updated")
                 })
