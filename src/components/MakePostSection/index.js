@@ -12,7 +12,7 @@ import Stack from '@mui/material/Stack';
 import Badge from '@mui/material/Badge';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import CheckIcon from '@mui/icons-material/Check';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import LogoPhoto from "../../images/Boiler Breakouts-logos.jpeg";
 import Cat_pic from "../../images/cat_pic.jpg";
 import ImageListItem from "@mui/material/ImageListItem";
@@ -165,7 +165,7 @@ function MakePost(){
 
     return (
         <Container styles={{color: 'darkblue', marginRight: '-60px', marginBottom: '-15px'}}>
-            {/*Make a Post Here*/}
+
             <Button
                 tooltip="Click to make a new post"
                 styles={{backgroundColor: 'darkblue' , color : 'white', width: '73px', height: '73px'}}
@@ -242,7 +242,7 @@ function MakePost(){
                     <Stack spacing={1} direction="row">
                         <div>
                             <Badge color="primary" invisible={!invisible} variant="dot" >
-                                <CheckIcon/>
+                                <AdminPanelSettingsIcon/>
                             </Badge>
                             <FormControlLabel
                                 sx={{ color: 'primary' }}

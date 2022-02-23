@@ -50,7 +50,7 @@ function Navbar(){
                             > profile </NavBtnLinkR>
 
                         </NavBtn>
-                        {/*TODO: here bellow need to edit later to only show when signed in status*/}
+
                         <NavBtn style={{marginRight: '-300px'}}>
                             <NavBtnLink href="\"> Log out </NavBtnLink>
                         </NavBtn>
