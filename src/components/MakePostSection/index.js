@@ -12,12 +12,11 @@ import Stack from '@mui/material/Stack';
 import Badge from '@mui/material/Badge';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import CheckIcon from '@mui/icons-material/Check';
-import LogoPhoto from "../../images/Boiler Breakouts-logos.jpeg";
-import Cat_pic from "../../images/cat_pic.jpg";
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageList from "@mui/material/ImageList";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import Resizer from "react-image-file-resizer";
 
 const style = {
     position: 'absolute',
@@ -32,6 +31,22 @@ const style = {
     borderRadius: 5,
     variant: 'contained',
 };
+
+const resizeFile = (file) =>
+    new Promise((resolve) => {
+        Resizer.imageFileResizer(
+            file,
+            300,
+            400,
+            "JPEG",
+            80,
+            0,
+            (uri) => {
+                resolve(uri);
+            },
+            "base64"
+        );
+    });
 
 const Input = styled('input')({
     display: "none",
@@ -79,20 +94,50 @@ function MakePost(){
         window.location.pathname = "/home";
 
     };
+
+    const onChange = async (event) => {
+        event.preventDefault();
+        const file = event.target.files[0];
+        const image = await resizeFile(file);
+        //console.log(image);
+        uploadFiles(image);
+    };
+    const onChange2 = async (event) => {
+
+        const file = event.target.files[0];
+        const image = await resizeFile(file);
+        //console.log(image);
+        uploadFiles2(image);
+    };
+    const onChange3 = async (event) => {
+
+        const file = event.target[0].files[0];
+        const image = await resizeFile(file);
+        //console.log(image);
+        uploadFiles3(image);
+    };
+
     const [progress, setProgress] = useState(0);
+    const [beforesize, setbeforesize] = useState(0);
+    const [beforesizetwo, setbeforesizetwo] = useState(0);
+    const [beforesizethree, setbeforesizethree] = useState(0);
     const formHandler = (e) => {
         e.preventDefault();
         const file = e.target[0].files[0];
+       // const file = resizeFile(image);
         uploadFiles(file);
+
     };
     const formHandler2 = (e) => {
         e.preventDefault();
         const file = e.target[0].files[0];
+       // const file = resizeFile(image);
         uploadFiles2(file);
     };
     const formHandler3 = (e) => {
         e.preventDefault();
         const file = e.target[0].files[0];
+      //  const file = resizeFile(image);
         uploadFiles3(file);
     };
 
@@ -109,6 +154,9 @@ function MakePost(){
                     (snapshot.bytesTransferred / snapshot.totalBytes) * 100
                 );
                 setProgress(prog);
+                const imagebeforesize = ( snapshot.totalBytes);
+                setbeforesize(imagebeforesize);
+
             },
             (error) => console.log(error),
             () => {
@@ -131,6 +179,8 @@ function MakePost(){
                     (snapshot.bytesTransferred / snapshot.totalBytes) * 100
                 );
                 setProgress(prog);
+                const imagebeforesizetwo = ( snapshot.totalBytes);
+                setbeforesizetwo(imagebeforesizetwo);
             },
             (error) => console.log(error),
             () => {
@@ -146,6 +196,7 @@ function MakePost(){
         const sotrageRef = ref(storage, `files/${file.name}`);
         const uploadTask = uploadBytesResumable(sotrageRef, file);
 
+
         uploadTask.on(
             "state_changed",
             (snapshot) => {
@@ -153,6 +204,9 @@ function MakePost(){
                     (snapshot.bytesTransferred / snapshot.totalBytes) * 100
                 );
                 setProgress(prog);
+                const imagebeforesizethree = ( snapshot.totalBytes);
+                setbeforesizethree(imagebeforesizethree);
+
             },
             (error) => console.log(error),
             () => {
@@ -165,7 +219,7 @@ function MakePost(){
 
     return (
         <Container styles={{color: 'darkblue', marginRight: '-60px', marginBottom: '-15px'}}>
-            {/*Make a Post Here*/}
+
             <Button
                 tooltip="Click to make a new post"
                 styles={{backgroundColor: 'darkblue' , color : 'white', width: '73px', height: '73px'}}
@@ -228,11 +282,16 @@ function MakePost(){
 
 
                     <form onSubmit={formHandler3}>
-                        <input type="file" className="input" />
+                        <input type="file" className="input"/>
                         <button type="submit">Upload</button>
+
                     </form>
                     <hr />
-                    <h2>Uploading done {progress}%</h2>
+
+                    <h4>Uploading done {progress}%</h4>
+                    <h7>Image 1 Before resize: {beforesize} bytes, After resize: {Math.round(beforesize*0.8)}; </h7>
+                    <h7>Image 2 Before resize: {beforesizetwo} bytes, After resize: {Math.round(beforesizetwo*0.8)}; </h7>
+                    <h7>Image 3 Before resize: {beforesizethree} bytes, After resize: {Math.round(beforesizethree*0.8)}; </h7>
 
 
 
@@ -242,7 +301,7 @@ function MakePost(){
                     <Stack spacing={1} direction="row">
                         <div>
                             <Badge color="primary" invisible={!invisible} variant="dot" >
-                                <CheckIcon/>
+                                <AdminPanelSettingsIcon/>
                             </Badge>
                             <FormControlLabel
                                 sx={{ color: 'primary' }}
@@ -252,12 +311,8 @@ function MakePost(){
                         </div>
                     </Stack>
 
-                    <Stack  spacing={3} direction="row">
+                    <Stack  spacing={2} direction="row">
 
-                        <label htmlFor="contained-button-file">
-                            <Input accept="image/*" id="contained-button-file" multiple type="file" />
-                            <buttonInner varient='contained' style={{color: 'purple'}} component='span'>Add Photos</buttonInner>
-                        </label>
                         <label>
                             <buttonInner onClick={createPost} style={{color:'#0D67B5'}}>SUBMIT</buttonInner>
                         </label>
