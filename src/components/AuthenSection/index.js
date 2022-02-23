@@ -42,7 +42,16 @@ export default function Login() {
     const emailRef = useRef();
     const passwordRef = useRef();
 
+    //moves user to sign up page to create a user
     async function handleSignup() {
+        setLoading(true);
+        try {
+            window.location = "/signup";
+        } catch {
+            alert("Error!");
+        }
+        setLoading(false);
+        /**
         setLoading(true);
         try {
             await signup(emailRef.current.value, passwordRef.current.value);
@@ -52,6 +61,7 @@ export default function Login() {
             alert("Error!");
         }
         setLoading(false);
+         */
     }
 
     async function handleLogin() {
