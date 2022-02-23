@@ -104,7 +104,7 @@ export default function Login() {
     }
 
     async function handleFPClick() {
-
+        window.location = "/forgot_password";
     }
 
 
