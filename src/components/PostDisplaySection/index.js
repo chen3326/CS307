@@ -80,8 +80,6 @@ function PostDisplaySection() {
                                 >
                                     {post.author?.email}
 
-
-
                                 </Link>
 
 

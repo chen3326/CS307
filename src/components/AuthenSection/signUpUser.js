@@ -60,20 +60,17 @@ export default function SignUpUser() {
 
     //add user to database in ./users
     const createUser = async () => {
-        //add topics in window
-
-
+        //todo: <Link> add topics in window
         //adds all user input into collection
         //password not passed into collection for security/privacy
+        setLoading(true);
         await addDoc(userCollectionRef, {
             author: { name: auth.currentUser.email, id: auth.currentUser.uid },
             fName: fName,
             lName: lName,
             email: email,
         });
-
-
-        window.location.pathname = "/home";
+        setLoading(false);
     };
 
     //create user in database authentication, but don't push to collections
@@ -82,10 +79,10 @@ export default function SignUpUser() {
         setLoading(true);
         try {
             await signup(email, password);
+            setLoading(false); //will move to next page if user creation w/email and password is ok, else page is same
+            createUser(); //push inputs to ./users collection
 
-            //will move to next page if user creation w/email and password is ok, else page is same
-            setLoading(false);
-            window.location = "/";
+            window.location.pathname = "/home"; //redirects now logged in user to homepage
         } catch {
             alert("Error!");
         }
@@ -164,19 +161,14 @@ export default function SignUpUser() {
                     </div>
                 </Typography>
 
-
+                {/*SUBMIT button creates user id in authen and then pushes user inputs to users collection*/}
                 <Button onClick={handleUserAuthen}>Sign Up</Button>
 
-                {/*submit and close buttons on the bottom to end window*/}
-                <Stack  spacing={3} direction="row">
-                    <label>
-                        <buttonInner onClick={createUser} style={{color:'#0D67B5'}}>NEXT</buttonInner>
-                    </label>
-                </Stack>
             </Grid>
             <Grid item sm/>n
         </Grid>
     );
+
 }
 
 /** save buttons for later incase
