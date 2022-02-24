@@ -30,15 +30,15 @@ function Navbar(){
                         <NavLogo>
                             Boiler Breakouts
                         </NavLogo>
-                        <NavMenu>
-                            <NavBtnLink href="home" > Homepage </NavBtnLink>
-                        </NavMenu>
-                        <NavBtn>
-                            <NavBtnLink href="settings" > Settings </NavBtnLink>
-                        </NavBtn>
-                        <NavBtn>
-                            <NavBtnLink href=""> Notifications</NavBtnLink>
-                        </NavBtn>
+                        {/*<NavMenu>*/}
+                        {/*    <NavBtnLink href="home" > Homepage </NavBtnLink>*/}
+                        {/*</NavMenu>*/}
+                        {/*<NavBtn>*/}
+                        {/*    <NavBtnLink href="settings" > Settings </NavBtnLink>*/}
+                        {/*</NavBtn>*/}
+                        {/*<NavBtn>*/}
+                        {/*    <NavBtnLink href=""> Notifications</NavBtnLink>*/}
+                        {/*</NavBtn>*/}
                         <NavBtn>
                             <NavBtnLinkR
                                 to={{
