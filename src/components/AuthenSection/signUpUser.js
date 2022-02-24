@@ -48,7 +48,7 @@ const styles = theme => ({
         padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
     },
     avatar: {
-        margin: theme.spacing.unit,
+        margin: '70px auto 20px auto',
     },
     form: {
         width: '100%', // Fix IE 11 issue.
@@ -60,8 +60,8 @@ const styles = theme => ({
 });
 
 
-function SignUpUser(props) {
-    const { classes } = props;
+function SignUpUser() {
+    const min = 1;
 
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = React.useState(false);
@@ -137,108 +137,116 @@ function SignUpUser(props) {
 
     //DISPLAY PAGE
     return (
-        <main className={classes.main}>
-            <CssBaseline />
+        <Grid container className={"form"}>
+            <Grid item sm/>
+            <Grid item sm> {/*middle of grids so centered*/}
+                    {/* rn temp logo marker*/}
+                    <Avatar sx={{ bgcolor: orange[500] }} variant="rounded">
+                        <HardwareIcon sx={{ color: indigo[500] }} />
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        Create an Account
+                    </Typography>
 
-            <Paper className={classes.paper}>
-                {/* rn temp logo marker*/}
-                <Avatar sx={{ bgcolor: orange[500] }} variant="rounded">
-                    <HardwareIcon sx={{ color: indigo[500] }} />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    Create an Account
-                </Typography>
+                    {/*form for all user inputs*/}
+                        {/*Nickname*/}
+                        <FormControl margin="normal" fullWidth>
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                label="Nickname*"
+                                className={"textField"}
+                                onChange={(event) => {
+                                    setnickName(event.target.value);
+                                }}
+                            />
+                        </FormControl>
 
-                {/*form for all user inputs*/}
-                <form className={classes.form}>
-                    {/*Nickname*/}
-                    <FormControl margin="normal" fullWidth>
-                        <TextField
-                            id="outlined-basic"
-                            variant="outlined"
-                            label="Nickname*"
-                            className={"textField"}
-                            onChange={(event) => {
-                                setnickName(event.target.value);
-                            }}
-                        />
-                    </FormControl>
+                        {/*Email Address*/}
+                        <FormControl margin="normal" fullWidth>
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                label="Email Address*"
+                                className={"textField"}
+                                onChange={(event) => {
+                                    setEmail(event.target.value);
+                                }}
+                            />
+                        </FormControl>
 
-                    {/*Email Address*/}
-                    <FormControl margin="normal" fullWidth>
-                        <TextField
-                            id="outlined-basic"
-                            variant="outlined"
-                            label="Email Address*"
-                            className={"textField"}
-                            onChange={(event) => {
-                                setEmail(event.target.value);
-                            }}
-                        />
-                    </FormControl>
+                        {/*Password*/}
+                        <FormControl margin="normal" fullWidth>
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                label="Password*"
+                                className={"textField"}
+                                onChange={(event) => {
+                                    setPassword(event.target.value);
+                                }}
+                            />
+                            <Typography variant={"subtitle1"} display="inline">
+                                1. Minimum 6 characters
+                            </Typography>
+                            <Typography variant={"subtitle1"} display="inline">
+                                2. At least 1 upper case English letter
+                            </Typography>
+                            <Typography variant={"subtitle1"} display="inline">
+                                3. At least 1 lower case English letter
+                            </Typography>
+                            <Typography variant={"subtitle1"} display="inline">
+                                4. At least 1 letter
+                            </Typography>
+                            <Typography variant={"subtitle1"} display="inline">
+                                5. At least 1 special character (!,@,#,$,%,&,)");
+                            </Typography>
+                        </FormControl>
 
-                    {/*Password*/}
-                    <FormControl margin="normal" fullWidth>
-                        <TextField
-                            id="outlined-basic"
-                            variant="outlined"
-                            label="Password*"
-                            className={"textField"}
-                            onChange={(event) => {
-                                setPassword(event.target.value);
-                            }}
-                        />
-                        <Typography variant={"subtitle1"} display="inline">
-                            1. Minimum 6 characters
-                        </Typography>
-                        <Typography variant={"subtitle1"} display="inline">
-                            2. At least 1 upper case English letter
-                        </Typography>
-                        <Typography variant={"subtitle1"} display="inline">
-                            3. At least 1 lower case English letter
-                        </Typography>
-                        <Typography variant={"subtitle1"} display="inline">
-                            4. At least 1 letter
-                        </Typography>
-                        <Typography variant={"subtitle1"} display="inline">
-                            5. At least 1 special character (!,@,#,$,%,&,)");
-                        </Typography>
-                    </FormControl>
+                        {/*Major*/}
+                        <FormControl margin="normal" fullWidth>
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                label="Major*"
+                                className={"textField"}
+                                onChange={(event) => {
+                                    setMajor(event.target.value);
+                                }}
+                            />
+                        </FormControl>
 
-                    {/*Major*/}
-                    <FormControl margin="normal" fullWidth>
-                        <TextField
-                            id="outlined-basic"
-                            variant="outlined"
-                            label="Major*"
-                            className={"textField"}
-                            onChange={(event) => {
-                                setMajor(event.target.value);
-                            }}
-                        />
-                    </FormControl>
+                        {/*age and year*/}
+                        {/*Age*/}
+                        <FormControl margin="normal">
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                label="Age*"
+                                className={"textField"}
 
-                    {/*age and year*/}
-                    {/*Age*/}
-                    <FormControl margin="normal">
-                        <TextField
-                            id="outlined-basic"
-                            variant="outlined"
-                            label="Age*"
-                            className={"textField"}
-                            type={"number"}
-                            item xs={1}
-                            onChange={(event) =>
-                                event.target.value < 0
-                                    ? (event.target.value = 0)
-                                    : event.target.value
-                            }
-                        />
-                    </FormControl>
+                                type={"number"}
+                                inputProps={{ min }}
+                                value={age}
+                                onChange={(event) =>
+                                {
+                                    if (event.target.value === "") {
+                                        setAge(event.target.value);
+                                        return;
+                                    }
+                                    const value = +event.target.value;
+                                    if (value < min) {
+                                        setAge(min);
+                                    } else {
+                                        setAge(value);
+                                    }
+                                }}
+                            />
+                        </FormControl>
 
-                    {/*Year*/}
+                        {/*Year*/}
                         <div>
-                            <FormControl sx={{ m: 1, minWidth: 120 }}>
+                            <FormControl margin="normal" fullWidth>
                                 <InputLabel id="demo-controlled-open-select-label">Year</InputLabel>
                                 <Select
                                     labelId="demo-controlled-open-select-label"
@@ -265,25 +273,23 @@ function SignUpUser(props) {
                         </div>
 
 
-                    {/*todo: profile img*/}
-                    {/*todo: bio text section*/}
+                        {/*todo: profile img*/}
+                        {/*todo: bio text section*/}
 
 
-                    {/*SUBMIT button creates user id in authen and then pushes user inputs to users collection*/}
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                        onClick={handleUserAuthen}
-                    >
-                        Next
-                    </Button>
-
-                </form>
-            </Paper>
-        </main>
+                        {/*SUBMIT button creates user id in authen and then pushes user inputs to users collection*/}
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            onClick={handleUserAuthen}
+                        >
+                            Next
+                        </Button>
+            </Grid>
+            <Grid item sm/>
+        </Grid>
     );
 }
 export default withStyles(styles)(SignUpUser);
