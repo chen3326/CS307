@@ -103,9 +103,9 @@ function SignUpUser() {
         //adds all user input into collection
         //password not passed into collection for security/privacy
         await addDoc(userCollectionRef, {
+            id: auth.currentUser.uid,
+            email: email,
             author: {
-                id: auth.currentUser.uid,
-                email: email,
                 nickName: nickName,
                 age: age,
                 major: major,
