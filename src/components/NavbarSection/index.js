@@ -33,9 +33,9 @@ function Navbar(){
                         {/*<NavMenu>*/}
                         {/*    <NavBtnLink href="home" > Homepage </NavBtnLink>*/}
                         {/*</NavMenu>*/}
-                        {/*<NavBtn>*/}
-                        {/*    <NavBtnLink href="settings" > Settings </NavBtnLink>*/}
-                        {/*</NavBtn>*/}
+                        <NavBtn>
+                            <NavBtnLink href="settings" > Settings </NavBtnLink>
+                        </NavBtn>
                         {/*<NavBtn>*/}
                         {/*    <NavBtnLink href=""> Notifications</NavBtnLink>*/}
                         {/*</NavBtn>*/}
