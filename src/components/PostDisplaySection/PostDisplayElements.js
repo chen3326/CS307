@@ -15,7 +15,7 @@ export const PostDisplayContainer = styled.div`
 export const Post = styled.div`
   width: 600px;
   height: auto;
-  max-height: 800px;
+  max-height: 600px;
   background-color: rgb(250, 250, 250);
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   margin: 20px;

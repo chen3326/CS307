@@ -64,15 +64,15 @@ function MakePost(){
 
     const createPost = async () => {
         if (invisible) {
-            auth.currentUser.email = "anonymous@unknown.com";
             setauthorPost(auth.currentUser.email);
+            //auth.currentUser.email = "anonymous@unknown.com";
         }
 
         await addDoc(postsCollectionRef, {
             title:title,
             postText:postText,
-            author: { email: auth.currentUser.email, id: auth.currentUser.uid },
-            //another:{authorPost},
+            author: { email: invisible?"anonymous@unknown.com":auth.currentUser.email, id: auth.currentUser.uid },
+            realAuthor: {realEmail: auth.currentUser.email},
             imageUrl:imageUrl,
             imageUrl2:imageUrl2,
             imageUrl3:imageUrl3
