@@ -46,7 +46,7 @@ function MakePost(){
     const [imageUrl, setimageUrl] = useState("");
     const [imageUrl2, setimageUrl2] = useState("");
     const [imageUrl3, setimageUrl3] = useState("");
-
+    const [FileURl, setFileURl] = useState("");
 
     const postsCollectionRef = collection(database, "posts");
 
@@ -59,8 +59,6 @@ function MakePost(){
     const AnonymousSet = () => {
         setInvisible(!invisible);
     };
-
-    const names = ['Bruce', 'Clark', 'Diana']
 
     const [authorPost, setauthorPost] = useState("");
 
@@ -77,8 +75,8 @@ function MakePost(){
             realAuthor: {realEmail: auth.currentUser.email},
             imageUrl:imageUrl,
             imageUrl2:imageUrl2,
-            imageUrl3:imageUrl3
-
+            imageUrl3:imageUrl3,
+            FileURl:FileURl
 
         });
 
@@ -101,25 +99,8 @@ function MakePost(){
     const [inputtext, setInputText] = useState(0);
     const [countnum, setCountnum] = useState(0);
 
-    const formHandler = (e) => {
-        e.preventDefault();
-        const file = e.target[0].files[0];
-       // const file = resizeFile(image);
-        uploadFiles(file);
 
-    };
-    const formHandler2 = (e) => {
-        e.preventDefault();
-        const file = e.target[0].files[0];
-       // const file = resizeFile(image);
-        uploadFiles2(file);
-    };
-    const formHandler3 = (e) => {
-        e.preventDefault();
-        const file = e.target[0].files[0];
-      //  const file = resizeFile(image);
-        uploadFiles3(file);
-    };
+
 
     const uploadFiles = (file) => {
         //
@@ -194,6 +175,33 @@ function MakePost(){
             }
         );
     };
+
+    const uploadFiles4 = (file) => {
+        //
+        if (!file) return;
+        const sotrageRef = ref(storage, `files/${file.name}`);
+        const uploadTask = uploadBytesResumable(sotrageRef, file);
+
+        uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+                const prog = Math.round(
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                );
+                setProgress(prog);
+                ;
+
+            },
+            (error) => console.log(error),
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    setFileURl(downloadURL);
+                });
+            }
+        );
+    };
+
+
     async function doUpload(event) {
 
         const inputFile = event.target.files[0];
@@ -251,6 +259,28 @@ function MakePost(){
             setaftersizethree(`${(afterCompressedFile.size / 1024 / 1024).toFixed(2)} MB`);
 
             await uploadFiles3(afterCompressedFile);
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
+    async function doUpload4(event) {
+
+        const inputFile = event.target.files[0];
+
+
+        const maxSet = {
+
+            useWebWorker: true
+        }
+        try {
+
+
+
+
+
+            await uploadFiles4(inputFile);
         } catch (error) {
             console.log(error);
         }
@@ -333,6 +363,18 @@ function MakePost(){
 
                     <form onChange={event => doUpload3(event)}>
                         <input type="file" className="input"/>
+
+
+
+
+                    </form>
+
+                    <form onChange={event => doUpload4(event)}>
+                        <input type="file" className="input"/>
+
+                        upload your file
+
+
 
 
                     </form>

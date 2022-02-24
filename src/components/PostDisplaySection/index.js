@@ -27,14 +27,15 @@ function PostDisplaySection() {
             {postLists.map((post) => {
                 return(
                     <OnePost
-                        postid = {post.id}
+                        postid = {post?.id}
 
-                        title={post.title}
-                        postText={post.postText}
-                        authorEmail={post.author.email}
-                        imageUrl={post.imageUrl}
-                        imageUrl2={post.imageUrl2}
-                        imageUrl3={post.imageUrl3}
+                        title={post?.title}
+                        postText={post?.postText}
+                        authorEmail={post?.author?.email}
+                        imageUrl={post?.imageUrl}
+                        imageUrl2={post?.imageUrl2}
+                        imageUrl3={post?.imageUrl3}
+                        FileURl={post?.FileURl}
 
                     />
                     )
