@@ -60,12 +60,19 @@ function MakePost(){
         setInvisible(!invisible);
     };
 
+    const [authorPost, setauthorPost] = useState("");
 
     const createPost = async () => {
+        if (invisible) {
+            auth.currentUser.email = "anonymous@unknown.com";
+            setauthorPost(auth.currentUser.email);
+        }
+
         await addDoc(postsCollectionRef, {
             title:title,
             postText:postText,
             author: { email: auth.currentUser.email, id: auth.currentUser.uid },
+            //another:{authorPost},
             imageUrl:imageUrl,
             imageUrl2:imageUrl2,
             imageUrl3:imageUrl3
@@ -290,11 +297,11 @@ function MakePost(){
 
                         </div>
 
-                        <label> Post:</label>
+                        <label> Post: (Limit 500 words)</label>
                         <div className="inputGp" >
 
                             <textarea
-                                style={{width:'450px', height:'250px', marginTop:'5px', marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
+                                style={{width:'450px', height:'200px', marginTop:'5px', marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
                                 placeholder="Post..."
                                 maxLength="500"
                                 onInput={checkunderlimit}
@@ -348,6 +355,9 @@ function MakePost(){
                                 control={<Switch checked={invisible} onChange={AnonymousSet} />}
                                 label="Anonymous"
                             />
+                            <Stack sx={{ width: '100%' }} spacing={1} onInvalid="false">
+                                <Alert severity="error">If you choose to post anonymously, you can't change the option after submit!</Alert>
+                            </Stack>
                         </div>
                     </Stack>
 
