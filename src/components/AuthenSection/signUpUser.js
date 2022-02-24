@@ -2,7 +2,7 @@
 
 
 //local files
-import {auth, database} from "../../firebase.js";
+import {auth, database, storage} from "../../firebase.js";
 import {login, logout, signup, useAuth} from "../../firebase";
 import Topics from './topicsWindow';
 import AppLogo from '../../images/Boiler Breakouts-logos.jpeg';
@@ -27,6 +27,8 @@ import React, {useRef, useState, useEffect} from "react";
 import { addDoc, collection } from "firebase/firestore";
 import Grid from "@mui/material/Grid";
 import topicsWindow from "./topicsWindow";
+import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
+import imageCompression from "browser-image-compression";
 
 
 //stying margins for ux
@@ -82,9 +84,11 @@ function SignUpUser() {
     const [major, setMajor] = useState("");
     const [age, setAge] = useState(0)
     const [year, setYear] = useState("");
-    //todo: profile image set up
     const [bio, setBio] = useState("");
-
+    const [imageUrl, setimageUrl] = useState("");
+    const [aftersize, setaftersize] = useState(0);
+    const [beforesize, setbeforesize] = useState(0);
+    const [progress, setProgress] = useState(0);
 
 
     const [topic1, setTopic1] = useState("");
@@ -111,6 +115,9 @@ function SignUpUser() {
                 major: major,
                 year: year,
                 bio: bio,
+                profileImage: {
+                    imageUrl:imageUrl,
+                }
             },
             topics: {
                 topic1: topic1,
@@ -122,8 +129,6 @@ function SignUpUser() {
         });
         window.location.pathname = "/home"; //redirects now logged in user to homepage
     };
-
-
 
     //create user in database authentication, but don't push to collections
     //firebase will error if unsuccessful inputs ie. email is already taken or isn't an email
@@ -158,7 +163,51 @@ function SignUpUser() {
         setLoading(false);
     }
 
+    const uploadFiles = (file) => {
+        //
+        if (!file) return;
+        const sotrageRef = ref(storage, `files/${file.name}`);
+        const uploadTask = uploadBytesResumable(sotrageRef, file);
 
+        uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+                const prog = Math.round(
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                );
+                setProgress(prog);
+                //const imageaftersize = ( snapshot.totalBytes);
+                //setaftersize(imageaftersize);
+
+            },
+            (error) => console.log(error),
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    setimageUrl(downloadURL);
+                });
+            }
+        );
+    };
+
+    async function doUpload(event) {
+        const inputFile = event.target.files[0];
+        setbeforesize(`${(inputFile.size / 1024 / 1024).toFixed(2)} MB`);
+
+        const maxSet = {
+            useWebWorker: true
+        }
+        try {
+
+            const afterCompressedFile = await imageCompression(inputFile, maxSet);
+
+            setaftersize(`${(afterCompressedFile.size / 1024 / 1024).toFixed(2)} MB`);
+
+            await uploadFiles(afterCompressedFile);
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
 
     //DISPLAY PAGE
     return (
@@ -218,7 +267,7 @@ function SignUpUser() {
                     </div>
 
                     <div>{/*personal info*/}
-                        {/*Nickname*/}
+                        {/*profile picture image*/}
                         <FormControl margin="normal" fullWidth>
                             <Typography variant={"h6"} >
                                 Personal Info:
@@ -226,6 +275,18 @@ function SignUpUser() {
                             <Typography id="modal-modal-title" variant="subtitle1" component="subtitle1">
                                 Let us know more about you!
                             </Typography>
+
+                        <FormControl margin="normal" fullWidth>
+                            <form onChange={event => doUpload(event)}>
+                                <input type="file" className="input" />
+
+                            </form>
+                            <hr />
+                            <h4>Profile Picture Uploading done {progress}%</h4>
+                            <h7>Image 1 Before resize: {beforesize} bytes, After resize: {aftersize}; </h7>
+                        </FormControl>
+
+                        {/*Nickname*/}
                             <TextField
                                 id="outlined-basic"
                                 variant="outlined"
@@ -249,7 +310,6 @@ function SignUpUser() {
                             }}
                             />
                         </FormControl>
-
 
                         {/*Major*/}
                         <FormControl margin="normal" fullWidth>
@@ -319,9 +379,6 @@ function SignUpUser() {
                                 </Select>
                             </FormControl>
                         </div>
-
-                        {/*todo: profile img*/}
-                        {/*todo: bio text section*/}
                     </div>
 
 
