@@ -12,13 +12,13 @@ import Stack from '@mui/material/Stack';
 import Badge from '@mui/material/Badge';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import CheckIcon from '@mui/icons-material/Check';
-import LogoPhoto from "../../images/Boiler Breakouts-logos.jpeg";
-import Cat_pic from "../../images/cat_pic.jpg";
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageList from "@mui/material/ImageList";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-
+import Resizer from "react-image-file-resizer";
+import imageCompression from "browser-image-compression";
+import Alert from '@mui/material/Alert';
 const style = {
     position: 'absolute',
     top: '50%',
@@ -32,6 +32,8 @@ const style = {
     borderRadius: 5,
     variant: 'contained',
 };
+
+
 
 const Input = styled('input')({
     display: "none",
@@ -47,10 +49,6 @@ function MakePost(){
     const [imageUrl2, setimageUrl2] = useState("");
     const [imageUrl3, setimageUrl3] = useState("");
 
-
-
-
-    
 
     const postsCollectionRef = collection(database, "posts");
 
@@ -79,20 +77,39 @@ function MakePost(){
         window.location.pathname = "/home";
 
     };
+
     const [progress, setProgress] = useState(0);
+
+    const [beforesize, setbeforesize] = useState(0);
+    const [beforesizetwo, setbeforesizetwo] = useState(0);
+    const [beforesizethree, setbeforesizethree] = useState(0);
+
+    const [aftersize, setaftersize] = useState(0);
+    const [aftersizetwo, setaftersizetwo] = useState(0);
+    const [aftersizethree, setaftersizethree] = useState(0);
+
+
+    //const [inputtext, setInputText] = useState(0);
+    const [inputtext, setInputText] = useState(0);
+    const [countnum, setCountnum] = useState(0);
+
     const formHandler = (e) => {
         e.preventDefault();
         const file = e.target[0].files[0];
+       // const file = resizeFile(image);
         uploadFiles(file);
+
     };
     const formHandler2 = (e) => {
         e.preventDefault();
         const file = e.target[0].files[0];
+       // const file = resizeFile(image);
         uploadFiles2(file);
     };
     const formHandler3 = (e) => {
         e.preventDefault();
         const file = e.target[0].files[0];
+      //  const file = resizeFile(image);
         uploadFiles3(file);
     };
 
@@ -109,6 +126,9 @@ function MakePost(){
                     (snapshot.bytesTransferred / snapshot.totalBytes) * 100
                 );
                 setProgress(prog);
+                //const imageaftersize = ( snapshot.totalBytes);
+                //setaftersize(imageaftersize);
+
             },
             (error) => console.log(error),
             () => {
@@ -131,6 +151,8 @@ function MakePost(){
                     (snapshot.bytesTransferred / snapshot.totalBytes) * 100
                 );
                 setProgress(prog);
+                //const imageaftersizetwo = ( snapshot.totalBytes);
+                //setaftersizetwo(imageaftersizetwo);
             },
             (error) => console.log(error),
             () => {
@@ -146,6 +168,7 @@ function MakePost(){
         const sotrageRef = ref(storage, `files/${file.name}`);
         const uploadTask = uploadBytesResumable(sotrageRef, file);
 
+
         uploadTask.on(
             "state_changed",
             (snapshot) => {
@@ -153,6 +176,7 @@ function MakePost(){
                     (snapshot.bytesTransferred / snapshot.totalBytes) * 100
                 );
                 setProgress(prog);
+
             },
             (error) => console.log(error),
             () => {
@@ -162,10 +186,71 @@ function MakePost(){
             }
         );
     };
+    async function doUpload(event) {
 
+        const inputFile = event.target.files[0];
+        setbeforesize(`${(inputFile.size / 1024 / 1024).toFixed(2)} MB`);
+
+        const maxSet = {
+            useWebWorker: true
+        }
+        try {
+
+            const afterCompressedFile = await imageCompression(inputFile, maxSet);
+
+            setaftersize(`${(afterCompressedFile.size / 1024 / 1024).toFixed(2)} MB`);
+
+            await uploadFiles(afterCompressedFile);
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+    async function doUpload2(event) {
+
+        const inputFile = event.target.files[0];
+        setbeforesizetwo(`${(inputFile.size / 1024 / 1024).toFixed(2)} MB`);
+
+        const maxSet = {
+            useWebWorker: true
+        }
+        try {
+
+            const afterCompressedFile = await imageCompression(inputFile, maxSet);
+
+            setaftersizetwo(`${(afterCompressedFile.size / 1024 / 1024).toFixed(2)} MB`);
+
+            await uploadFiles2(afterCompressedFile);
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
+    async function doUpload3(event) {
+
+        const inputFile = event.target.files[0];
+        setbeforesizethree(`${(inputFile.size / 1024 / 1024).toFixed(2)} MB`);
+
+        const maxSet = {
+
+            useWebWorker: true
+        }
+        try {
+
+            const afterCompressedFile = await imageCompression(inputFile, maxSet);
+
+            setaftersizethree(`${(afterCompressedFile.size / 1024 / 1024).toFixed(2)} MB`);
+
+            await uploadFiles3(afterCompressedFile);
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
     return (
         <Container styles={{color: 'darkblue', marginRight: '-60px', marginBottom: '-15px'}}>
-            {/*Make a Post Here*/}
+
             <Button
                 tooltip="Click to make a new post"
                 styles={{backgroundColor: 'darkblue' , color : 'white', width: '73px', height: '73px'}}
@@ -197,6 +282,7 @@ function MakePost(){
                                 }}
 
                             />
+
                         </div>
 
                         <label> Post:</label>
@@ -206,33 +292,40 @@ function MakePost(){
                                 style={{width:'450px', height:'250px', marginTop:'5px', marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
                                 placeholder="Post..."
                                 onChange={(event) => {
-                                    setPostText(event.target.value);
+
+                                    setInputText(event.target.value);
+                                    setPostText(inputtext);
                                 }}
                             />
                         </div>
                     </Typography>
 
-                    <form onSubmit={formHandler}>
+                    <form onChange={event => doUpload(event)}>
                         <input type="file" className="input" />
-                        <button type="submit">Upload</button>
+
                     </form>
                     <hr />
 
 
 
-                    <form onSubmit={formHandler2}>
+                    <form onChange={event => doUpload2(event)}>
                         <input type="file" className="input" />
-                        <button type="submit">Upload</button>
+
                     </form>
                     <hr />
 
 
-                    <form onSubmit={formHandler3}>
-                        <input type="file" className="input" />
-                        <button type="submit">Upload</button>
+                    <form onChange={event => doUpload3(event)}>
+                        <input type="file" className="input"/>
+
+
                     </form>
                     <hr />
-                    <h2>Uploading done {progress}%</h2>
+
+                    <h4>Uploading done {progress}%</h4>
+                    <h7>Image 1 Before resize: {beforesize} bytes, After resize: {aftersize}; </h7>
+                    <h7>Image 2 Before resize: {beforesizetwo} bytes, After resize: {aftersizetwo}; </h7>
+                    <h7>Image 3 Before resize: {beforesizethree} bytes, After resize: {aftersizethree}; </h7>
 
 
 
@@ -242,7 +335,7 @@ function MakePost(){
                     <Stack spacing={1} direction="row">
                         <div>
                             <Badge color="primary" invisible={!invisible} variant="dot" >
-                                <CheckIcon/>
+                                <AdminPanelSettingsIcon/>
                             </Badge>
                             <FormControlLabel
                                 sx={{ color: 'primary' }}
@@ -252,12 +345,8 @@ function MakePost(){
                         </div>
                     </Stack>
 
-                    <Stack  spacing={3} direction="row">
+                    <Stack  spacing={2} direction="row">
 
-                        <label htmlFor="contained-button-file">
-                            <Input accept="image/*" id="contained-button-file" multiple type="file" />
-                            <buttonInner varient='contained' style={{color: 'purple'}} component='span'>Add Photos</buttonInner>
-                        </label>
                         <label>
                             <buttonInner onClick={createPost} style={{color:'#0D67B5'}}>SUBMIT</buttonInner>
                         </label>

@@ -51,13 +51,16 @@ function PostDisplaySection() {
        // handleClose();
         await addDoc(commentsCollectionRef, {
             commentText:commentText,
-            author: { name: auth.currentUser.email, id: auth.currentUser.uid },
+            author: { author: auth.currentUser.email, id: auth.currentUser.uid },
 
         });
 
         window.location.pathname = "/home";
 
     };
+
+
+
     return (
 
         <PostDisplayContainer>
