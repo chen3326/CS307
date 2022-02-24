@@ -50,14 +50,24 @@ export default function ForgotPassword()
     async function handlePasswordChange() {
         try {
             if (confirmPassword === password) {
-                await passwordChange(password);
-                console.log("Password Changed!");
-                setLoading(false);
-                window.history.back();
+                if (password.match(/^\S*(?=\S{6,})(?=\S*\d)(?=\S*[A-Z])(?=\S*[a-z])(?=\S*[!@#$%^&*? ])\S*$/)) {
+                    await passwordChange(password);
+                    console.log("Password Changed!");
+                    setLoading(false);
+                    window.history.back();
+                }
+                else {
+                    alert("Password Doesnt Meet Requirements of:\n1. Minimum 6 characters\n" +
+                        "2. At least 1 upper case English letter\n" +
+                        "3. At least 1 lower case English letter\n" +
+                        "4. At least 1 letter\n" +
+                        "5. At least 1 special character (!,@,#,$,%,&,)");
+                }
+
                 //will move to next page if user creation w/email and password is ok, else page is same
 
             } else {
-                alert("Passwords do not match!")
+                alert("Passwords do not match!");
                 console.log("Password do not match");
             }
             //push inputs to ./users collection

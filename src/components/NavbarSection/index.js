@@ -11,7 +11,7 @@ import {
     NavBtn,
     NavBtnLink, NavBtnLinkR
 } from './NavbarElements';
-import {auth, useAuth} from "../../firebase";
+import {auth, useAuth,logout} from "../../firebase";
 import {
 
 
@@ -51,7 +51,7 @@ function Navbar(){
 
                         </NavBtn>
 
-                        <NavBtn style={{marginRight: '-200px'}}>
+                        <NavBtn style={{marginRight: '-200px'}} >
                             <NavBtnLink href="\"> Log out </NavBtnLink>
                         </NavBtn>
                     </NavbarContainer>
