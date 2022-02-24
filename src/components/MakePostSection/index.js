@@ -15,7 +15,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import imageCompression from "browser-image-compression";
-import Alert from '@mui/material/Alert';
+import Alert from '@mui/material/Alert'; //will be used in anonymous
 
 const style = {
     position: 'absolute',
@@ -246,6 +246,13 @@ function MakePost(){
         }
 
     }
+
+    const checkunderlimit = (object) => {
+        if (object.target.value.length > object.target.maxLength) {
+            object.target.value = object.target.value.slice(0, object.target.maxLength)
+        }
+    }
+
     return (
         <Container styles={{color: 'darkblue', marginRight: '-60px', marginBottom: '-15px'}}>
 
@@ -289,6 +296,9 @@ function MakePost(){
                             <textarea
                                 style={{width:'450px', height:'250px', marginTop:'5px', marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
                                 placeholder="Post..."
+                                maxLength="500"
+                                onInput={checkunderlimit}
+
                                 onChange={(event) => {
                                     setPostText(event.target.value);
                                 }}
