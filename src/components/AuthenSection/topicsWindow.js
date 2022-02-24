@@ -4,7 +4,7 @@ import buttonInner from '@mui/material/Button';
 import React, { useState, useEffect } from "react";
 import { styled } from '@mui/material/styles';
 import { addDoc, collection } from "firebase/firestore";
-import {auth, database} from "../../firebase.js";
+import {auth, database, signup} from "../../firebase.js";
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
@@ -37,10 +37,12 @@ const Input = styled('input')({
 });
 
 
-function Topics(){
+function Topics(email, nickName, age, major, year) {
+    console.log(email);
 
     //collections in firebase keep the data tied to the user
     //https://firebase.google.com/docs/firestore/data-model
+    const [loading, setLoading] = useState(false);
     const [topic1, setTopic1] = useState("");
     const [topic2, setTopic2] = useState("");
     const [topic3, setTopic3] = useState("");
@@ -55,40 +57,60 @@ function Topics(){
 
     const [invisible, setInvisible] = React.useState(false); //ask helen what this does
 
+    const userCollectionRef = collection(database, "users"); //collection of users
 
-    //
-    const createPost = async () => {
-        await addDoc(topicCollectionRef, {
-            topic1:topic1,
-            topic2:topic2,
-            topic3:topic3,
-            topic4:topic4,
-            topic5:topic5,
-            author: { name: auth.currentUser.email, id: auth.currentUser.uid },
 
+    //add user to database in ./users
+    const createUser = async () => {
+        //todo: <Link> add topics in window
+        //adds all user input into collection
+        //password not passed into collection for security/privacy
+        await addDoc(userCollectionRef, {
+            topic1: topic1,
+            topic2: topic2,
+            topic3: topic3,
+            topic4: topic4,
+            topic5: topic5,
+            author: {
+                id: auth.currentUser.uid,
+                email: email,
+                nickName: nickName,
+                age: age,
+                major: major,
+                year: year,
+            },
+            //topics: { email: auth.currentUser.email,  },
         });
-        //window.location.pathname = "/home";
+        window.location.pathname = "/home"; //redirects now logged in user to homepage
     };
 
-    return (
+    async function handleUserAuthen() {
+        setLoading(true);
+        try {
+            //push inputs to ./users collection
+            createUser();
+        } catch {
+            alert("Error!");
+        }
+        setLoading(false);
+    }
+
+    return(
         <Container styles={{color: 'darkblue', marginRight: '-60px', marginBottom: '-15px'}}>
-            {/*Make a Post Here*/}
             <Button
-                tooltip="Click to make a new post"
                 styles={{backgroundColor: 'darkblue' , color : 'white', width: '73px', height: '73px'}}
                 onClick={handleOpen}//() => window.location.pathname = "/Topics" }
             >
                 <CreatePostIcon fontSize='large'/>
             </Button>
+
             <Modal
                 open={open}
-                onClose={handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
 
             >
                 <Box sx={style}>
-                    {/*title and subtitle header*/}
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         Add Your Topics
                     </Typography>
@@ -96,7 +118,6 @@ function Topics(){
                         Here you can add some of your interests, classes, clubs, etc. that will be tied to your account. Lets start off with five topics for now. You can add more later.
                     </Typography>
 
-                    {/*topicsog*/}
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                         <label> Topic 1:</label>
                         <div className="inputGp">
@@ -111,9 +132,6 @@ function Topics(){
                         </div>
                     </Typography>
 
-                    {/*topics that show what could be*/}
-                    {/*todo: rn only notes the last topic because other topics are overwritten*/}
-                    {/*todo:delete null topics*/}
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                         <label> Topic 2:</label>
                         <div className="inputGp">
@@ -168,39 +186,20 @@ function Topics(){
                     </Typography>
 
 
-                    {/*submit and close buttons on the bottom to end window*/}
-                    <Stack  spacing={3} direction="row">
-                        <label>
-                            <buttonInner onClick={createPost} style={{color:'#0D67B5'}}>SUBMIT</buttonInner>
-                        </label>
-                        <label>
-                            <buttonInner onClick={handleClose} style={{color:'red'}}> CLOSE </buttonInner>
-                        </label>
-                    </Stack>
+
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+
+                        onClick={handleUserAuthen}
+                    >
+                        SUBMIT
+                    </Button>
                 </Box>
             </Modal>
         </Container>
-
     );
 }
-
-const itemData = [
-    {
-        img: LogoPhoto,
-        title: 'BoilerBreakoutLogo',
-    },
-    {
-        img: Cat_pic,
-        title: 'Cat',
-    },
-    {
-        img: LogoPhoto,
-        title: 'BoilerBreakoutLogo',
-    },
-    {
-        img: Cat_pic,
-        title: 'Cat',
-    },
-];
-
 export default Topics;

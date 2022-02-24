@@ -7,7 +7,6 @@ function Signup_page() {
         <>
 
             <SignUpUser/>
-            <Topics/>
 
         </>
     );

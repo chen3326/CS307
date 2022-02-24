@@ -4,8 +4,9 @@
 //local files
 import {auth, database} from "../../firebase.js";
 import {login, logout, signup, useAuth} from "../../firebase";
+import Topics from './topicsWindow';
 import AppLogo from '../../images/Boiler Breakouts-logos.jpeg';
-
+import toTest from './test';
 
 //MUX extentions
 import {
@@ -25,6 +26,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import React, {useRef, useState, useEffect} from "react";
 import { addDoc, collection } from "firebase/firestore";
 import Grid from "@mui/material/Grid";
+import topicsWindow from "./topicsWindow";
 
 
 //stying margins for ux
@@ -54,6 +56,9 @@ const styles = theme => ({
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing.unit,
     },
+    textField: {
+        width: '90%', marginLeft: 'auto', marginRight: 'auto', color: 'white', paddingBottom: 0, marginTop: 0, fontWeight: 500,
+    },
     submit: {
         marginTop: theme.spacing.unit * 3,
     },
@@ -74,12 +79,19 @@ function SignUpUser() {
     const [nickName, setnickName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [age, setAge] = useState(0)
     const [major, setMajor] = useState("");
+    const [age, setAge] = useState(0)
     const [year, setYear] = useState("");
-
     //todo: profile image set up
     const [bio, setBio] = useState("");
+
+
+
+    const [topic1, setTopic1] = useState("");
+    const [topic2, setTopic2] = useState("");
+    const [topic3, setTopic3] = useState("");
+    const [topic4, setTopic4] = useState("");
+    const [topic5, setTopic5] = useState("");
 
 
 
@@ -91,17 +103,27 @@ function SignUpUser() {
         //adds all user input into collection
         //password not passed into collection for security/privacy
         await addDoc(userCollectionRef, {
-            id: auth.currentUser.uid,
-            email: email,
-            nickName: nickName,
-            age: age,
-            major: major,
-            year: year,
-            bio: bio
-            //topics: { email: auth.currentUser.email,  },
+            author: {
+                id: auth.currentUser.uid,
+                email: email,
+                nickName: nickName,
+                age: age,
+                major: major,
+                year: year,
+                bio: bio,
+            },
+            topics: {
+                topic1: topic1,
+                topic2: topic2,
+                topic3: topic3,
+                topic4: topic4,
+                topic5: topic5,
+            }
         });
         window.location.pathname = "/home"; //redirects now logged in user to homepage
     };
+
+
 
     //create user in database authentication, but don't push to collections
     //firebase will error if unsuccessful inputs ie. email is already taken or isn't an email
@@ -114,6 +136,9 @@ function SignUpUser() {
                 if (password.match(/^\S*(?=\S{6,})(?=\S*\d)(?=\S*[A-Z])(?=\S*[a-z])(?=\S*[!@#$%^&*? ])\S*$/)) {
                     await signup(email, password);
                     setLoading(false); //will move to next page if user creation w/email and password is ok, else page is same
+
+                    //topics window not working for now, put all on one page    Topics(email, nickName, age, major, year);
+
                     createUser();
                 } else {
                     alert("Password Doesnt Meet Requirements of:\n1. Minimum 6 characters\n" +
@@ -273,10 +298,76 @@ function SignUpUser() {
                             </FormControl>
                         </div>
 
-
                         {/*todo: profile img*/}
                         {/*todo: bio text section*/}
 
+
+                        {/*TOPICS SECTION (TEMPORARY)*/}
+                        <div>
+                            <FormControl margin="normal" fullWidth>
+                                <Typography variant={"h6"} >
+                                    Topics:
+                                </Typography>
+                                <Typography id="modal-modal-title" variant="subtitle1" component="subtitle1">
+                                    Here you can add some of your interests, classes, clubs, etc. that will be tied to your account. Lets start off with five topics for now. You can add more later.
+                                </Typography>
+
+                                <TextField
+                                    id="outlined-basic"
+                                    variant="outlined"
+                                    label="Topic 1*"
+                                    className={"textField"}
+                                    onChange={(event) => {
+                                        setTopic1(event.target.value);
+                                    }}
+                                />
+                            </FormControl>
+                            <FormControl margin="normal" fullWidth>
+                                <TextField
+                                    id="outlined-basic"
+                                    variant="outlined"
+                                    label="Topic 2*"
+                                    className={"textField"}
+                                    onChange={(event) => {
+                                        setTopic2(event.target.value);
+                                    }}
+                                />
+                            </FormControl>
+                            <FormControl margin="normal" fullWidth>
+                                <TextField
+                                    id="outlined-basic"
+                                    variant="outlined"
+                                    label="Topic 3*"
+                                    className={"textField"}
+                                    onChange={(event) => {
+                                        setTopic3(event.target.value);
+                                    }}
+                                />
+                            </FormControl>
+                            <FormControl margin="normal" fullWidth>
+                                <TextField
+                                    id="outlined-basic"
+                                    variant="outlined"
+                                    label="Topic 4*"
+                                    className={"textField"}
+                                    onChange={(event) => {
+                                        setTopic4(event.target.value);
+                                    }}
+                                />
+                            </FormControl>
+                            <FormControl margin="normal" fullWidth>
+                                <TextField
+                                    id="outlined-basic"
+                                    variant="outlined"
+                                    label="Topic 5*"
+                                    className={"textField"}
+                                    onChange={(event) => {
+                                        setTopic5(event.target.value);
+                                    }}
+                                />
+                            </FormControl>
+
+                        </div>
 
                         {/*SUBMIT button creates user id in authen and then pushes user inputs to users collection*/}
                         <Button
@@ -284,6 +375,7 @@ function SignUpUser() {
                             fullWidth
                             variant="contained"
                             color="primary"
+
                             onClick={handleUserAuthen}
                         >
                             Next

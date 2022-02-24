@@ -39,18 +39,9 @@ function PostDisplaySection() {
 
                     />
                     )
-
-
-
-
-
-
-
             })}
 
         </PostDisplayContainer>
-
-
     );
 }
 
