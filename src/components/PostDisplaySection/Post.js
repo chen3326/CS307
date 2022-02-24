@@ -32,7 +32,8 @@ function OnePost({postid, title, postText, authorEmail, imageUrl, imageUrl2, ima
 
         await addDoc(commentsCollectionRef, {
             commentText: commentText,
-            commentAuthorId: auth.currentUser.uid
+            commentAuthorId: auth.currentUser.uid,
+            commentAuthorEmail: auth.currentUser.email
 
         });
 
@@ -122,7 +123,7 @@ function OnePost({postid, title, postText, authorEmail, imageUrl, imageUrl2, ima
 
                     </ImageListItem>
                     {FileURl !== "" &&
-                        <a href={FileURl}> download attached file</a>
+                        <a href={FileURl} style={{marginTop:'-30px'}}> download attached file</a>
                     }
 
 
@@ -130,7 +131,7 @@ function OnePost({postid, title, postText, authorEmail, imageUrl, imageUrl2, ima
 
                 </ImageList>
                 <CardActions>
-                    <Button onClick={handleClick('bottom')} style={{marginTop:'-100px'}}> Reply </Button>
+                    <Button variant='outlined' color='primary' onClick={handleClick('bottom')} style={{marginTop:'-200px'}}> Reply </Button>
                     <Popper open={open} anchorEl={anchorEl} placement={placement} transition>
                         {({TransitionProps}) => (
                             <Fade {...TransitionProps} timeout={350}>
@@ -179,7 +180,18 @@ function OnePost({postid, title, postText, authorEmail, imageUrl, imageUrl2, ima
                         return (
 
 
-                            <div> {comment.commentText}</div>
+                            <div> {comment.commentText} -- By <Link
+                                to={{
+                                    pathname: "/profile",
+                                    state: comment.commentAuthorEmail
+
+                                    // your data array of objects
+                                }}
+                            >
+                                {comment.commentAuthorEmail}
+
+                            </Link>
+                            </div>
                         )
 
 

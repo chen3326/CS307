@@ -16,6 +16,7 @@ export const Post = styled.div`
   width: 600px;
   height: auto;
   max-height: 800px;
+  max-width: 600px;
   background-color: rgb(250, 250, 250);
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   margin: 20px;
@@ -46,5 +47,6 @@ export const PostTextContainer = styled.a`
   width: 100%;
   overflow: hidden;
   overflow-y: auto;
+  align-items: flex-start;
 
 `
