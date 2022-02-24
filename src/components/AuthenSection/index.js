@@ -51,17 +51,6 @@ export default function Login() {
             alert("Error!");
         }
         setLoading(false);
-        /**
-        setLoading(true);
-        try {
-            await signup(emailRef.current.value, passwordRef.current.value);
-            setLoading(false);
-            window.location = "/signup";
-        } catch {
-            alert("Error!");
-        }
-        setLoading(false);
-         */
     }
 
     async function handleLogin() {
