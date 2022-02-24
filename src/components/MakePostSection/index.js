@@ -13,12 +13,10 @@ import Badge from '@mui/material/Badge';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import ImageListItem from "@mui/material/ImageListItem";
-import ImageList from "@mui/material/ImageList";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-import Resizer from "react-image-file-resizer";
 import imageCompression from "browser-image-compression";
 import Alert from '@mui/material/Alert';
+
 const style = {
     position: 'absolute',
     top: '50%',
@@ -292,9 +290,7 @@ function MakePost(){
                                 style={{width:'450px', height:'250px', marginTop:'5px', marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
                                 placeholder="Post..."
                                 onChange={(event) => {
-
-                                    setInputText(event.target.value);
-                                    setPostText(inputtext);
+                                    setPostText(event.target.value);
                                 }}
                             />
                         </div>
