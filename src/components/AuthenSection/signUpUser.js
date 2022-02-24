@@ -10,11 +10,11 @@ import toTest from './test';
 
 //MUX extentions
 import {
-    Typography, TextField, Button, Container, Box, FormControl, CssBaseline,
+    Typography, Button, Container, Box, FormControl, CssBaseline,
     FormControlLabel, Checkbox, Input, Paper
 } from '@material-ui/core';
 import {
-    InputLabel, MenuItem, Select, Avatar, FormHelperText
+    InputLabel, MenuItem, Select, Avatar, FormHelperText, TextField
 } from '@mui/material';
 
 
@@ -169,24 +169,12 @@ function SignUpUser() {
                     <Avatar sx={{ bgcolor: orange[500] }} variant="rounded">
                         <HardwareIcon sx={{ color: indigo[500] }} />
                     </Avatar>
-                    <Typography component="h1" variant="h5">
+                    <Typography component="h1" variant="h3">
                         Create an Account
                     </Typography>
 
                     {/*form for all user inputs*/}
-                        {/*Nickname*/}
-                        <FormControl margin="normal" fullWidth>
-                            <TextField
-                                id="outlined-basic"
-                                variant="outlined"
-                                label="Nickname*"
-                                className={"textField"}
-                                onChange={(event) => {
-                                    setnickName(event.target.value);
-                                }}
-                            />
-                        </FormControl>
-
+                    <div> {/*essencial infor for authen*/}
                         {/*Email Address*/}
                         <FormControl margin="normal" fullWidth>
                             <TextField
@@ -227,6 +215,41 @@ function SignUpUser() {
                                 5. At least 1 special character (!,@,#,$,%,&,)");
                             </Typography>
                         </FormControl>
+                    </div>
+
+                    <div>{/*personal info*/}
+                        {/*Nickname*/}
+                        <FormControl margin="normal" fullWidth>
+                            <Typography variant={"h6"} >
+                                Personal Info:
+                            </Typography>
+                            <Typography id="modal-modal-title" variant="subtitle1" component="subtitle1">
+                                Let us know more about you!
+                            </Typography>
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                label="Nickname*"
+                                className={"textField"}
+                                onChange={(event) => {
+                                    setnickName(event.target.value);
+                                }}
+                            />
+                        </FormControl>
+
+                        {/*bio*/}
+                        <FormControl margin="normal" fullWidth>
+                        <TextField
+                            id="outlined-multiline-static"
+                            label="Bio"
+                            multiline
+                            rows={5}
+                            onChange={(event) => {
+                                setBio(event.target.value);
+                            }}
+                            />
+                        </FormControl>
+
 
                         {/*Major*/}
                         <FormControl margin="normal" fullWidth>
@@ -241,7 +264,6 @@ function SignUpUser() {
                             />
                         </FormControl>
 
-                        {/*age and year*/}
                         {/*Age*/}
                         <FormControl margin="normal">
                             <TextField
@@ -273,7 +295,7 @@ function SignUpUser() {
                         {/*Year*/}
                         <div>
                             <FormControl margin="normal" fullWidth>
-                                <InputLabel id="demo-controlled-open-select-label">Year</InputLabel>
+                                <InputLabel id="demo-controlled-open-select-label">Year*</InputLabel>
                                 <Select
                                     labelId="demo-controlled-open-select-label"
                                     id="demo-controlled-open-select"
@@ -281,7 +303,7 @@ function SignUpUser() {
                                     onClose={handleClose}
                                     onOpen={handleOpen}
                                     value={year}
-                                    label="Year"
+                                    label="Year*"
                                     onChange={(event) => {
                                         setYear(event.target.value);
                                     }}
@@ -300,86 +322,88 @@ function SignUpUser() {
 
                         {/*todo: profile img*/}
                         {/*todo: bio text section*/}
+                    </div>
 
 
-                        {/*TOPICS SECTION (TEMPORARY)*/}
-                        <div>
-                            <FormControl margin="normal" fullWidth>
-                                <Typography variant={"h6"} >
-                                    Topics:
-                                </Typography>
-                                <Typography id="modal-modal-title" variant="subtitle1" component="subtitle1">
-                                    Here you can add some of your interests, classes, clubs, etc. that will be tied to your account. Lets start off with five topics for now. You can add more later.
-                                </Typography>
 
-                                <TextField
-                                    id="outlined-basic"
-                                    variant="outlined"
-                                    label="Topic 1*"
-                                    className={"textField"}
-                                    onChange={(event) => {
-                                        setTopic1(event.target.value);
-                                    }}
-                                />
-                            </FormControl>
-                            <FormControl margin="normal" fullWidth>
-                                <TextField
-                                    id="outlined-basic"
-                                    variant="outlined"
-                                    label="Topic 2*"
-                                    className={"textField"}
-                                    onChange={(event) => {
-                                        setTopic2(event.target.value);
-                                    }}
-                                />
-                            </FormControl>
-                            <FormControl margin="normal" fullWidth>
-                                <TextField
-                                    id="outlined-basic"
-                                    variant="outlined"
-                                    label="Topic 3*"
-                                    className={"textField"}
-                                    onChange={(event) => {
-                                        setTopic3(event.target.value);
-                                    }}
-                                />
-                            </FormControl>
-                            <FormControl margin="normal" fullWidth>
-                                <TextField
-                                    id="outlined-basic"
-                                    variant="outlined"
-                                    label="Topic 4*"
-                                    className={"textField"}
-                                    onChange={(event) => {
-                                        setTopic4(event.target.value);
-                                    }}
-                                />
-                            </FormControl>
-                            <FormControl margin="normal" fullWidth>
-                                <TextField
-                                    id="outlined-basic"
-                                    variant="outlined"
-                                    label="Topic 5*"
-                                    className={"textField"}
-                                    onChange={(event) => {
-                                        setTopic5(event.target.value);
-                                    }}
-                                />
-                            </FormControl>
+                    <div>{/*TOPICS SECTION (TEMPORARY)*/}
+                        <FormControl margin="normal" fullWidth>
+                            <Typography variant={"h6"} >
+                                Topics:
+                            </Typography>
+                            <Typography id="modal-modal-title" variant="subtitle1" component="subtitle1">
+                                Here you can add some of your interests, classes, clubs, etc. that will be tied to your account. Lets start off with five topics for now. You can add more later.
+                            </Typography>
 
-                        </div>
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                label="Topic 1*"
+                                className={"textField"}
+                                onChange={(event) => {
+                                    setTopic1(event.target.value);
+                                }}
+                            />
+                        </FormControl>
+                        <FormControl margin="normal" fullWidth>
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                label="Topic 2*"
+                                className={"textField"}
+                                onChange={(event) => {
+                                    setTopic2(event.target.value);
+                                }}
+                            />
+                        </FormControl>
+                        <FormControl margin="normal" fullWidth>
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                label="Topic 3*"
+                                className={"textField"}
+                                onChange={(event) => {
+                                    setTopic3(event.target.value);
+                                }}
+                            />
+                        </FormControl>
+                        <FormControl margin="normal" fullWidth>
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                label="Topic 4*"
+                                className={"textField"}
+                                onChange={(event) => {
+                                    setTopic4(event.target.value);
+                                }}
+                            />
+                        </FormControl>
+                        <FormControl margin="normal" fullWidth>
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                label="Topic 5*"
+                                className={"textField"}
+                                onChange={(event) => {
+                                    setTopic5(event.target.value);
+                                }}
+                            />
+                        </FormControl>
+                    </div>
 
-                        {/*SUBMIT button creates user id in authen and then pushes user inputs to users collection*/}
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
 
-                            onClick={handleUserAuthen}
-                        >
-                            Next
-                        </Button>
+
+                {/*SUBMIT button creates user id in authen and then pushes user inputs to users collection*/}
+                <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+
+                    onClick={handleUserAuthen}
+                >
+                    Next
+                </Button>
             </Grid>
             <Grid item sm/>
         </Grid>
