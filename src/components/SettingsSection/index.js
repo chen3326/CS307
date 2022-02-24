@@ -16,6 +16,10 @@ import pic from "../../images/cat_pic.jpg";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
+import {addDoc, collection, getDocs, updateDoc} from "firebase/firestore";
+import {auth, database} from "../../firebase";
+//import {useLocation} from "react-router-dom";
+
 const years = [
     {
         value: 'freshman',
@@ -41,7 +45,35 @@ const years = [
 
 function SettingsSection() {
 
+    //const { state } = useLocation();
+    const privateCollectionRef = collection(database, "users");
+
     const [year, setYear] = React.useState('');
+
+    const [privateUser, setPrivateUser] = React.useState(false);
+
+
+
+
+    const handlePrivateUser = async () => {
+        setPrivateUser(!privateUser);
+
+        //await updateDoc(privateCollectionRef, {
+        //   privateStatus: privateUser
+        //});
+
+
+    };
+    const handlePublicUser = async () => {
+        setPrivateUser(!privateUser);
+
+        //await updateDoc(privateCollectionRef, {
+        //    privateStatus: privateUser
+        //});
+
+
+    };
+
 
     const handleYearChange = (event) => {
         setYear(event.target.value);
@@ -215,8 +247,11 @@ function SettingsSection() {
                                     {/*TODO: link this setting to the database*/}
                                     <FormGroup>
                                         <Stack direction="row" spacing={1} alignItems="center">
+                                            <Button variant="contained" color = 'secondary'  onChange={handlePublicUser}> Choose Public</Button>
+                                            <Button color = 'primary' variant='contained'  onChange={handlePrivateUser}> Choose Private</Button>
                                             <Typography>Public</Typography>
-                                            <FormControlLabel control={<Switch defaultChecked />} label="" />
+
+                                            <FormControlLabel control={<Switch checked={privateUser} onChange={handlePrivateUser}/>} label="" />
                                             <Typography>Private</Typography>
                                         </Stack>
                                     </FormGroup>
