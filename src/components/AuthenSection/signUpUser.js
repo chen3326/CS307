@@ -6,7 +6,6 @@ import {auth, database, storage} from "../../firebase.js";
 import {login, logout, signup, useAuth} from "../../firebase";
 import Topics from './topicsWindow';
 import AppLogo from '../../images/Boiler Breakouts-logos.jpeg';
-import toTest from './test';
 
 //MUX extentions
 import {
@@ -18,7 +17,6 @@ import {
 } from '@mui/material';
 
 
-import PropTypes from 'prop-types';
 import { orange, indigo } from '@mui/material/colors';
 import HardwareIcon from '@mui/icons-material/Hardware';
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -26,7 +24,6 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import React, {useRef, useState, useEffect} from "react";
 import { addDoc, collection } from "firebase/firestore";
 import Grid from "@mui/material/Grid";
-import topicsWindow from "./topicsWindow";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
 import imageCompression from "browser-image-compression";
 
@@ -85,12 +82,12 @@ function SignUpUser() {
     const [age, setAge] = useState(0)
     const [year, setYear] = useState("");
     const [bio, setBio] = useState("");
+    //profile pic variables todo:default profile image
     const [imageUrl, setimageUrl] = useState("");
     const [aftersize, setaftersize] = useState(0);
     const [beforesize, setbeforesize] = useState(0);
     const [progress, setProgress] = useState(0);
-
-
+    //topic var
     const [topic1, setTopic1] = useState("");
     const [topic2, setTopic2] = useState("");
     const [topic3, setTopic3] = useState("");
@@ -103,7 +100,6 @@ function SignUpUser() {
 
     //add user to database in ./users
     const createUser = async () => {
-        //todo: <Link> add topics in window
         //adds all user input into collection
         //password not passed into collection for security/privacy
         await addDoc(userCollectionRef, {
@@ -215,10 +211,18 @@ function SignUpUser() {
             <Grid item sm/>
             <Grid item sm> {/*middle of grids so centered*/}
                     {/* rn temp logo marker*/}
-                    <Avatar sx={{ bgcolor: orange[500] }} variant="rounded">
-                        <HardwareIcon sx={{ color: indigo[500] }} />
-                    </Avatar>
-                    <Typography component="h1" variant="h3">
+                <Box
+                    display="flex"
+                    width={500} height={100}
+                >
+                    <Box m="auto">
+                        <Avatar sx={{ bgcolor: orange[500] }} variant="rounded">
+                            <HardwareIcon sx={{ color: indigo[500] }} />
+                        </Avatar>
+                    </Box>
+                </Box>
+
+                    <Typography component="h1" variant="h3" align="center">
                         Create an Account
                     </Typography>
 
@@ -381,8 +385,6 @@ function SignUpUser() {
                         </div>
                     </div>
 
-
-
                     <div>{/*TOPICS SECTION (TEMPORARY)*/}
                         <FormControl margin="normal" fullWidth>
                             <Typography variant={"h6"} >
@@ -451,16 +453,19 @@ function SignUpUser() {
 
 
                 {/*SUBMIT button creates user id in authen and then pushes user inputs to users collection*/}
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
+                <FormControl margin="normal" fullWidth>
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
 
-                    onClick={handleUserAuthen}
-                >
-                    Next
-                </Button>
+                        onClick={handleUserAuthen}
+                    >
+                        Next
+                    </Button>
+                </FormControl>
+
             </Grid>
             <Grid item sm/>
         </Grid>
