@@ -78,9 +78,23 @@ export default function SignUpUser() {
     async function handleUserAuthen() {
         setLoading(true);
         try {
-            await signup(email, password);
-            setLoading(false); //will move to next page if user creation w/email and password is ok, else page is same
-            createUser(); //push inputs to ./users collection
+            if (email.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+                if (password.match(/^\S*(?=\S{6,})(?=\S*\d)(?=\S*[A-Z])(?=\S*[a-z])(?=\S*[!@#$%^&*? ])\S*$/)) {
+                    await signup(email, password);
+                    setLoading(false); //will move to next page if user creation w/email and password is ok, else page is same
+                    createUser();
+                } else {
+                    alert("Password Doesnt Meet Requirements of:\n1. Minimum 6 characters\n" +
+                        "2. At least 1 upper case English letter\n" +
+                        "3. At least 1 lower case English letter\n" +
+                        "4. At least 1 letter\n" +
+                        "5. At least 1 special character (!,@,#,$,%,&,)");
+                }
+            }
+            else {
+                alert("Please enter a Valid Email!")
+            }
+             //push inputs to ./users collection
 
             //window.location.pathname = "/home"; //redirects now logged in user to homepage
         } catch {
