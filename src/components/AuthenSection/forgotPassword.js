@@ -9,7 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import {collection, getDoc} from "firebase/firestore";
+import {collection} from "firebase/firestore";
 
 //main welcome page with login and link to signing in
 //stying margins for ux
@@ -51,8 +51,9 @@ export default function ForgotPassword()
         try {
             if (confirmPassword === password) {
                 await passwordChange(password);
+                console.log("Password Changed!");
                 setLoading(false);
-                window.location.pathname = "/home";
+                window.history.back();
                 //will move to next page if user creation w/email and password is ok, else page is same
 
             } else {
@@ -69,7 +70,7 @@ export default function ForgotPassword()
     async function handleBackClick() {
         setLoading(true);
         try {
-            window.location.pathname = "/";
+            window.history.back();
             //push inputs to ./users collection
 
             //window.location.pathname = "/home"; //redirects now logged in user to homepage
