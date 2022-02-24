@@ -103,6 +103,9 @@ export default function SignUpUser() {
                     Create an Account
                 </Typography>
 
+
+
+
                 {/*first name*/}
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                     <label> First Name:</label>
@@ -117,6 +120,21 @@ export default function SignUpUser() {
                         />
                     </div>
                 </Typography>
+
+                <div>
+                    <TextField
+                        //id="modal-modal-description"
+                        id="outlined-basic"
+                        variant="outlined"
+                        label="firstname_test"
+                        //className="inputGp"
+                        className={"textField"}
+                        onChange={(event) => {
+                            setfName(event.target.value);
+                        }}
+                    />
+                </div>
+
 
                 {/*last name*/}
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
