@@ -225,6 +225,7 @@ function SignUpUser() {
                                 label="Age*"
                                 className={"textField"}
 
+                                //make sure that only unsigned int can be used as inputs
                                 type={"number"}
                                 inputProps={{ min }}
                                 value={age}
