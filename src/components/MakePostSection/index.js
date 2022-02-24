@@ -60,6 +60,8 @@ function MakePost(){
         setInvisible(!invisible);
     };
 
+    const names = ['Bruce', 'Clark', 'Diana']
+
     const [authorPost, setauthorPost] = useState("");
 
     const createPost = async () => {
@@ -76,6 +78,7 @@ function MakePost(){
             imageUrl:imageUrl,
             imageUrl2:imageUrl2,
             imageUrl3:imageUrl3
+
 
         });
 
