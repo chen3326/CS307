@@ -23,21 +23,9 @@ function Sidebar(){
                 <SidebarContainer>
                     <SideLogo>
                     </SideLogo>
-                    <SideMenu>
-                        <SideItem>
-                            <SideLinks
-                                to='aboutMe'
-                                smooth={true}
-                                duration={500}
-                                spy={false}
-                                exact='true'
-                                offset={-80}
-                            >
-                                <HomeIcon/>
-                            </SideLinks>
-                        </SideItem>
-
-                    </SideMenu>
+                    <SideBtn>
+                        <SideBtnLink href="/home"> <HomeIcon/></SideBtnLink>
+                    </SideBtn>
                     <SideBtn>
                         <SideBtnLink href=""> <SavedIcon/></SideBtnLink>
                     </SideBtn>

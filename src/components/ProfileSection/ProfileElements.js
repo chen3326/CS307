@@ -64,7 +64,7 @@ export const UserName = styled.div`
 
   width: 30vw;
   color: black;
-  font-size: 5rem;
+  font-size: 4rem;
   font-weight: bold;
 
 `

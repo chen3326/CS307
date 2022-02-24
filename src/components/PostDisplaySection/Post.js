@@ -49,6 +49,11 @@ function OnePost({postid, title, postText, authorEmail, imageUrl, imageUrl2, ima
         getComments();
     });
 
+    const checkUnderLimit = (object) => {
+        if (object.target.value.length > object.target.maxLength) {
+            object.target.value = object.target.value.slice(0, object.target.maxLength)
+        }
+    }
 
     return (
 
@@ -125,7 +130,7 @@ function OnePost({postid, title, postText, authorEmail, imageUrl, imageUrl2, ima
 
                 </ImageList>
                 <CardActions>
-                    <Button onClick={handleClick('bottom')}> Reply </Button>
+                    <Button onClick={handleClick('bottom')} style={{marginTop:'-100px'}}> Reply </Button>
                     <Popper open={open} anchorEl={anchorEl} placement={placement} transition>
                         {({TransitionProps}) => (
                             <Fade {...TransitionProps} timeout={350}>
@@ -148,6 +153,8 @@ function OnePost({postid, title, postText, authorEmail, imageUrl, imageUrl2, ima
                                                                 borderRadius: '5px'
                                                             }}
                                                             placeholder=" Comment..."
+                                                            maxLength="140"
+                                                            onInput={checkUnderLimit}
                                                             onChange={(event) => {
                                                                 setCommentText(event.target.value);
                                                             }}
