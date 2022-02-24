@@ -1,47 +1,69 @@
+//Sign up user creates a new account
+
+
+//local files
+import {auth, database} from "../../firebase.js";
+import {login, logout, signup, useAuth} from "../../firebase";
 import AppLogo from '../../images/Boiler Breakouts-logos.jpeg';
+
 
 //MUX extentions
 import {
-    Grid, Typography, TextField, Button, Container, Box
+    Typography, TextField, Button, Container, Box, FormControl, CssBaseline,
+    FormControlLabel, Checkbox, Input, Paper
 } from '@material-ui/core';
-
 import {
-    Stack, buttonInner
+    InputLabel, MenuItem, Select, Avatar, FormHelperText
 } from '@mui/material';
 
 
-import {login, logout, signup, useAuth} from "../../firebase";
+import PropTypes from 'prop-types';
+import { orange, indigo } from '@mui/material/colors';
+import HardwareIcon from '@mui/icons-material/Hardware';
+import withStyles from '@material-ui/core/styles/withStyles';
+
 import React, {useRef, useState, useEffect} from "react";
 import { addDoc, collection } from "firebase/firestore";
-import {auth, database} from "../../firebase.js";
+import Grid from "@mui/material/Grid";
 
 
-//main welcome page with login and link to signing in
 //stying margins for ux
-const styles = {
+const styles = theme => ({
+    main: {
+        width: 'auto',
+        display: 'block', // Fix IE 11 issue.
+        marginLeft: theme.spacing.unit * 3,
+        marginRight: theme.spacing.unit * 3,
+        [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
+            width: 400,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
+    },
+    paper: {
+        marginTop: theme.spacing.unit * 8,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+    },
+    avatar: {
+        margin: theme.spacing.unit,
+    },
     form: {
-        textAlign: 'center'
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing.unit,
     },
-    image: {
-        margin: '70px auto 20px auto'
+    submit: {
+        marginTop: theme.spacing.unit * 3,
     },
-    pageTitle: {
-        margin: '10px auto 10px auto'
-    },
-    textField: {
-        margin: '10px auto 10px auto'
-    },
-    button: {
-        marginTop: '10px auto 10px auto'
-    }
-};
+});
 
-export default function SignUpUser() {
+
+function SignUpUser(props) {
+    const { classes } = props;
+
     const [loading, setLoading] = useState(false);
-    const currentUser = useAuth();
-    const emailRef = useRef();
-    const passwordRef = useRef();
-
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -49,14 +71,19 @@ export default function SignUpUser() {
     //collections in firebase keep the data tied to the user
     //https://firebase.google.com/docs/firestore/data-model
     //variables to keep user's input
-    const [fName, setfName] = useState("");
-    const [lName, setlName] = useState("");
+    const [nickName, setnickName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [age, setAge] = useState(0)
+    const [major, setMajor] = useState("");
+    const [year, setYear] = useState("");
+
+    //todo: profile image set up
+    const [bio, setBio] = useState("");
+
 
 
     const userCollectionRef = collection(database, "users"); //collection of users
-
 
     //add user to database in ./users
     const createUser = async () => {
@@ -66,8 +93,11 @@ export default function SignUpUser() {
         await addDoc(userCollectionRef, {
             id: auth.currentUser.uid,
             email: email,
-            fName: fName,
-            lName: lName,
+            nickName: nickName,
+            age: age,
+            major: major,
+            year: year,
+            bio: bio
             //topics: { email: auth.currentUser.email,  },
         });
         window.location.pathname = "/home"; //redirects now logged in user to homepage
@@ -78,7 +108,9 @@ export default function SignUpUser() {
     async function handleUserAuthen() {
         setLoading(true);
         try {
+            //valid email checks
             if (email.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+                //valid password recs as seen below in alert
                 if (password.match(/^\S*(?=\S{6,})(?=\S*\d)(?=\S*[A-Z])(?=\S*[a-z])(?=\S*[!@#$%^&*? ])\S*$/)) {
                     await signup(email, password);
                     setLoading(false); //will move to next page if user creation w/email and password is ok, else page is same
@@ -95,8 +127,6 @@ export default function SignUpUser() {
                 alert("Please enter a Valid Email!")
             }
              //push inputs to ./users collection
-
-            //window.location.pathname = "/home"; //redirects now logged in user to homepage
         } catch {
             alert("Error!");
         }
@@ -105,111 +135,155 @@ export default function SignUpUser() {
 
 
 
+    //DISPLAY PAGE
     return (
-        <Grid container className={"form"}>
-            <Grid item sm/>
-            <Grid item sm> {/*middle of grids so centered*/}
+        <main className={classes.main}>
+            <CssBaseline />
 
-                {/**todo:get smaller logo*/}
-                <img src={AppLogo} alt="logo" width='150px'/>
-
-                <Typography variant="h2" className={"pageTitle"}>
+            <Paper className={classes.paper}>
+                {/* rn temp logo marker*/}
+                <Avatar sx={{ bgcolor: orange[500] }} variant="rounded">
+                    <HardwareIcon sx={{ color: indigo[500] }} />
+                </Avatar>
+                <Typography component="h1" variant="h5">
                     Create an Account
                 </Typography>
 
-
-
-
-                {/*first name*/}
-                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    <label> First Name:</label>
-                    <div className="inputGp">
-                        <input
-                            style={{width:'450px', height:'30px', marginTop:'5px',marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
-                            placeholder="First Name..."
-                            width=""
+                {/*form for all user inputs*/}
+                <form className={classes.form}>
+                    {/*Nickname*/}
+                    <FormControl margin="normal" fullWidth>
+                        <TextField
+                            id="outlined-basic"
+                            variant="outlined"
+                            label="Nickname*"
+                            className={"textField"}
                             onChange={(event) => {
-                                setfName(event.target.value);
+                                setnickName(event.target.value);
                             }}
                         />
-                    </div>
-                </Typography>
+                    </FormControl>
 
-                <div>
-                    <TextField
-                        //id="modal-modal-description"
-                        id="outlined-basic"
-                        variant="outlined"
-                        label="firstname_test"
-                        //className="inputGp"
-                        className={"textField"}
-                        onChange={(event) => {
-                            setfName(event.target.value);
-                        }}
-                    />
-                </div>
-
-
-                {/*last name*/}
-                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    <label> Last Name:</label>
-                    <div className="inputGp">
-                        <input
-                            style={{width:'450px', height:'30px', marginTop:'5px',marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
-                            placeholder="Last Name..."
-                            width=""
-                            onChange={(event) => {
-                                setlName(event.target.value);
-                            }}
-                        />
-                    </div>
-                </Typography>
-
-                {/*email*/}
-                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    <label> Email:</label>
-                    <div className="inputGp">
-                        <input
-                            style={{width:'450px', height:'30px', marginTop:'5px',marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
-                            placeholder="Email..."
-                            width=""
+                    {/*Email Address*/}
+                    <FormControl margin="normal" fullWidth>
+                        <TextField
+                            id="outlined-basic"
+                            variant="outlined"
+                            label="Email Address*"
+                            className={"textField"}
                             onChange={(event) => {
                                 setEmail(event.target.value);
                             }}
                         />
-                    </div>
-                </Typography>
+                    </FormControl>
 
-                {/*password todo:add on password authen function here, also double confirm type*/}
-                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    <label> Password:</label>
-                    <div className="inputGp">
-                        <input
-                            style={{width:'450px', height:'30px', marginTop:'5px',marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
-                            placeholder="Password..."
-                            width=""
+                    {/*Password*/}
+                    <FormControl margin="normal" fullWidth>
+                        <TextField
+                            id="outlined-basic"
+                            variant="outlined"
+                            label="Password*"
+                            className={"textField"}
                             onChange={(event) => {
                                 setPassword(event.target.value);
                             }}
                         />
-                    </div>
-                </Typography>
+                        <Typography variant={"subtitle1"} display="inline">
+                            1. Minimum 6 characters
+                        </Typography>
+                        <Typography variant={"subtitle1"} display="inline">
+                            2. At least 1 upper case English letter
+                        </Typography>
+                        <Typography variant={"subtitle1"} display="inline">
+                            3. At least 1 lower case English letter
+                        </Typography>
+                        <Typography variant={"subtitle1"} display="inline">
+                            4. At least 1 letter
+                        </Typography>
+                        <Typography variant={"subtitle1"} display="inline">
+                            5. At least 1 special character (!,@,#,$,%,&,)");
+                        </Typography>
+                    </FormControl>
 
-                {/*SUBMIT button creates user id in authen and then pushes user inputs to users collection*/}
-                <Button onClick={handleUserAuthen}>Sign Up</Button>
+                    {/*Major*/}
+                    <FormControl margin="normal" fullWidth>
+                        <TextField
+                            id="outlined-basic"
+                            variant="outlined"
+                            label="Major*"
+                            className={"textField"}
+                            onChange={(event) => {
+                                setMajor(event.target.value);
+                            }}
+                        />
+                    </FormControl>
 
-            </Grid>
-            <Grid item sm/>n
-        </Grid>
+                    {/*age and year*/}
+                    {/*Age*/}
+                    <FormControl margin="normal">
+                        <TextField
+                            id="outlined-basic"
+                            variant="outlined"
+                            label="Age*"
+                            className={"textField"}
+                            type={"number"}
+                            item xs={1}
+                            onChange={(event) =>
+                                event.target.value < 0
+                                    ? (event.target.value = 0)
+                                    : event.target.value
+                            }
+                        />
+                    </FormControl>
+
+                    {/*Year*/}
+                        <div>
+                            <FormControl sx={{ m: 1, minWidth: 120 }}>
+                                <InputLabel id="demo-controlled-open-select-label">Year</InputLabel>
+                                <Select
+                                    labelId="demo-controlled-open-select-label"
+                                    id="demo-controlled-open-select"
+                                    open={open}
+                                    onClose={handleClose}
+                                    onOpen={handleOpen}
+                                    value={year}
+                                    label="Year"
+                                    onChange={(event) => {
+                                        setYear(event.target.value);
+                                    }}
+                                >
+                                    <MenuItem value="">
+                                        <em>None</em>
+                                    </MenuItem>
+                                    <MenuItem value={"Freshman"}>Freshman</MenuItem>
+                                    <MenuItem value={"Sophmore"}>Sophmore</MenuItem>
+                                    <MenuItem value={"Junior"}>Junior</MenuItem>
+                                    <MenuItem value={"Senior"}>Senior</MenuItem>
+                                    <MenuItem value={"Super Senior"}>Super Senior</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </div>
+
+
+                    {/*todo: profile img*/}
+                    {/*todo: bio text section*/}
+
+
+                    {/*SUBMIT button creates user id in authen and then pushes user inputs to users collection*/}
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                        onClick={handleUserAuthen}
+                    >
+                        Next
+                    </Button>
+
+                </form>
+            </Paper>
+        </main>
     );
-
 }
-
-/** save buttons for later incase
-
-<Button disabled={loading || currentUser} onClick={handleSignup}>Sign Up</Button>
-<Button disabled={loading || currentUser} onClick={handleLogin}>Log In</Button>
-<Button disabled={loading || !currentUser} onClick={handleLogout}>Log Out</Button>
-<Button disabled={loading || currentUser} onClick={anonymous_login}> continue as guest</Button>
-<Button disabled={loading || !currentUser} onClick={handleFPClick}>Forgot Password</Button>
- **/
+export default withStyles(styles)(SignUpUser);
