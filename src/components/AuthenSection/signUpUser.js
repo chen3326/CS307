@@ -172,8 +172,6 @@ function SignUpUser() {
                     (snapshot.bytesTransferred / snapshot.totalBytes) * 100
                 );
                 setProgress(prog);
-                //const imageaftersize = ( snapshot.totalBytes);
-                //setaftersize(imageaftersize);
 
             },
             (error) => console.log(error),
@@ -193,7 +191,6 @@ function SignUpUser() {
             useWebWorker: true
         }
         try {
-
             const afterCompressedFile = await imageCompression(inputFile, maxSet);
 
             setaftersize(`${(afterCompressedFile.size / 1024 / 1024).toFixed(2)} MB`);
@@ -286,7 +283,7 @@ function SignUpUser() {
 
                             </form>
                             <hr />
-                            <h4>Profile Picture Uploading done {progress}%</h4>
+                            <h4>Profile Picture Uploading {progress}% Done</h4>
                             <h7>Image 1 Before resize: {beforesize} bytes, After resize: {aftersize}; </h7>
                         </FormControl>
 
