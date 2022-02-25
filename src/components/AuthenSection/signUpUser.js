@@ -296,6 +296,7 @@ function SignUpUser() {
                                 variant="outlined"
                                 label="Nickname*"
                                 className={"textField"}
+                                inputProps={{ maxLength: 25 }}
                                 onChange={(event) => {
                                     setnickName(event.target.value);
                                 }}
@@ -309,6 +310,7 @@ function SignUpUser() {
                             label="Bio"
                             multiline
                             rows={5}
+                            inputProps={{ maxLength: 200 }}
                             onChange={(event) => {
                                 setBio(event.target.value);
                             }}
@@ -322,6 +324,7 @@ function SignUpUser() {
                                 variant="outlined"
                                 label="Major*"
                                 className={"textField"}
+                                inputProps={{ maxLength: 100 }}
                                 onChange={(event) => {
                                     setMajor(event.target.value);
                                 }}
@@ -399,6 +402,7 @@ function SignUpUser() {
                                 variant="outlined"
                                 label="Topic 1*"
                                 className={"textField"}
+                                inputProps={{ maxLength: 40 }}
                                 onChange={(event) => {
                                     setTopic1(event.target.value);
                                 }}
@@ -410,6 +414,7 @@ function SignUpUser() {
                                 variant="outlined"
                                 label="Topic 2*"
                                 className={"textField"}
+                                inputProps={{ maxLength: 40 }}
                                 onChange={(event) => {
                                     setTopic2(event.target.value);
                                 }}
@@ -421,6 +426,7 @@ function SignUpUser() {
                                 variant="outlined"
                                 label="Topic 3*"
                                 className={"textField"}
+                                inputProps={{ maxLength: 40 }}
                                 onChange={(event) => {
                                     setTopic3(event.target.value);
                                 }}
@@ -432,6 +438,7 @@ function SignUpUser() {
                                 variant="outlined"
                                 label="Topic 4*"
                                 className={"textField"}
+                                inputProps={{ maxLength: 40 }}
                                 onChange={(event) => {
                                     setTopic4(event.target.value);
                                 }}
@@ -443,6 +450,7 @@ function SignUpUser() {
                                 variant="outlined"
                                 label="Topic 5*"
                                 className={"textField"}
+                                inputProps={{ maxLength: 40 }}
                                 onChange={(event) => {
                                     setTopic5(event.target.value);
                                 }}
