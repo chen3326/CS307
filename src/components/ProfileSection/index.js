@@ -7,8 +7,8 @@ import Typography from '@mui/material/Typography';
 import ThumbUpAltRoundedIcon from '@mui/icons-material/ThumbUpAltRounded';
 import TextsmsRoundedIcon from '@mui/icons-material/TextsmsRounded';
 import BookmarkRoundedIcon from '@mui/icons-material/BookmarkRounded';
-import {addDoc, collection, getDocs, query, where} from "firebase/firestore";
 import PropTypes from 'prop-types';
+
 import {
     FollowButton,
     ProfileContainer,
@@ -17,14 +17,10 @@ import {
 
 import pic from "../../images/cat_pic.jpg";
 import {useLocation} from "react-router-dom";
-import {auth, database} from "../../firebase";
-
-import Followerlist from "./followerlist";
 
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
-
 
     return (
         <div
@@ -57,9 +53,6 @@ function a11yProps(index) {
 }
 
 function FullWidthTabs() {
-
-
-
     const theme = useTheme();
     const [value, setValue] = React.useState(0);
 
@@ -67,7 +60,9 @@ function FullWidthTabs() {
         setValue(newValue);
     };
 
-
+    const handleChangeIndex = (index) => {
+        setValue(index);
+    };
 
     return (
 
@@ -81,15 +76,19 @@ function FullWidthTabs() {
                     variant="fullWidth"
                     aria-label="full width tabs example"
                 >
-                    <Tab label="I'm following" {...a11yProps(0)} />
-
+                    <Tab label="Posts" {...a11yProps(0)} />
+                    <Tab label="Liked" {...a11yProps(1)} />
+                    <Tab label="Saved" {...a11yProps(2)} />
+                    <Tab label="Comments" {...a11yProps(3)} />
                 </Tabs>
             </AppBar>
                 <TabPanel value={value} index={0} dir={theme.direction}>
                     <TabCard>
                         <OutlinedCard/>
                     </TabCard>
-
+                    <TabCard>
+                        <OutlinedCard/>
+                    </TabCard>
                 </TabPanel>
                 <TabPanel value={value} index={1} dir={theme.direction}>
                 <TabCard>
@@ -111,17 +110,13 @@ function FullWidthTabs() {
 }
 
 const card = (
-
     <React.Fragment>
         <CardContent>
             {/*<Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>*/}
             {/*    Lorem Ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.*/}
             {/*</Typography>*/}
             <Typography variant="h6" component="div">
-                <Followerlist
-
-
-                />
+                Lorem Ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
             </Typography>
         </CardContent>
         <CardActions>
@@ -159,29 +154,6 @@ function OutlinedCard() {
 
 function ProfileSection() {
     const { state } = useLocation();
-
-
-
-    const [followingCollectionRef, setfollowingCollectionRef] = React.useState("");
-
-
-
-
-    const followUser = async () => {
-        const q = query(collection(database, "users"), where("email", "==",auth.currentUser.email ));
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((doc) => {
-
-            setfollowingCollectionRef(collection(database,"users",doc.id,"following"));
-
-        });
-        await addDoc(followingCollectionRef, {
-            followedemail: state
-        });
-
-
-
-    };
 
 
     return (
@@ -239,7 +211,6 @@ function ProfileSection() {
                                         justifyContent="center"
                                         alignItems="center"
                                         // fullWidth={true}
-                                        onClick={followUser}
 
                                         variant="outlined">Follow</Button>
                                 </FollowButton>
@@ -288,13 +259,9 @@ function ProfileSection() {
                             </Grid>
                         </Grid>
                         </UserStats>
-                        {state=== auth.currentUser?.email &&
-                            <FullWidthTabs/>
-                        }
 
 
-
-
+                        <FullWidthTabs/>
 
                     </Grid>
                 </Grid>
