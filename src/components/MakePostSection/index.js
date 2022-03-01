@@ -16,6 +16,7 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import imageCompression from "browser-image-compression";
 import Alert from '@mui/material/Alert'; //will be used in anonymous
+import TagIcon from '@mui/icons-material/Tag';
 
 const style = {
     position: 'absolute',
@@ -208,7 +209,7 @@ function MakePost(){
         setbeforesize(`${(inputFile.size / 1024 / 1024).toFixed(2)} MB`);
 
         const maxSet = {
-            useWebWorker: true
+            useWebWorker: true,
         }
         try {
 
@@ -295,6 +296,12 @@ function MakePost(){
 
     return (
         <Container styles={{color: 'darkblue', marginRight: '-60px', marginBottom: '-15px'}}>
+            <Button
+                tooltip="Click to create a new topic"
+                styles={{backgroundColor: '#7bcfa6' , color : 'white', width: '73px', height: '73px'}}
+            >
+                <TagIcon fontSize='large'/>
+            </Button>
 
             <Button
                 tooltip="Click to make a new post"
@@ -303,6 +310,7 @@ function MakePost(){
             >
                 <CreatePostIcon fontSize='large'/>
             </Button>
+
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -330,7 +338,7 @@ function MakePost(){
 
                         </div>
 
-                        <label> Post: (Limit 500 words)</label>
+                        <label> Post: (Limit 500 Characters)</label>
                         <div className="inputGp" >
 
                             <textarea
