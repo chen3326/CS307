@@ -60,8 +60,14 @@ function MakePost(){
     const AnonymousSet = () => {
         setInvisible(!invisible);
     };
+    const [invisibleTopic, setInvisibleTopic] = React.useState(false);
+    const AnonymousSetTopic = () => {
+        setInvisibleTopic(!invisibleTopic);
+    };
 
     const [authorPost, setauthorPost] = useState("");
+
+    const [topic, setTopic] = useState("");
 
     const createPost = async () => {
         if (invisible) {
@@ -71,6 +77,7 @@ function MakePost(){
 
         await addDoc(postsCollectionRef, {
             title:title,
+            topic:topic,
             postText:postText,
             author: { email: invisible?"anonymous@unknown.com":auth.currentUser.email, id: auth.currentUser.uid },
             realAuthor: {realEmail: auth.currentUser.email},
@@ -78,6 +85,28 @@ function MakePost(){
             imageUrl2:imageUrl2,
             imageUrl3:imageUrl3,
             FileURl:FileURl
+
+        });
+
+        await addDoc(topicsCollectionRef, {
+            author: { email: invisibleTopic?"anonymous@unknown.com":auth.currentUser.email, id: auth.currentUser.uid },
+            realAuthor: {realEmail: auth.currentUser.email},
+            topicName:topic
+
+        });
+
+        window.location.pathname = "/home";
+
+    };
+    const topicsCollectionRef = collection(database, "postTopics");
+
+    //const [authorTopic, setAuthorTopic] = useState("");
+    const createTopic = async () => {
+
+        await addDoc(topicsCollectionRef, {
+            author: { email: invisibleTopic?"anonymous@unknown.com":auth.currentUser.email, id: auth.currentUser.uid },
+            realAuthor: {realEmail: auth.currentUser.email},
+            topicName:topic
 
         });
 
@@ -297,13 +326,6 @@ function MakePost(){
     return (
         <Container styles={{color: 'darkblue', marginRight: '-60px', marginBottom: '-15px'}}>
             <Button
-                tooltip="Click to create a new topic"
-                styles={{backgroundColor: '#7bcfa6' , color : 'white', width: '73px', height: '73px'}}
-            >
-                <TagIcon fontSize='large'/>
-            </Button>
-
-            <Button
                 tooltip="Click to make a new post"
                 styles={{backgroundColor: 'darkblue' , color : 'white', width: '73px', height: '73px'}}
                 onClick={handleOpen}//() => window.location.pathname = "/makePost" }
@@ -327,8 +349,8 @@ function MakePost(){
                         <div className="inputGp">
 
                             <input
-                                style={{width:'450px', height:'30px', marginTop:'5px',marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
-                                placeholder="Title..."
+                                style={{width:'450px', height:'30px', marginTop:'5px',marginBottom:'10px', border: '2px solid #0D67B5', borderRadius:'5px'}}
+                                placeholder=" Title..."
                                 width=""
                                 onChange={(event) => {
                                     setTitle(event.target.value);
@@ -338,12 +360,40 @@ function MakePost(){
 
                         </div>
 
+                        <label> Topic: (At most 35 characters)</label>
+                        <div className="inputGp">
+
+                            <input
+                                style={{width:'450px', height:'30px',marginBottom:'5px', border: '2px solid #0D67B5', borderRadius:'5px'}}
+                                placeholder=" Topic..."
+                                width=""
+                                maxLength="35"
+                                onChange={(event) => {
+                                    setTopic('#'+event.target.value+'#');
+                                }}
+
+                            />
+
+                        </div>
+                        <Stack spacing={1} direction="row">
+                            <div>
+                                <Badge color="primary" invisible={!invisibleTopic} variant="dot" >
+                                    <AdminPanelSettingsIcon/>
+                                </Badge>
+                                <FormControlLabel
+                                    sx={{ color: 'primary' }}
+                                    control={<Switch checked={invisibleTopic} onChange={AnonymousSetTopic} />}
+                                    label="Anonymous Topic"
+                                />
+                            </div>
+                        </Stack>
+
                         <label> Post: (Limit 500 Characters)</label>
                         <div className="inputGp" >
 
                             <textarea
                                 style={{width:'450px', height:'200px', marginTop:'5px', marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
-                                placeholder="Post..."
+                                placeholder=" Post..."
                                 maxLength="500"
                                 onInput={checkunderlimit}
 
@@ -406,10 +456,10 @@ function MakePost(){
                             <FormControlLabel
                                 sx={{ color: 'primary' }}
                                 control={<Switch checked={invisible} onChange={AnonymousSet} />}
-                                label="Anonymous"
+                                label="Anonymous Post"
                             />
                             <Stack sx={{ width: '100%' }} spacing={1} onInvalid="false">
-                                <Alert severity="error">If you choose to post anonymously, you can't change the option after submit!</Alert>
+                                <Alert severity="error">If you choose to post or topic anonymously, you can't change the option after submit!</Alert>
                             </Stack>
                         </div>
                     </Stack>

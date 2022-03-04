@@ -30,6 +30,7 @@ function PostDisplaySection() {
                         postid = {post?.id}
 
                         title={post?.title}
+                        topic={post?.topic}
                         postText={post?.postText}
                         authorEmail={post?.author?.email}
                         imageUrl={post?.imageUrl}

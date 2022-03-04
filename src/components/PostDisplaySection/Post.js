@@ -15,7 +15,7 @@ import {addDoc, collection, getDocs} from "firebase/firestore";
 import data from "bootstrap/js/src/dom/data";
 import {auth, database} from "../../firebase";
 
-function OnePost({postid, title, postText, authorEmail, imageUrl, imageUrl2, imageUrl3,FileURl}) {
+function OnePost({postid, title, topic, postText, authorEmail, imageUrl, imageUrl2, imageUrl3,FileURl}) {
     const [open, setOpen] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [placement, setPlacement] = React.useState();
@@ -82,6 +82,10 @@ function OnePost({postid, title, postText, authorEmail, imageUrl, imageUrl2, ima
 
             </PostHeader>
             <PostDisplayContainer>
+
+                {topic !== "" &&
+                    <a href={topic}>{topic}</a>
+                }
                 {postText}
                 <ImageList sx={{width: 500, height: 450}} cols={3} rowHeight={164}>
 
