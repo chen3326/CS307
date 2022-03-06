@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 
 
 import {auth, database} from "../../firebase";
-import {getDocs, collection, deleteDoc, doc, addDoc} from "firebase/firestore";
+import {getDocs, collection, deleteDoc, doc, addDoc, onSnapshot, query, orderBy} from "firebase/firestore";
 import {Post, PostDisplayContainer, PostHeader, PostHeaderTitle} from "./PostDisplayElements";
 
 import OnePost from "./Post";
@@ -12,12 +12,13 @@ function PostDisplaySection() {
     const [postLists, setPostList] = useState([]);
     const postsCollectionRef = collection(database, "posts");
     useEffect(() => {
-        const getPosts = async () => {
-            const data = await getDocs(postsCollectionRef);
-            setPostList(data.docs.map((doc) => ({...doc.data(), id: doc.id})));
-        };
+        const unsubscribe = onSnapshot(query(postsCollectionRef, orderBy('timestamp', 'desc')), snapshot =>{
 
-        getPosts();
+            setPostList(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})));
+        })
+
+        return unsubscribe;
+
     });
 
     return (
@@ -25,10 +26,9 @@ function PostDisplaySection() {
         <PostDisplayContainer>
 
             {postLists.map((post) => {
-                return(
+                return (
                     <OnePost
-                        postid = {post?.id}
-
+                        postid={post?.id}
                         title={post?.title}
                         topic={post?.topic}
                         postText={post?.postText}
@@ -37,9 +37,10 @@ function PostDisplaySection() {
                         imageUrl2={post?.imageUrl2}
                         imageUrl3={post?.imageUrl3}
                         FileURl={post?.FileURl}
+                        timestamp={post?.timestamp}
 
                     />
-                    )
+                )
             })}
 
         </PostDisplayContainer>

@@ -3,7 +3,7 @@ import { Container, Button, Link } from 'react-floating-action-button'
 import buttonInner from '@mui/material/Button';
 import React, { useState, useEffect } from "react";
 import { styled } from '@mui/material/styles';
-import { addDoc, collection } from "firebase/firestore";
+import {addDoc, collection, serverTimestamp} from "firebase/firestore";
 import {auth, database, storage} from "../../firebase.js";
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -16,7 +16,7 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import imageCompression from "browser-image-compression";
 import Alert from '@mui/material/Alert'; //will be used in anonymous
-import TagIcon from '@mui/icons-material/Tag';
+
 
 const style = {
     position: 'absolute',
@@ -41,8 +41,6 @@ const Input = styled('input')({
 function MakePost(){
     const [title, setTitle] = useState("");
     const [postText, setPostText] = useState("");
-
-    const [file,setFile] = useState("");
 
     const [imageUrl, setimageUrl] = useState("");
     const [imageUrl2, setimageUrl2] = useState("");
@@ -84,7 +82,8 @@ function MakePost(){
             imageUrl:imageUrl,
             imageUrl2:imageUrl2,
             imageUrl3:imageUrl3,
-            FileURl:FileURl
+            FileURl:FileURl,
+            timestamp:serverTimestamp()
 
         });
 

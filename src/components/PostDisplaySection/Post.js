@@ -15,7 +15,7 @@ import {addDoc, collection, getDocs} from "firebase/firestore";
 import data from "bootstrap/js/src/dom/data";
 import {auth, database} from "../../firebase";
 
-function OnePost({postid, title, topic, postText, authorEmail, imageUrl, imageUrl2, imageUrl3,FileURl}) {
+function OnePost({postid, title, topic, postText, authorEmail, imageUrl, imageUrl2, imageUrl3, FileURl,timestamp}) {
     const [open, setOpen] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [placement, setPlacement] = React.useState();
@@ -63,6 +63,13 @@ function OnePost({postid, title, topic, postText, authorEmail, imageUrl, imageUr
                 <PostHeaderTitle>
                     <h1> {title}</h1>
                 </PostHeaderTitle>
+
+                    <h1> {timestamp.toDate().toString()}</h1>
+
+
+                {/*<PostHeaderTitle>*/}
+                {/*    <h1> {timestamp}</h1>*/}
+                {/*</PostHeaderTitle>*/}
                 <PostHeaderTitle>
                     <Link
                         to={{
@@ -127,15 +134,14 @@ function OnePost({postid, title, topic, postText, authorEmail, imageUrl, imageUr
 
                     </ImageListItem>
                     {FileURl !== "" &&
-                        <a href={FileURl} style={{marginTop:'-30px'}}> download attached file</a>
+                        <a href={FileURl} style={{marginTop: '-30px'}}> download attached file</a>
                     }
-
-
 
 
                 </ImageList>
                 <CardActions>
-                    <Button variant='outlined' color='primary' onClick={handleClick('bottom')} style={{marginTop:'-200px'}}> Reply </Button>
+                    <Button variant='outlined' color='primary' onClick={handleClick('bottom')}
+                            style={{marginTop: '-200px'}}> Reply </Button>
                     <Popper open={open} anchorEl={anchorEl} placement={placement} transition>
                         {({TransitionProps}) => (
                             <Fade {...TransitionProps} timeout={350}>
