@@ -214,9 +214,7 @@ function ProfileSection() {
 
                                         variant="outlined">Follow</Button>
                                 </FollowButton>
-
                             </Grid>
-
                         </Grid>
 
 

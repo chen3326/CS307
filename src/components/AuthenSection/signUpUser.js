@@ -271,7 +271,7 @@ function SignUpUser() {
                         {/*profile picture image*/}
                         <FormControl margin="normal" fullWidth>
                             <Typography variant={"h6"} >
-                                Personal Info:
+                                Profile Info:
                             </Typography>
                             <Typography id="modal-modal-title" variant="subtitle1" component="subtitle1">
                                 Let us know more about you!
