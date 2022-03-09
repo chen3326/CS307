@@ -293,7 +293,7 @@ function SignUpUser() {
                                 variant="outlined"
                                 label="Nickname*"
                                 className={"textField"}
-                                inputProps={{ maxLength: 25 }}
+                                inputProps={{ maxLength: 50 }}
                                 onChange={(event) => {
                                     setnickName(event.target.value);
                                 }}

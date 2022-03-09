@@ -17,7 +17,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 import {addDoc, collection, getDocs, updateDoc} from "firebase/firestore";
-import {auth, database} from "../../firebase";
+import {auth, database, signup} from "../../firebase";
 import {useState} from "react";
 //import {useLocation} from "react-router-dom";
 
@@ -48,12 +48,9 @@ function SettingsSection() {
     const min = 1;
 
     //const { state } = useLocation();
-    const privateCollectionRef = collection(database, "users");
 
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
 
     //collections in firebase keep the data tied to the user
     //https://firebase.google.com/docs/firestore/data-model
@@ -67,17 +64,54 @@ function SettingsSection() {
     const [bio, setBio] = useState("");
     const [privateUser, setPrivateUser] = React.useState(false);
 
+    const userCollectionRef = collection(database, "users"); //collection of users
+
+    //add user to database in ./users
+    const EditUser = async () => {
+        //adds all user input into collection
+        await addDoc(userCollectionRef, {
+            id: auth.currentUser.uid,
+            email: email,
+            author: {
+                nickName: nickName,
+                age: age,
+                major: major,
+                year: year,
+                bio: bio,
+                privateUser: privateUser,
+            },
+        });
+        window.location.pathname = "/profile"; //redirects now logged in user to homepage
+    };
+
+    //create user in database authentication, but don't push to collections
+    //firebase will error if unsuccessful inputs ie. email is already taken or isn't an email
+    async function handleUserSettings() {
+        setLoading(true);
+        try {
+            //valid email checks
+            if (email.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+                //await signup(email, password);
+                setLoading(false);
+                EditUser(); //todo: for now just create new user to send data
+            }
+            else {
+                alert("Please enter a Valid Email!")
+            }
+            //push inputs to ./users collection
+        } catch {
+            alert("Error!");
+        }
+        setLoading(false);
+    }
 
 
 
     const handlePrivateUser = async () => {
         setPrivateUser(!privateUser);
-
         //await updateDoc(privateCollectionRef, {
         //   privateStatus: privateUser
         //});
-
-
     };
     const handlePublicUser = async () => {
         setPrivateUser(!privateUser);
@@ -88,7 +122,6 @@ function SettingsSection() {
 
 
     };
-
 
     async function handleFPClick() {
         window.location = "/forgot_password";
@@ -136,6 +169,7 @@ function SettingsSection() {
                             <UserName>Settings: Cat Dude</UserName>
                         </Grid>
 
+                        {/*SETTINGS*/}
                         <UserSettings>
                             <Grid
                                 //Settings section
@@ -153,18 +187,22 @@ function SettingsSection() {
                                     item xs={10}
                                 >
                                     <Grid item xs>
-                                        {/*TODO: link this setting to the database*/}
                                         <FormGroup>
                                             <Stack direction="row" spacing={1} alignItems="center">
                                                 <Typography>Public</Typography>
-                                                <FormControlLabel control={<Switch checked={privateUser} onChange={handlePrivateUser}/>} label="" />
+                                                <FormControlLabel control={
+                                                    <Switch checked={privateUser}
+                                                            onChange={handlePrivateUser}
+                                                    />}
+                                                                  label=""
+                                                />
                                                 <Typography>Private</Typography>
                                             </Stack>
                                         </FormGroup>
                                     </Grid>
                                 </Grid>
 
-                                {/*username*/}
+                                {/*name*/}
                                 <Grid container
                                     wrap="nowrap"
                                     spacing={2}
@@ -180,7 +218,7 @@ function SettingsSection() {
                                             id="filled-start-adornment"
                                             sx={{ m: 1, width: '25ch' }}
                                             variant="filled"
-                                            inputProps={{ maxLength: 25 }}
+                                            inputProps={{ maxLength: 50 }}
                                             onChange={(event) => {
                                                 setnickName(event.target.value);
                                             }}
@@ -202,11 +240,10 @@ function SettingsSection() {
                                         {/*TODO: change user's authem if viable*/}
                                         {/*TODO: take email check error from signin*/}
                                         <TextField
-                                            disabled
-                                            id="filled-disabled"
+                                            id="filled-start-adornment"
                                             sx={{ m: 1, width: '25ch' }}
                                             variant="filled"
-                                            inputProps={{ maxLength: 25 }}
+                                            inputProps={{ maxLength: 50 }}
                                             onChange={(event) => {
                                                 setEmail(event.target.value);
                                             }}
@@ -384,7 +421,11 @@ function SettingsSection() {
                                         direction="column"
                                         justifyContent="center"
                                         alignItems="center"
-                                        variant="outlined">Save Settings</Button>
+                                        variant="contained"
+                                        onClick={handleUserSettings}
+                                    >
+                                        Save Settings
+                                    </Button>
                                 </SaveButton>
                             </Grid>
                         </Grid>
@@ -396,71 +437,3 @@ function SettingsSection() {
 }
 
 export default SettingsSection;
-
-/** old classes section
-<Grid
-    container
-    direction="row"
-    justifyContent="center"
-    alignItems="flex-start"
-    spacing={2}
->
-    <Grid
-        // Classes: LHS Column
-        container
-        direction="column"
-        justifyContent="flex-start"
-        alignItems="center"
-        item xs={6}
-    >
-        <TextField
-            label="Class 1"
-            id="filled-start-adornment"
-            sx={{ m: 1, width: '25ch' }}
-            variant="filled"
-        />
-        <TextField
-            label="Class 2"
-            id="filled-start-adornment"
-            sx={{ m: 1, width: '25ch' }}
-            variant="filled"
-        />
-        <TextField
-            label="Class 3"
-            id="filled-start-adornment"
-            sx={{ m: 1, width: '25ch' }}
-            variant="filled"
-        />
-
-    </Grid>
-
-    <Grid
-        // Classes: RHS Column
-        container
-        direction="column"
-        justifyContent="flex-start"
-        alignItems="stretch"
-        item xs={6}
-    >
-
-        <TextField
-            label="Class 4"
-            id="filled-start-adornment"
-            sx={{ m: 1, width: '25ch' }}
-            variant="filled"
-        />
-        <TextField
-            label="Class 5"
-            id="filled-start-adornment"
-            sx={{ m: 1, width: '25ch' }}
-            variant="filled"
-        />
-        <TextField
-            label="Class 6"
-            id="filled-start-adornment"
-            sx={{ m: 1, width: '25ch' }}
-            variant="filled"
-        />
-    </Grid>
-</Grid>
-*/
