@@ -6,7 +6,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, on
 
 import {useEffect, useState} from "react";
 
-import { getStorage, ref } from "firebase/storage";
+import { getStorage } from "firebase/storage";
 
 
 const firebaseConfig = {

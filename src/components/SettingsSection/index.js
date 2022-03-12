@@ -6,20 +6,23 @@ import {
 } from "@mui/material";
 import Grid from '@mui/material/Grid';
 
+import pic from "../../images/cat_pic.jpg";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
+//react and firebase
+import {addDoc, collection, doc, where, query, setDoc, getDocs, updateDoc} from "firebase/firestore";
+import {auth, database} from "../../firebase";
+import {useState} from "react";
+import {useLocation} from "react-router-dom";
+
+
+//local
 import {
     SaveButton,
     SettingsContainer,
     ProfilePic, UserName, UserSettings,
 } from './SettingsElements';
-
-import pic from "../../images/cat_pic.jpg";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-
-import {addDoc, collection, getDocs, updateDoc} from "firebase/firestore";
-import {auth, database, signup} from "../../firebase";
-import {useState} from "react";
-//import {useLocation} from "react-router-dom";
 
 const years = [
     {
@@ -45,26 +48,66 @@ const years = [
 ];
 
 function SettingsSection() {
-    const min = 1;
 
-    //const { state } = useLocation();
+    const { state } = useLocation(); //contains current user's email
+    const min = 1; //minimum for age input
 
     const [loading, setLoading] = useState(false);
-    const [open, setOpen] = React.useState(false);
-
-    //collections in firebase keep the data tied to the user
+    const userCollectionRef = collection(database, "users"); //collections in firebase keep the data tied to the user
     //https://firebase.google.com/docs/firestore/data-model
     //variables to keep user's input
-    const [nickName, setnickName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [major, setMajor] = useState("");
-    const [age, setAge] = useState(0)
+    const uEmail = auth.currentUser.email;
+    console.log(uEmail);
+    var uName, uMajor, uAge, uYear, uBio;
+    getUser(); //get user's og inputs
+    const [nickName, setnickName] = useState(uName);
+    const [email, setEmail] = useState(uEmail);
+    const [major, setMajor] = useState(uMajor);
+    const [age, setAge] = useState(uAge)
     const [year, setYear] = useState("");
-    const [bio, setBio] = useState("");
+    const [bio, setBio] = useState(uBio);
     const [privateUser, setPrivateUser] = React.useState(false);
 
-    const userCollectionRef = collection(database, "users"); //collection of users
+
+    //testing out getting firebase
+    //db.collection("users").doc(doc.id).update({author: {age: 10}});
+
+    //todo: for somereason, changes only happen when inputs are first changed
+    console.log("START OF FUNCTION___________________________________________________________________________________");
+    async function getUser(){
+        const q = query(userCollectionRef, where("email", "==", uEmail));
+        const querySnapshot = await getDocs(q);
+
+        querySnapshot.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            console.log(doc.id, " => ", doc.data());
+            /*
+            uName = doc.data().author.nickName;
+            console.log(uName);
+
+            uMajor = doc.data().author.major;
+            uAge = doc.data().author.age;
+            //uYear = doc.data().author.year;
+            uBio = doc.data().author.bio;
+            */
+            setnickName(doc.data().author.nickName);
+            setBio(doc.data().author.bio);
+            setAge(doc.data().author.age);
+            setYear(doc.data().author.year);
+            setMajor(doc.data().author.major);
+            console.log("End of loop!!!------------");
+        });
+        //get user's users doc and display original inputs
+
+
+
+    };
+
+
+
+
+
+
 
     //add user to database in ./users
     const EditUser = async () => {
@@ -84,7 +127,7 @@ function SettingsSection() {
         window.location.pathname = "/profile"; //redirects now logged in user to homepage
     };
 
-    //create user in database authentication, but don't push to collections
+    //edit user doc in database authentication, but don't push to collections
     //firebase will error if unsuccessful inputs ie. email is already taken or isn't an email
     async function handleUserSettings() {
         setLoading(true);
@@ -105,29 +148,21 @@ function SettingsSection() {
         setLoading(false);
     }
 
-
-
     const handlePrivateUser = async () => {
         setPrivateUser(!privateUser);
         //await updateDoc(privateCollectionRef, {
         //   privateStatus: privateUser
         //});
     };
-    const handlePublicUser = async () => {
-        setPrivateUser(!privateUser);
 
-        //await updateDoc(privateCollectionRef, {
-        //    privateStatus: privateUser
-        //});
-
-
-    };
-
+    //forgot password, moves to forgot password page
     async function handleFPClick() {
         window.location = "/forgot_password";
     }
 
+    //DISPLAY
     return (
+
         <SettingsContainer>
             <Container fixed>
                 <Grid
@@ -167,6 +202,7 @@ function SettingsSection() {
                         >
                             {/*TODO: Make this dynamically change based on if the user updates their name*/}
                             <UserName>Settings: Cat Dude</UserName>
+
                         </Grid>
 
                         {/*SETTINGS*/}
@@ -217,6 +253,7 @@ function SettingsSection() {
                                         <TextField
                                             id="filled-start-adornment"
                                             sx={{ m: 1, width: '25ch' }}
+                                            value={nickName}
                                             variant="filled"
                                             inputProps={{ maxLength: 50 }}
                                             onChange={(event) => {
@@ -243,6 +280,7 @@ function SettingsSection() {
                                             id="filled-start-adornment"
                                             sx={{ m: 1, width: '25ch' }}
                                             variant="filled"
+                                            value={email}
                                             inputProps={{ maxLength: 50 }}
                                             onChange={(event) => {
                                                 setEmail(event.target.value);
@@ -292,8 +330,7 @@ function SettingsSection() {
                                             id="filled-start-adornment"
                                             sx={{ m: 1, width: '50ch' }}
                                             variant="filled"
-                                            id="outlined-multiline-static"
-                                            label="Bio"
+                                            value={bio}
                                             multiline
                                             rows={5}
                                             inputProps={{ maxLength: 200 }}
@@ -389,6 +426,7 @@ function SettingsSection() {
                                             id="filled-number"
                                             sx={{ m: 1, width: '50ch' }}
                                             variant="filled"
+                                            value={major}
                                             inputProps={{ maxLength: 100 }}
                                             onChange={(event) => {
                                                 setMajor(event.target.value);

@@ -22,7 +22,7 @@ import HardwareIcon from '@mui/icons-material/Hardware';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import React, {useRef, useState, useEffect} from "react";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, setDoc, collection } from "firebase/firestore";
 import Grid from "@mui/material/Grid";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
 import imageCompression from "browser-image-compression";
@@ -102,7 +102,7 @@ function SignUpUser() {
     const createUser = async () => {
         //adds all user input into collection
         //password not passed into collection for security/privacy
-        await addDoc(userCollectionRef, {
+        await addDoc(userCollectionRef,{
             id: auth.currentUser.uid,
             email: email,
             author: {
