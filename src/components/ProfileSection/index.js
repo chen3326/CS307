@@ -17,9 +17,21 @@ import {
 
 import pic from "../../images/cat_pic.jpg";
 import {useLocation} from "react-router-dom";
+import {auth} from "../../firebase";
 
 
 function TabPanel(props) {
+    //checks authentication - also not authenticated here even though already logged in??
+    var user = auth.currentUser;
+    if (user) {
+        user.reload().then(() => {
+            console.log('THERE IS A USER');
+            getUser(); //get user's og inputs
+        });
+    } else {
+        console.log('No authenticated user');
+    }
+
     const { children, value, index, ...other } = props;
 
     return (

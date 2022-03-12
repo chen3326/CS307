@@ -22,7 +22,7 @@ import {
 } from './SettingsElements';
 import pic from "../../images/cat_pic.jpg";
 
-
+//years class
 const years = [
     {
         value: 'Freshman',
@@ -48,16 +48,13 @@ const years = [
 
 function SettingsSection() {
     //reloads page if user is authenticated
-    var num = 0;
-    num++;
-    console.log('NUM=>', num); //the page reloads everytime TT
-    var uEmail, uName, uMajor, uAge, uYear, uBio; //empty variables to stop black page
-
-    if (auth.currentUser) {
-        auth.currentUser.reload().then(() => {
-            console.log(JSON.stringify(auth.currentUser));
+    //the page reloads everytime TT a change is made in the input box
+    var user, uEmail, uName, uMajor, uAge, uYear, uBio; //empty variables to stop black page
+    user = auth.currentUser;
+    if (user) {
+        user.reload().then(() => {
+            console.log('THERE IS A USER');
             getUser(); //get user's og inputs
-
         });
     } else {
         console.log('No authenticated user');
