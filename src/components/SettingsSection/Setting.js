@@ -32,6 +32,7 @@ import {
     ProfilePic, UserName, UserSettings,
 } from './SettingsElements';
 import pic from "../../images/cat_pic.jpg";
+import {getAuth, onAuthStateChanged} from "firebase/auth";
 
 //years class
 const years = [
@@ -58,10 +59,24 @@ const years = [
 ];
 
 //function SettingsSection(userRef, uEmail, uName, uYear, uAge, uBio, uMajor) {
-    function SettingsSection() {
+function SettingsSection() {
 
     //the page reloads everytime TT a change is made in the input box
-    const currentUser = useAuth();
+    const auth = getAuth();
+    const [uemail, setUemail] = useState("");
+    const [email, setEmail] = useState("");
+    const [queried, setQueried] = useState(false);
+    onAuthStateChanged(auth, (user) => {
+        if (user&&!queried) {
+            setUemail(user.email);
+            setQueried(true);
+
+
+        } else {
+
+        }
+    });
+
     const uEmail = "matcha@mm.com";//gets current user's email
     const pid = "OSdsNaiKBvlK7BluSo7E";
     const uName = "matcha";
@@ -71,9 +86,6 @@ const years = [
     const uMajor = "drinks";
 
 
-
-
-
     const min = 1; //minimum for age input
     const [loading, setLoading] = useState(false);
     const userCollectionRef = collection(database, "users"); //collections in firebase keep the data tied to the user
@@ -81,14 +93,12 @@ const years = [
     //https://firebase.google.com/docs/firestore/data-model
     //variables to keep user's input
     const [nickName, setnickName] = useState(uName);
-    const [email, setEmail] = useState(uEmail);
+
     const [major, setMajor] = useState(uMajor);
     const [age, setAge] = useState(uAge)
     const [year, setYear] = useState(uYear);
     const [bio, setBio] = useState(uBio);
     const [privateUser, setPrivateUser] = React.useState(false);
-
-
 
 
     //add user to database in ./users
@@ -125,8 +135,7 @@ const years = [
                 setLoading(false);
 
                 EditUser(); //todo: for now just create new user to send data
-            }
-            else {
+            } else {
                 alert("Please enter a Valid Email!")
             }
             //push inputs to ./users collection
@@ -189,7 +198,7 @@ const years = [
                         >
                             {/*TODO: Make this dynamically change based on if the user updates their name*/}
                             <UserName>Settings:</UserName>
-                            <UserName>{uEmail}</UserName>
+                            <UserName>{uemail}</UserName>
                         </Grid>
 
                         {/*SETTINGS*/}
@@ -239,10 +248,10 @@ const years = [
                                         {/*TODO: clean up the id's on this page*/}
                                         <TextField
                                             id="filled-start-adornment"
-                                            sx={{ m: 1, width: '25ch' }}
+                                            sx={{m: 1, width: '25ch'}}
                                             value={nickName}
                                             variant="filled"
-                                            inputProps={{ maxLength: 50 }}
+                                            inputProps={{maxLength: 50}}
                                             onChange={(event) => {
                                                 setnickName(event.target.value);
                                             }}
@@ -265,12 +274,12 @@ const years = [
                                         {/*TODO: take email check error from signin*/}
                                         <TextField
                                             id="filled-start-adornment"
-                                            sx={{ m: 1, width: '25ch' }}
+                                            sx={{m: 1, width: '25ch'}}
                                             variant="filled"
-                                            value={email}
-                                            inputProps={{ maxLength: 50 }}
+                                            value={uemail}
+                                            inputProps={{maxLength: 50}}
                                             onChange={(event) => {
-                                                setEmail(event.target.value);
+                                                setUemail(event.target.value);
                                             }}
                                         />
                                     </Grid>
@@ -315,12 +324,12 @@ const years = [
                                     <Grid item xs>
                                         <TextField
                                             id="filled-start-adornment"
-                                            sx={{ m: 1, width: '50ch' }}
+                                            sx={{m: 1, width: '50ch'}}
                                             variant="filled"
                                             value={bio}
                                             multiline
                                             rows={5}
-                                            inputProps={{ maxLength: 200 }}
+                                            inputProps={{maxLength: 200}}
                                             onChange={(event) => {
                                                 setBio(event.target.value);
                                             }}
@@ -341,13 +350,12 @@ const years = [
                                     <Grid item xs>
                                         <TextField
                                             id="filled-number"
-                                            sx={{ m: 1, width: '15ch' }}
+                                            sx={{m: 1, width: '15ch'}}
                                             //make sure that only unsigned int can be used as inputs
                                             type={"number"}
-                                            inputProps={{ min }} //min age
+                                            inputProps={{min}} //min age
                                             value={age}
-                                            onChange={(event) =>
-                                            {
+                                            onChange={(event) => {
                                                 if (event.target.value === "") {
                                                     setAge(event.target.value);
                                                     return;
@@ -375,7 +383,7 @@ const years = [
                                         <p>Year:</p>
                                     </Grid>
                                     <Grid item xs>
-                                        <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
+                                        <FormControl variant="filled" sx={{m: 1, minWidth: 120}}>
                                             <InputLabel id="select-filled-label"></InputLabel>
                                             <Select
                                                 labelId="select-filled-label"
@@ -411,10 +419,10 @@ const years = [
                                     <Grid item xs>
                                         <TextField
                                             id="filled-number"
-                                            sx={{ m: 1, width: '50ch' }}
+                                            sx={{m: 1, width: '50ch'}}
                                             variant="filled"
                                             value={major}
-                                            inputProps={{ maxLength: 100 }}
+                                            inputProps={{maxLength: 100}}
                                             onChange={(event) => {
                                                 setMajor(event.target.value);
                                             }}
