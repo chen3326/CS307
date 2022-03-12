@@ -6,7 +6,6 @@ import {
 } from "@mui/material";
 import Grid from '@mui/material/Grid';
 
-import pic from "../../images/cat_pic.jpg";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
@@ -14,8 +13,6 @@ import Typography from "@mui/material/Typography";
 import {addDoc, collection, doc, where, query, setDoc, getDocs, updateDoc} from "firebase/firestore";
 import {auth, database} from "../../firebase";
 import {useState} from "react";
-import {useLocation} from "react-router-dom";
-
 
 //local
 import {
@@ -23,90 +20,90 @@ import {
     SettingsContainer,
     ProfilePic, UserName, UserSettings,
 } from './SettingsElements';
+import pic from "../../images/cat_pic.jpg";
+
 
 const years = [
     {
-        value: 'freshman',
+        value: 'Freshman',
         label: 'Freshman',
     },
     {
-        value: 'sophomore',
+        value: 'Sophomore',
         label: 'Sophomore',
     },
     {
-        value: 'junior',
+        value: 'Junior',
         label: 'Junior',
     },
     {
-        value: 'senior',
+        value: 'Senior',
         label: 'Senior',
     },
     {
-        value: 'superSenior',
+        value: 'Super Senior',
         label: 'Super Senior',
     },
 ];
 
 function SettingsSection() {
+    //reloads page if user is authenticated
+    var num = 0;
+    num++;
+    console.log('NUM=>', num); //the page reloads everytime TT
+    var uEmail, uName, uMajor, uAge, uYear, uBio; //empty variables to stop black page
 
-    const { state } = useLocation(); //contains current user's email
+    if (auth.currentUser) {
+        auth.currentUser.reload().then(() => {
+            console.log(JSON.stringify(auth.currentUser));
+            getUser(); //get user's og inputs
+
+        });
+    } else {
+        console.log('No authenticated user');
+    }
+
     const min = 1; //minimum for age input
-
     const [loading, setLoading] = useState(false);
     const userCollectionRef = collection(database, "users"); //collections in firebase keep the data tied to the user
     //https://firebase.google.com/docs/firestore/data-model
     //variables to keep user's input
-    const uEmail = auth.currentUser.email;
-    console.log(uEmail);
-    var uName, uMajor, uAge, uYear, uBio;
-    getUser(); //get user's og inputs
     const [nickName, setnickName] = useState(uName);
     const [email, setEmail] = useState(uEmail);
     const [major, setMajor] = useState(uMajor);
     const [age, setAge] = useState(uAge)
-    const [year, setYear] = useState("");
+    const [year, setYear] = useState(uYear);
     const [bio, setBio] = useState(uBio);
     const [privateUser, setPrivateUser] = React.useState(false);
 
-
-    //testing out getting firebase
-    //db.collection("users").doc(doc.id).update({author: {age: 10}});
-
     //todo: for somereason, changes only happen when inputs are first changed
-    console.log("START OF FUNCTION___________________________________________________________________________________");
     async function getUser(){
+        uEmail = auth.currentUser.email;
+
         const q = query(userCollectionRef, where("email", "==", uEmail));
         const querySnapshot = await getDocs(q);
 
         querySnapshot.forEach((doc) => {
             // doc.data() is never undefined for query doc snapshots
-            console.log(doc.id, " => ", doc.data());
-            /*
+            //console.log(doc.id, " => ", doc.data());
+            // sets, but doesn't show bc need to recompile, thus overwritten with null
             uName = doc.data().author.nickName;
-            console.log(uName);
-
-            uMajor = doc.data().author.major;
             uAge = doc.data().author.age;
-            //uYear = doc.data().author.year;
+            uYear = doc.data().author.year;
             uBio = doc.data().author.bio;
-            */
-            setnickName(doc.data().author.nickName);
-            setBio(doc.data().author.bio);
-            setAge(doc.data().author.age);
-            setYear(doc.data().author.year);
-            setMajor(doc.data().author.major);
-            console.log("End of loop!!!------------");
+            uMajor = doc.data().author.major;
+
+
+
+            setEmail(uEmail);
+            setnickName(uName);
+            setBio(uBio);
+            setAge(uAge);
+            setYear(uYear);
+            setMajor(uMajor);
         });
         //get user's users doc and display original inputs
-
-
-
     };
-
-
-
-
-
 
 
     //add user to database in ./users
@@ -162,7 +159,6 @@ function SettingsSection() {
 
     //DISPLAY
     return (
-
         <SettingsContainer>
             <Container fixed>
                 <Grid
@@ -201,8 +197,8 @@ function SettingsSection() {
                             alignItems="flex-start"
                         >
                             {/*TODO: Make this dynamically change based on if the user updates their name*/}
-                            <UserName>Settings: Cat Dude</UserName>
-
+                            <UserName>Settings:</UserName>
+                            <UserName>{nickName}</UserName>
                         </Grid>
 
                         {/*SETTINGS*/}
@@ -357,7 +353,7 @@ function SettingsSection() {
                                             sx={{ m: 1, width: '15ch' }}
                                             //make sure that only unsigned int can be used as inputs
                                             type={"number"}
-                                            inputProps={{ min }}
+                                            inputProps={{ min }} //min age
                                             value={age}
                                             onChange={(event) =>
                                             {
