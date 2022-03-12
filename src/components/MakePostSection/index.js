@@ -78,6 +78,7 @@ function MakePost(){
             topic:topic,
             postText:postText,
             author: { email: invisible?"anonymous@unknown.com":auth.currentUser.email, id: auth.currentUser.uid },
+            topicAuthor: { email: invisibleTopic?"anonymous@unknown.com":auth.currentUser.email, id: auth.currentUser.uid },
             realAuthor: {realEmail: auth.currentUser.email},
             imageUrl:imageUrl,
             imageUrl2:imageUrl2,
@@ -368,7 +369,7 @@ function MakePost(){
                                 width=""
                                 maxLength="35"
                                 onChange={(event) => {
-                                    setTopic('#'+event.target.value+'#');
+                                    setTopic(event.target.value);
                                 }}
 
                             />

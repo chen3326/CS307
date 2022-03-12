@@ -15,7 +15,7 @@ import {addDoc, collection, getDocs} from "firebase/firestore";
 import data from "bootstrap/js/src/dom/data";
 import {auth, database} from "../../firebase";
 
-function OnePost({postid, title, topic, postText, authorEmail, imageUrl, imageUrl2, imageUrl3, FileURl,timestamp}) {
+function OnePost({postid, title, topic, topicAuthor, postText, authorEmail, imageUrl, imageUrl2, imageUrl3, FileURl,timestamp}) {
     const [open, setOpen] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [placement, setPlacement] = React.useState();
@@ -64,7 +64,7 @@ function OnePost({postid, title, topic, postText, authorEmail, imageUrl, imageUr
                     <h1> {title}</h1>
                 </PostHeaderTitle>
 
-                    <h1> {timestamp.toDate().toString()}</h1>
+
 
 
                 {/*<PostHeaderTitle>*/}
@@ -88,11 +88,38 @@ function OnePost({postid, title, topic, postText, authorEmail, imageUrl, imageUr
 
 
             </PostHeader>
+            {/* <a href={topic}>{topic}</a> */}
             <PostDisplayContainer>
-
+                <h4> {timestamp.toDate().toString()}</h4>
                 {topic !== "" &&
-                    <a href={topic}>{topic}</a>
+                    <Link
+                        to={{
+                            pathname: "/inner_topic",
+                            state: topicAuthor,
+                            topicName: topic,
+
+                            // your data array of objects
+                        }}
+                    >
+                        {topic}
+
+                    </Link>
+
+
                 }
+                {/*
+                    <Link
+                        to={{
+                            pathname: "/inner_topic",
+                            state: authorEmail,
+
+                            // your data array of objects
+                        }}
+                    >
+                        {topic}
+
+                    </Link>*/}
+
                 {postText}
                 <ImageList sx={{width: 500, height: 450}} cols={3} rowHeight={164}>
 
