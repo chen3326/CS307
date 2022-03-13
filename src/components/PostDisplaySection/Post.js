@@ -95,8 +95,8 @@ function OnePost({postid, title, topic, topicAuthor, postText, authorEmail, imag
                     <Link
                         to={{
                             pathname: "/inner_topic",
-                            state: topicAuthor,
-                            topicName: topic,
+                            state: topic,
+                            topicAuthor: topicAuthor,
 
                             // your data array of objects
                         }}

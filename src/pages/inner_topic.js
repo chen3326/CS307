@@ -6,18 +6,23 @@ import SidebarSection from "../components/SidebarSection";
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import {useLocation} from "react-router-dom";
+import Switch from '@mui/material/Switch';
+import ToggleButton from '@mui/material/ToggleButton';
 function Inner_topic() {
-    const { state , topicName} = useLocation();
+    const { state , topicAuthor} = useLocation();
+
+
     return (
         <>
             <SidebarSection/>
             <NavSection/>
 
             <Typography style={{marginTop:"5%", marginLeft:"10%"}}>
-                <h1>Topic Name: {topicName}</h1>
-                <h2>Topic Author: {state}</h2>
-                <Button>Follow</Button>
-                <Button>Unfollow</Button>
+                <h1>Topic Name: {state}</h1>
+                <h2>Topic Author: {topicAuthor}</h2>
+                <label>Unfollow</label>
+                <Switch/>
+                <label>Follow</label>
             </Typography>
         </>
 
