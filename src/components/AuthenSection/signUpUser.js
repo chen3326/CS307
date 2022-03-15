@@ -111,6 +111,7 @@ function SignUpUser() {
                 major: major,
                 year: year,
                 bio: bio,
+                privateUser: false,
                 profileImage: {
                     imageUrl:imageUrl,
                 }
