@@ -37,7 +37,7 @@ function GetUserSettingProfileSection() {
     const currentUser = useAuth();
     const uEmail = currentUser?.email;//gets current user's email
     //uEmail does work, just not on the first try
-    console.log(uEmail);
+    //console.log(uEmail);
 
 
     const [userList, setUserList] = useState([]); //holds users profiles

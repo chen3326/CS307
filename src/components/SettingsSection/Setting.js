@@ -11,16 +11,12 @@ import Typography from "@mui/material/Typography";
 
 //react and firebase
 import {
-    addDoc,
     collection,
     doc,
     where,
     query,
     setDoc,
-    getDocs,
-    updateDoc,
     onSnapshot,
-    orderBy
 } from "firebase/firestore";
 import {auth, useAuth, database} from "../../firebase";
 import {useEffect, useState} from "react";
@@ -58,57 +54,59 @@ const years = [
     },
 ];
 
-//function SettingsSection(userRef, uEmail, uName, uYear, uAge, uBio, uMajor) {
+//function SettingsSection(userRef, email, uName, uYear, uAge, uBio, uMajor) {
 function SettingsSection() {
 
-    //the page reloads everytime TT a change is made in the input box
     const auth = getAuth();
-    const [uemail, setUemail] = useState("");
-    const [email, setEmail] = useState("");
-    const [queried, setQueried] = useState(false);
+    //https://firebase.google.com/docs/firestore/data-model
+    //variables to keep user's input
+    const [email, setEmail] = useState(""); //email for user auth
+    const [nickName, setnickName] = useState("");
+    const [major, setMajor] = useState("");
+    const [age, setAge] = useState(0)
+    const [year, setYear] = useState(0);
+    const [bio, setBio] = useState("");
+    const [privateUser, setPrivateUser] = React.useState(false);
+    const [docid, setDocid] = useState("");
+    const [queried, setQueried] = useState(false); //lock
+
     onAuthStateChanged(auth, (user) => {
         if (user&&!queried) {
-            setUemail(user.email);
-            setQueried(true);
-
-
-        } else {
-
+            setEmail(user.email); //sets user's email to email
+            getUser(); //set other user var
+            setQueried(true); //stops overwriting var from firebase backend
         }
     });
 
-    const uEmail = "matcha@mm.com";//gets current user's email
-    const pid = "OSdsNaiKBvlK7BluSo7E";
-    const uName = "matcha";
-    const uYear = "Junior";
-    const uAge = 20;
-    const uBio = "I love matcha<3";
-    const uMajor = "drinks";
-
-
     const min = 1; //minimum for age input
     const [loading, setLoading] = useState(false);
-    const userCollectionRef = collection(database, "users"); //collections in firebase keep the data tied to the user
 
-    //https://firebase.google.com/docs/firestore/data-model
-    //variables to keep user's input
-    const [nickName, setnickName] = useState(uName);
-
-    const [major, setMajor] = useState(uMajor);
-    const [age, setAge] = useState(uAge)
-    const [year, setYear] = useState(uYear);
-    const [bio, setBio] = useState(uBio);
-    const [privateUser, setPrivateUser] = React.useState(false);
-
+    //get user's profile doc and set text boxes with data
+    //based on  https://github.com/firebase/snippets-web/blob/1c4c6834f310bf53a98b3fa3c2e2191396cacd69/snippets/firestore-next/test-firestore/listen_document_local.js#L8-L13
+    async function getUser(){
+        //compare email to other users in collection
+        const q = query(collection(database, "users"), where("email", "==", email));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                //set all the user's settings
+                setnickName(doc.data().author.nickName);
+                setBio(doc.data().author.bio);
+                setAge(doc.data().author.age);
+                setMajor(doc.data().author.major)
+                setYear(doc.data().author.year);
+                setPrivateUser(doc.data().author.privateUser);
+                setDocid(doc.id);//address to user's profile document
+                console.log(docid);
+                console.log(doc.id);
+            });
+        });
+    }
 
     //add user to database in ./users
     const EditUser = async () => {
-        //adds all user input into collection
-        //matcha doc id = OSdsNaiKBvlK7BluSo7E
-
         //set doc overwrites the original doc,thus updating it
-
-        await setDoc(doc(database, "users", pid), {
+        //docid = "OSdsNaiKBvlK7BluSo7E";
+        await setDoc(doc(database, "users", docid), {
             id: auth.currentUser.uid,
             email: email,
             author: {
@@ -133,8 +131,7 @@ function SettingsSection() {
             if (email.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
                 //await signup(email, password);
                 setLoading(false);
-
-                EditUser(); //todo: for now just create new user to send data
+                EditUser();
             } else {
                 alert("Please enter a Valid Email!")
             }
@@ -196,9 +193,8 @@ function SettingsSection() {
                             justifyContent="flex-start"
                             alignItems="flex-start"
                         >
-                            {/*TODO: Make this dynamically change based on if the user updates their name*/}
                             <UserName>Settings:</UserName>
-                            <UserName>{uemail}</UserName>
+                            <UserName>{email}</UserName>
                         </Grid>
 
                         {/*SETTINGS*/}
@@ -224,8 +220,10 @@ function SettingsSection() {
                                                 <Typography>Public</Typography>
                                                 <FormControlLabel control={
                                                     <Switch checked={privateUser}
+                                                            value={privateUser}
                                                             onChange={handlePrivateUser}
-                                                    />}
+                                                    />
+                                                }
                                                                   label=""
                                                 />
                                                 <Typography>Private</Typography>
@@ -276,10 +274,10 @@ function SettingsSection() {
                                             id="filled-start-adornment"
                                             sx={{m: 1, width: '25ch'}}
                                             variant="filled"
-                                            value={uemail}
+                                            value={email}
                                             inputProps={{maxLength: 50}}
                                             onChange={(event) => {
-                                                setUemail(event.target.value);
+                                                setEmail(event.target.value);
                                             }}
                                         />
                                     </Grid>
