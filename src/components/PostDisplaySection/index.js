@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 
 
-import {auth, database} from "../../firebase";
-import {getDocs, collection, deleteDoc, doc, addDoc, onSnapshot, query, orderBy} from "firebase/firestore";
-import {Post, PostDisplayContainer, PostHeader, PostHeaderTitle} from "./PostDisplayElements";
+import {database} from "../../firebase";
+import {collection, onSnapshot, query, orderBy} from "firebase/firestore";
+import { PostDisplayContainer} from "./PostDisplayElements";
 
 import OnePost from "./Post";
 
@@ -21,12 +21,14 @@ function PostDisplaySection() {
 
     });
 
+
     return (
 
         <PostDisplayContainer>
 
             {postLists.map((post) => {
                 return (
+
                     <OnePost
                         postid={post?.id}
                         title={post?.title}
@@ -39,6 +41,7 @@ function PostDisplaySection() {
                         imageUrl3={post?.imageUrl3}
                         FileURl={post?.FileURl}
                         timestamp={post?.timestamp}
+                        likes = {post?.likes}
 
                     />
                 )

@@ -74,6 +74,7 @@ function MakePost(){
         }
 
         await addDoc(postsCollectionRef, {
+
             title:title,
             topic:topic,
             postText:postText,
@@ -84,7 +85,8 @@ function MakePost(){
             imageUrl2:imageUrl2,
             imageUrl3:imageUrl3,
             FileURl:FileURl,
-            timestamp:serverTimestamp()
+            timestamp:serverTimestamp(),
+
 
         });
 

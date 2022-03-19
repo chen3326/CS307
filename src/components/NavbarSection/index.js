@@ -1,6 +1,7 @@
 import React from 'react';
 import LogoPhoto from '../../images/Boiler Breakouts-logos.jpeg';
 
+
 import {
     Nav,
     NavbarContainer,
@@ -26,6 +27,7 @@ function Navbar(){
         <>
                 <Nav >
                     <NavbarContainer>
+
                         <img src = {LogoPhoto} alt=''/>
                         <NavLogo>
                             Boiler Breakouts

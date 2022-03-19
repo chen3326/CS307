@@ -11,11 +11,30 @@ import {CardActions, Fade, Paper, Popper} from "@mui/material";
 import Button from "@material-ui/core/Button";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
-import {addDoc, collection, getDocs} from "firebase/firestore";
-import data from "bootstrap/js/src/dom/data";
+import {addDoc, collection, doc, getDocs, onSnapshot, query, setDoc, deleteDoc} from "firebase/firestore";
 import {auth, database} from "../../firebase";
 
-function OnePost({postid, title, topic, topicAuthor, postText, authorEmail, imageUrl, imageUrl2, imageUrl3, FileURl,timestamp}) {
+
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+
+import {getAuth} from "firebase/auth";
+
+function OnePost({
+                     postid,
+                     title,
+                     topic,
+                     topicAuthor,
+                     postText,
+                     authorEmail,
+                     imageUrl,
+                     imageUrl2,
+                     imageUrl3,
+                     FileURl,
+                     timestamp,
+
+
+                 }) {
     const [open, setOpen] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [placement, setPlacement] = React.useState();
@@ -27,6 +46,9 @@ function OnePost({postid, title, topic, topicAuthor, postText, authorEmail, imag
     const [commentText, setCommentText] = useState("");
     const [commentList, setCommentList] = useState([]);
     const commentsCollectionRef = collection(database, 'posts', postid, 'comments',)
+    const [likes, setLikes] = useState([]);
+    const [hasLiked, setHasLiked] = useState(false);
+
 
     const createComment = async () => {
 
@@ -34,19 +56,53 @@ function OnePost({postid, title, topic, topicAuthor, postText, authorEmail, imag
             commentText: commentText,
             commentAuthorId: auth.currentUser.uid,
             commentAuthorEmail: auth.currentUser.email
-
         });
-
         window.location.pathname = "/home";
 
     };
+
+    useEffect(
+        () =>
+            onSnapshot(collection(database, "posts", postid, "likes"), (snapshot) =>
+
+                setLikes(snapshot.docs)
+            ),
+
+        [database, postid]
+    );
+
+    useEffect(
+        () =>
+
+            setHasLiked(
+                likes.findIndex((like) => like.id === getAuth().currentUser.uid) !== -1
+            ),
+
+        [likes]
+    );
+
+
+    const likePost = async () => {
+        if (hasLiked) {
+            await deleteDoc(doc(database, 'posts', postid, 'likes', getAuth().currentUser.uid));
+        } else {
+            await setDoc(doc(database, "posts", postid, "likes", getAuth().currentUser.uid), {
+                username: getAuth().currentUser.email,
+
+
+            });
+
+        }
+
+
+    };
+
 
     useEffect(() => {
         const getComments = async () => {
             const data = await getDocs(commentsCollectionRef);
             setCommentList(data.docs.map((doc) => ({...doc.data(), id: doc.id})));
         };
-
         getComments();
     });
 
@@ -60,17 +116,11 @@ function OnePost({postid, title, topic, topicAuthor, postText, authorEmail, imag
 
         <Post>
             <PostHeader>
+
+
                 <PostHeaderTitle>
                     <h1> {title}</h1>
-                </PostHeaderTitle>
 
-
-
-
-                {/*<PostHeaderTitle>*/}
-                {/*    <h1> {timestamp}</h1>*/}
-                {/*</PostHeaderTitle>*/}
-                <PostHeaderTitle>
                     <Link
                         to={{
                             pathname: "/profile",
@@ -85,6 +135,14 @@ function OnePost({postid, title, topic, topicAuthor, postText, authorEmail, imag
 
 
                 </PostHeaderTitle>
+                <div>
+                    {hasLiked ? (
+                        <Button onClick={likePost} href=""> <FavoriteIcon style={{color: 'red'}}/> {likes.length}
+                        </Button>
+                    ) : (
+                        <Button onClick={likePost} href=""> <FavoriteBorderIcon/> {likes.length} </Button>
+                    )}
+                </div>
 
 
             </PostHeader>
@@ -241,7 +299,6 @@ function OnePost({postid, title, topic, topicAuthor, postText, authorEmail, imag
             </PostDisplayContainer>
 
 
-            {/*<h3>@{post.author.name}</h3>*/}
         </Post>
 
     );
