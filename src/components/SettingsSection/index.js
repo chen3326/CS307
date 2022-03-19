@@ -17,9 +17,10 @@ import {
     setDoc,
     onSnapshot,
 } from "firebase/firestore";
-import {useAuth, database} from "../../firebase";
+import {useAuth, database, storage} from "../../firebase";
 import {getAuth, onAuthStateChanged, updateEmail} from "firebase/auth";
 import {useState} from "react";
+
 
 //local
 import {
@@ -27,7 +28,11 @@ import {
     SettingsContainer,
     ProfilePic, UserName, UserSettings,
 } from './SettingsElements';
-import pic from "../../images/cat_pic.jpg";
+import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
+import imageCompression from "browser-image-compression";
+//import doUpload from '../AuthenSection/index';
+
+
 
 //years class
 const years = [
@@ -67,6 +72,8 @@ function SettingsSection() {
     const [age, setAge] = useState(0)
     const [year, setYear] = useState(0);
     const [bio, setBio] = useState("");
+    const [imageUrl, setImageUrl] = useState("");
+    const [progress, setProgress] = useState(0);
     const [privateUser, setPrivateUser] = React.useState(false);
     const [docid, setDocid] = useState("");
     const [queried, setQueried] = useState(false); //lock
@@ -98,6 +105,7 @@ function SettingsSection() {
                 setAge(doc.data().author.age);
                 setMajor(doc.data().author.major)
                 setYear(doc.data().author.year);
+                setImageUrl(doc.data().author.imageUrl);
                 setPrivateUser(doc.data().author.privateUser);
                 setDocid(doc.id);//address to user's profile document
             });
@@ -116,6 +124,7 @@ function SettingsSection() {
                 major: major,
                 year: year,
                 bio: bio,
+                imageUrl:imageUrl,
                 privateUser: privateUser,
             },
         });
@@ -157,6 +166,46 @@ function SettingsSection() {
         window.location = "/forgot_password";
     }
 
+    //upload new user's profile pic
+    const uploadFiles = (file) => {
+        if (!file) return;
+        const sotrageRef = ref(storage, `files/${file.name}`);
+        const uploadTask = uploadBytesResumable(sotrageRef, file);
+
+        uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+                const prog = Math.round(
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                );
+                setProgress(prog);
+
+            },
+            (error) => console.log(error),
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    setImageUrl(downloadURL);
+                });
+            }
+        );
+    };
+
+    //compress image file
+    async function doUpload(event) {
+        const inputFile = event.target.files[0];
+        const maxSet = {
+            useWebWorker: true
+        }
+        try {
+            const afterCompressedFile = await imageCompression(inputFile, maxSet);
+            await uploadFiles(afterCompressedFile);
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
     //DISPLAY
     return (
         <SettingsContainer>
@@ -177,7 +226,14 @@ function SettingsSection() {
                         alignItems="center"
                         item xs={4}
                     >
-                        <ProfilePic src={pic}/>
+                        <ProfilePic src={imageUrl}/>
+                        <FormControl margin="normal" >
+                            <form onChange={event => doUpload(event)}>
+                                <input type="file" className="input" />
+                            </form>
+                            <hr />
+                            <h4>Profile Picture Loading... {progress}%</h4>
+                        </FormControl>
                     </Grid>
 
 

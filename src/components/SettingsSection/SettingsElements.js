@@ -17,6 +17,7 @@ export const ProfilePic = styled.img`
   align-items: stretch;
   justify-content: flex-start;
   height: 20vh;
+  width: 30vh;
   border-radius: 10px;
 `;
 

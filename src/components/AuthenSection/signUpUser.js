@@ -83,9 +83,7 @@ function SignUpUser() {
     const [year, setYear] = useState("");
     const [bio, setBio] = useState("");
     //profile pic variables todo:default profile image
-    const [imageUrl, setimageUrl] = useState("");
-    const [aftersize, setaftersize] = useState(0);
-    const [beforesize, setbeforesize] = useState(0);
+    const [imageUrl, setImageUrl] = useState("https://firebasestorage.googleapis.com/v0/b/cs307-bdbca.appspot.com/o/files%2Fcat_pic.jpg?alt=media&token=86dc6a1d-f6a5-4f7e-be00-a25851f8e820");
     const [progress, setProgress] = useState(0);
     //topic var
     const [topic1, setTopic1] = useState("");
@@ -102,6 +100,7 @@ function SignUpUser() {
     const createUser = async () => {
         //adds all user input into collection
         //password not passed into collection for security/privacy
+        //automatically public user
         await addDoc(userCollectionRef,{
             id: auth.currentUser.uid,
             email: email,
@@ -112,9 +111,7 @@ function SignUpUser() {
                 year: year,
                 bio: bio,
                 privateUser: false,
-                profileImage: {
-                    imageUrl:imageUrl,
-                }
+                imageUrl:imageUrl,
             },
             topics: {
                 topic1: topic1,
@@ -140,7 +137,10 @@ function SignUpUser() {
                     setLoading(false); //will move to next page if user creation w/email and password is ok, else page is same
 
                     //topics window not working for now, put all on one page    Topics(email, nickName, age, major, year);
-
+                    //set automatic profile pic as cat.jpeg
+                    if (imageUrl === ""){
+                        setImageUrl('https://firebasestorage.googleapis.com/v0/b/cs307-bdbca.appspot.com/o/files%2Fcat_pic.jpg?alt=media&token=86dc6a1d-f6a5-4f7e-be00-a25851f8e820');
+                    }
                     createUser();
                 } else {
                     alert("Password Doesnt Meet Requirements of:\n1. Minimum 6 characters\n" +
@@ -178,25 +178,23 @@ function SignUpUser() {
             (error) => console.log(error),
             () => {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    setimageUrl(downloadURL);
+                    setImageUrl(downloadURL);
                 });
             }
         );
     };
 
     async function doUpload(event) {
+        console.log("hello world");
         const inputFile = event.target.files[0];
-        setbeforesize(`${(inputFile.size / 1024 / 1024).toFixed(2)} MB`);
 
         const maxSet = {
             useWebWorker: true
         }
         try {
             const afterCompressedFile = await imageCompression(inputFile, maxSet);
-
-            setaftersize(`${(afterCompressedFile.size / 1024 / 1024).toFixed(2)} MB`);
-
             await uploadFiles(afterCompressedFile);
+
         } catch (error) {
             console.log(error);
         }
@@ -285,7 +283,6 @@ function SignUpUser() {
                             </form>
                             <hr />
                             <h4>Profile Picture Uploading {progress}% Done</h4>
-                            <h7>Image 1 Before resize: {beforesize} bytes, After resize: {aftersize}; </h7>
                         </FormControl>
 
                         {/*Nickname*/}
