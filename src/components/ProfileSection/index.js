@@ -17,7 +17,7 @@ import {
 
 import pic from "../../images/cat_pic.jpg";
 import {useLocation} from "react-router-dom";
-import {auth} from "../../firebase";
+
 
 
 function TabPanel(props) {

@@ -27,14 +27,14 @@ function Sidebar(){
                         <SideBtnLink href="/home"> <HomeIcon/></SideBtnLink>
                     </SideBtn>
                     <SideBtn>
-                        <SideBtnLink href=""> <SavedIcon/></SideBtnLink>
+                        <SideBtnLink href="/saved"> <SavedIcon/></SideBtnLink>
                     </SideBtn>
-                    <SideBtn>
-                        <SideBtnLink href=""> <ThumbUpIcon/></SideBtnLink>
-                    </SideBtn>
-                    <SideBtn>
-                        <SideBtnLink href=""> <CommentIcon/></SideBtnLink>
-                    </SideBtn>
+                    {/*<SideBtn>*/}
+                    {/*    <SideBtnLink href=""> <ThumbUpIcon/></SideBtnLink>*/}
+                    {/*</SideBtn>*/}
+                    {/*<SideBtn>*/}
+                    {/*    <SideBtnLink href=""> <CommentIcon/></SideBtnLink>*/}
+                    {/*</SideBtn>*/}
                 </SidebarContainer>
             </Side>
 

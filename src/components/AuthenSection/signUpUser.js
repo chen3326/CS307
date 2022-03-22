@@ -22,10 +22,11 @@ import HardwareIcon from '@mui/icons-material/Hardware';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import React, {useRef, useState, useEffect} from "react";
-import { addDoc, setDoc, collection } from "firebase/firestore";
+import {addDoc, setDoc, collection, doc} from "firebase/firestore";
 import Grid from "@mui/material/Grid";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
 import imageCompression from "browser-image-compression";
+import {getAuth} from "firebase/auth";
 
 
 //stying margins for ux
@@ -94,14 +95,14 @@ function SignUpUser() {
 
 
 
-    const userCollectionRef = collection(database, "users"); //collection of users
+
 
     //add user to database in ./users
     const createUser = async () => {
         //adds all user input into collection
         //password not passed into collection for security/privacy
         //automatically public user
-        await addDoc(userCollectionRef,{
+        await setDoc(doc(database,"users",getAuth().currentUser.uid),{
             id: auth.currentUser.uid,
             email: email,
             author: {
