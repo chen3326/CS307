@@ -11,7 +11,19 @@ import {CardActions, Fade, Paper, Popper} from "@mui/material";
 import Button from "@material-ui/core/Button";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
-import {addDoc, collection, doc, getDocs, onSnapshot, query, setDoc, deleteDoc} from "firebase/firestore";
+import {
+    addDoc,
+    collection,
+    doc,
+    getDocs,
+    onSnapshot,
+    setDoc,
+    deleteDoc,
+    updateDoc,
+    arrayUnion,
+    arrayRemove,
+    getDoc, getFirestore
+} from "firebase/firestore";
 import {auth, database} from "../../firebase";
 import SavedIcon from '@mui/icons-material/BookmarkAdded';
 
@@ -21,6 +33,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 
 import {getAuth} from "firebase/auth";
 import {useAuthState} from "react-firebase-hooks/auth";
+import {useDocument} from "react-firebase-hooks/firestore";
 
 function OnePost({
                      postid,
@@ -46,6 +59,7 @@ function OnePost({
         setPlacement(newPlacement);
     };
     const [commentText, setCommentText] = useState("");
+    const [uid, setUid] = useState("");
     const [commentList, setCommentList] = useState([]);
     const commentsCollectionRef = collection(database, 'posts', postid, 'comments',)
     const [likes, setLikes] = useState([]);
@@ -65,6 +79,7 @@ function OnePost({
 
     };
 
+
     useEffect(
         () =>
             onSnapshot(collection(database, "posts", postid, "likes"), (snapshot) =>
@@ -74,16 +89,6 @@ function OnePost({
 
         [database, postid]
     );
-    useEffect(
-        () =>
-            onSnapshot(collection(database, "posts", postid, "savedby"), (snapshot) =>
-
-                setSaved(snapshot.docs)
-            ),
-
-        [database, postid]
-    );
-
 
     useEffect(
         () =>
@@ -93,6 +98,15 @@ function OnePost({
             ),
 
         [likes]
+    );
+    useEffect(
+        () =>
+            onSnapshot(collection(database, "posts", postid, "savedby"), (snapshot) =>
+
+                setSaved(snapshot.docs)
+            ),
+
+        [database, postid]
     );
 
     useEffect(
@@ -109,19 +123,38 @@ function OnePost({
     const likePost = async () => {
         if (hasLiked) {
             await deleteDoc(doc(database, 'posts', postid, 'likes', getAuth().currentUser.uid));
+            await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
+                likedPosts: arrayRemove(postid)
+            });
         } else {
             await setDoc(doc(database, "posts", postid, "likes", getAuth().currentUser.uid), {
                 username: getAuth().currentUser.email,
+
+
             });
+
+            await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
+                likedPosts: arrayUnion(postid)
+            });
+
+
         }
     };
 
     const savePost = async () => {
         if (hasSaved) {
             await deleteDoc(doc(database, 'posts', postid, 'savedby', getAuth().currentUser.uid));
+            await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
+                savedPosts: arrayRemove(postid)
+            });
         } else {
+            await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
+                savedPosts: arrayUnion(postid)
+            });
             await setDoc(doc(database, "posts", postid, "savedby", getAuth().currentUser.uid), {
                 username: getAuth().currentUser.email,
+
+
             });
         }
 
@@ -141,11 +174,15 @@ function OnePost({
             object.target.value = object.target.value.slice(0, object.target.maxLength)
         }
     }
-    const [user, loading, error] = useAuthState(auth);
-    if (loading) {
-        return <div> Loading... </div>;
-    } else if (user) {
+
+
+
+
+
+
+
         return (
+
 
             <Post>
                 <PostHeader>
@@ -345,12 +382,6 @@ function OnePost({
             </Post>
 
         );
-    } else if (error) {
-        return <div>There was an authentication error.</div>;
-    } else {
-
-
-    }
 
 
 }
