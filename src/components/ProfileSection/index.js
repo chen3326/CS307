@@ -17,8 +17,23 @@ import {
 
 import pic from "../../images/cat_pic.jpg";
 import {useLocation} from "react-router-dom";
+import Modal from "@mui/material/Modal";
+import Stack from "@mui/material/Stack";
+import buttonInner from "@mui/material/Button";
 
-
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 530,
+    bgcolor: 'background.paper',
+    border: '2px solid darkblue',
+    boxShadow: 24,
+    p: 4,
+    borderRadius: 5,
+    variant: 'contained',
+};
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -68,7 +83,7 @@ function FullWidthTabs() {
     return (
 
         <Box sx={{ bgcolor: 'orange', borderRadius: '10px'}}>
-            <AppBar position="static"sx={{borderRadius: '10px'}}>
+            <AppBar position="static" sx={{borderRadius: '10px'}}>
                 <Tabs
                     value={value}
                     onChange={handleChange}
@@ -152,10 +167,297 @@ function OutlinedCard() {
     );
 }
 
+function DisplayTopics() {
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    return (
+        <Container>
+            <Grid
+                container
+                direction="column"
+                alignItems="center"
+                justifyContent="center"
+            >
+                <p>Topics:</p>
+                <Button variant="text"
+                        tooltip="Show subscribed topics"
+                        onClick={handleOpen}
+                >
+                    ####
+                </Button>
+            </Grid>
+
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Topics
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                        {/*<label> Topic:</label>*/}
+                        {/*<div className="inputGp">*/}
+                        {/*    <input*/}
+                        {/*        style={{width:'450px', height:'30px', marginTop:'5px',marginBottom:'10px', border: '2px solid #0D67B5', borderRadius:'5px'}}*/}
+                        {/*        placeholder=" Topics..."*/}
+                        {/*        width=""*/}
+                        {/*        onChange={(event) => {*/}
+                        {/*            setTitle(event.target.value);*/}
+                        {/*        }}*/}
+                        {/*    />*/}
+                        {/*</div>*/}
+
+                        <label> Topic: (At most 35 characters)</label>
+                        {/*<div className="inputGp">*/}
+                        {/*    <input*/}
+                        {/*        style={{width:'450px', height:'30px',marginBottom:'5px', border: '2px solid #0D67B5', borderRadius:'5px'}}*/}
+                        {/*        placeholder=" Topic..."*/}
+                        {/*        width=""*/}
+                        {/*        maxLength="35"*/}
+                        {/*        onChange={(event) => {*/}
+                        {/*            setTopic(event.target.value);*/}
+                        {/*        }}*/}
+                        {/*    />*/}
+                        {/*</div>*/}
+                        {/*<Stack spacing={1} direction="row">*/}
+                        {/*    <div>*/}
+                        {/*        <Badge color="primary" invisible={!invisibleTopic} variant="dot" >*/}
+                        {/*            <AdminPanelSettingsIcon/>*/}
+                        {/*        </Badge>*/}
+                        {/*        <FormControlLabel*/}
+                        {/*            sx={{ color: 'primary' }}*/}
+                        {/*            control={<Switch checked={invisibleTopic} onChange={AnonymousSetTopic} />}*/}
+                        {/*            label="Anonymous Topic"*/}
+                        {/*        />*/}
+                        {/*    </div>*/}
+                        {/*</Stack>*/}
+
+                        {/*<label> Post: (Limit 500 Characters)</label>*/}
+                        {/*<div className="inputGp" >*/}
+                        {/*    <textarea*/}
+                        {/*        style={{width:'450px', height:'200px', marginTop:'5px', marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}*/}
+                        {/*        placeholder=" Post..."*/}
+                        {/*        maxLength="500"*/}
+                        {/*        onInput={checkunderlimit}*/}
+                        {/*        onChange={(event) => {*/}
+                        {/*            setPostText(event.target.value);*/}
+                        {/*        }}*/}
+                        {/*    />*/}
+                        {/*</div>*/}
+                    </Typography>
+
+                    <Stack spacing={2} direction="row">
+                        <label>
+                            <buttonInner onClick={handleClose} style={{color:'red'}}> CLOSE </buttonInner>
+                        </label>
+                    </Stack>
+                </Box>
+            </Modal>
+        </Container>
+
+    );
+}
+
+function DisplayFollowers() {
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    return (
+        <Container>
+            <Grid
+                container
+                direction="column"
+                alignItems="center"
+                justifyContent="center"
+            >
+                <p>Followers:</p>
+                <Button variant="text"
+                        tooltip="Show Followers"
+                        onClick={handleOpen}
+                >
+                    ####
+                </Button>
+            </Grid>
+
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Followers
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                        {/*<label> Topic:</label>*/}
+                        {/*<div className="inputGp">*/}
+                        {/*    <input*/}
+                        {/*        style={{width:'450px', height:'30px', marginTop:'5px',marginBottom:'10px', border: '2px solid #0D67B5', borderRadius:'5px'}}*/}
+                        {/*        placeholder=" Topics..."*/}
+                        {/*        width=""*/}
+                        {/*        onChange={(event) => {*/}
+                        {/*            setTitle(event.target.value);*/}
+                        {/*        }}*/}
+                        {/*    />*/}
+                        {/*</div>*/}
+
+                        <label> Topic: (At most 35 characters)</label>
+                        {/*<div className="inputGp">*/}
+                        {/*    <input*/}
+                        {/*        style={{width:'450px', height:'30px',marginBottom:'5px', border: '2px solid #0D67B5', borderRadius:'5px'}}*/}
+                        {/*        placeholder=" Topic..."*/}
+                        {/*        width=""*/}
+                        {/*        maxLength="35"*/}
+                        {/*        onChange={(event) => {*/}
+                        {/*            setTopic(event.target.value);*/}
+                        {/*        }}*/}
+                        {/*    />*/}
+                        {/*</div>*/}
+                        {/*<Stack spacing={1} direction="row">*/}
+                        {/*    <div>*/}
+                        {/*        <Badge color="primary" invisible={!invisibleTopic} variant="dot" >*/}
+                        {/*            <AdminPanelSettingsIcon/>*/}
+                        {/*        </Badge>*/}
+                        {/*        <FormControlLabel*/}
+                        {/*            sx={{ color: 'primary' }}*/}
+                        {/*            control={<Switch checked={invisibleTopic} onChange={AnonymousSetTopic} />}*/}
+                        {/*            label="Anonymous Topic"*/}
+                        {/*        />*/}
+                        {/*    </div>*/}
+                        {/*</Stack>*/}
+
+                        {/*<label> Post: (Limit 500 Characters)</label>*/}
+                        {/*<div className="inputGp" >*/}
+                        {/*    <textarea*/}
+                        {/*        style={{width:'450px', height:'200px', marginTop:'5px', marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}*/}
+                        {/*        placeholder=" Post..."*/}
+                        {/*        maxLength="500"*/}
+                        {/*        onInput={checkunderlimit}*/}
+                        {/*        onChange={(event) => {*/}
+                        {/*            setPostText(event.target.value);*/}
+                        {/*        }}*/}
+                        {/*    />*/}
+                        {/*</div>*/}
+                    </Typography>
+
+                    <Stack spacing={2} direction="row">
+                        <label>
+                            <buttonInner onClick={handleClose} style={{color:'red'}}> CLOSE </buttonInner>
+                        </label>
+                    </Stack>
+                </Box>
+            </Modal>
+        </Container>
+
+    );
+}
+
+function DisplayFollowing() {
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    return (
+        <Container>
+            <Grid
+                container
+                direction="column"
+                alignItems="center"
+                justifyContent="center"
+            >
+                <p>Following:</p>
+                <Button variant="text"
+                        tooltip="Show subscribed topics"
+                        onClick={handleOpen}
+                >
+                    ####
+                </Button>
+            </Grid>
+
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Following
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                        {/*<label> Topic:</label>*/}
+                        {/*<div className="inputGp">*/}
+                        {/*    <input*/}
+                        {/*        style={{width:'450px', height:'30px', marginTop:'5px',marginBottom:'10px', border: '2px solid #0D67B5', borderRadius:'5px'}}*/}
+                        {/*        placeholder=" Topics..."*/}
+                        {/*        width=""*/}
+                        {/*        onChange={(event) => {*/}
+                        {/*            setTitle(event.target.value);*/}
+                        {/*        }}*/}
+                        {/*    />*/}
+                        {/*</div>*/}
+
+                        <label> Topic: (At most 35 characters)</label>
+                        {/*<div className="inputGp">*/}
+                        {/*    <input*/}
+                        {/*        style={{width:'450px', height:'30px',marginBottom:'5px', border: '2px solid #0D67B5', borderRadius:'5px'}}*/}
+                        {/*        placeholder=" Topic..."*/}
+                        {/*        width=""*/}
+                        {/*        maxLength="35"*/}
+                        {/*        onChange={(event) => {*/}
+                        {/*            setTopic(event.target.value);*/}
+                        {/*        }}*/}
+                        {/*    />*/}
+                        {/*</div>*/}
+                        {/*<Stack spacing={1} direction="row">*/}
+                        {/*    <div>*/}
+                        {/*        <Badge color="primary" invisible={!invisibleTopic} variant="dot" >*/}
+                        {/*            <AdminPanelSettingsIcon/>*/}
+                        {/*        </Badge>*/}
+                        {/*        <FormControlLabel*/}
+                        {/*            sx={{ color: 'primary' }}*/}
+                        {/*            control={<Switch checked={invisibleTopic} onChange={AnonymousSetTopic} />}*/}
+                        {/*            label="Anonymous Topic"*/}
+                        {/*        />*/}
+                        {/*    </div>*/}
+                        {/*</Stack>*/}
+
+                        {/*<label> Post: (Limit 500 Characters)</label>*/}
+                        {/*<div className="inputGp" >*/}
+                        {/*    <textarea*/}
+                        {/*        style={{width:'450px', height:'200px', marginTop:'5px', marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}*/}
+                        {/*        placeholder=" Post..."*/}
+                        {/*        maxLength="500"*/}
+                        {/*        onInput={checkunderlimit}*/}
+                        {/*        onChange={(event) => {*/}
+                        {/*            setPostText(event.target.value);*/}
+                        {/*        }}*/}
+                        {/*    />*/}
+                        {/*</div>*/}
+                    </Typography>
+
+                    <Stack  spacing={2} direction="row">
+                        <label>
+                            <buttonInner onClick={handleClose} style={{color:'red'}}> CLOSE </buttonInner>
+                        </label>
+                    </Stack>
+                </Box>
+            </Modal>
+        </Container>
+
+    );
+}
 
 function ProfileSection() {
-    const { state } = useLocation();
 
+    const { state } = useLocation();
 
     return (
         <ProfileContainer>
@@ -235,8 +537,7 @@ function ProfileSection() {
                                 justifyContent="center"
                                 item xs={4}
                             >
-                                <p>Posts:</p>
-                                <Button variant="text">####</Button>
+                                <DisplayTopics/>
                             </Grid>
                             <Grid container
                                   direction="column"
@@ -244,8 +545,7 @@ function ProfileSection() {
                                   justifyContent="center"
                                   item xs={4}
                             >
-                                <p>Followers:</p>
-                                <Button variant="text">####</Button>
+                                <DisplayFollowers/>
                             </Grid>
                             <Grid container
                                   direction="column"
@@ -253,8 +553,7 @@ function ProfileSection() {
                                   justifyContent="center"
                                   item xs={4}
                             >
-                                <p>Following:</p>
-                                <Button variant="text">####</Button>
+                                <DisplayFollowing/>
                             </Grid>
                         </Grid>
                         </UserStats>
@@ -266,54 +565,6 @@ function ProfileSection() {
                 </Grid>
             </Container>
         </ProfileContainer>
-
-
-        // <ProfileContainer> {/*Page*/}
-        //     <ProfileContentContainer>
-        //         {/*Content Wrapper*/}
-        //
-        //         {/*<ProfilePic src={pic}/>*/}
-        //         <ProfilePicContainer>
-        //
-        //             <ProfilePic src={pic}/>
-        //         </ProfilePicContainer>
-        //
-        //         <ProfileContent>
-        //
-        //             <UserName>Cat Dude</UserName>
-        //
-        //             <FollowButton>Follow</FollowButton>
-        //
-        //             <ProfileStats>
-        //                 <PostsStat>Posts: 87</PostsStat>
-        //                 <FollowersStat>90</FollowersStat>
-        //                 <FollowingStat>10</FollowingStat>
-        //             </ProfileStats>
-        //
-        //             <PostContainer>
-        //                 <Tabs>
-        //                     <Posts></Posts>
-        //                     <Liked></Liked>
-        //                     <Comments></Comments>
-        //                     <Saved></Saved>
-        //                 </Tabs>
-        //
-        //             </PostContainer>
-        //
-        //             <ProfileText>
-        //                 stuff
-        //
-        //             </ProfileText>
-        //
-        //         </ProfileContent>
-        //
-        //    </ProfileContentContainer>
-        //
-        //
-        //
-        //
-        //
-        // </ProfileContainer>
     );
 }
 
