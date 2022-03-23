@@ -62,7 +62,6 @@ const years = [
 
 //function SettingsSection(userRef, email, uName, uYear, uAge, uBio, uMajor) {
 function SettingsSection() {
-
     //https://firebase.google.com/docs/firestore/data-model
     //variables to keep user's input
     const [ogEmail, setOgEmail] = useState("");
