@@ -10,10 +10,10 @@ import OnePost from "./Post";
 import {getAuth} from "firebase/auth";
 import {useDocument} from "react-firebase-hooks/firestore";
 
+//when a user clicks on a post, they are taken to a page individually for that post, with more details available
+function IndvPost_display(postid) {
 
-function SavedPost_display() {
-    const [savedPosts, setSavedPosts] = useState([]);
-
+    const [indvPost, setIndvPost] = useState([]);
     const [postLists1, setPostList1] = useState([]);
     const postsCollectionRef = collection(database, "posts");
     const [uid, setUid] = useState("");
@@ -28,14 +28,16 @@ function SavedPost_display() {
 
     const [user, loading, error] = useAuthState(auth);
 
+    //get the post from the postid
     useEffect(() => {
         if (user){
-            onSnapshot(doc(database, "users", user.uid), (snapshot) =>
-                setSavedPosts(snapshot.data().savedPosts)
+            onSnapshot(doc(database, "posts", postid), (snapshot) =>
+                setIndvPost(snapshot.data().indvPost)
             )
         }
     },[user]);
 
+    //pre-loading and display page
     if (loading) {
         return <div> Loading... </div>;
     } else if (user) {
@@ -44,11 +46,9 @@ function SavedPost_display() {
                 <PostHeader> Posts saved by {user.email} </PostHeader>
 
                 {postLists1.map((post) => {
-
-
                     return (
                         <div>
-                            {savedPosts.includes(post.id) ? (
+                            {indvPost.includes(post.id) ? (
                                 <OnePost
                                     postid={post?.id}
                                     title={post?.title}
@@ -65,7 +65,6 @@ function SavedPost_display() {
                                 />
                             ) : (
                                 <div/>
-
                             )}
                         </div>
                     )
@@ -81,5 +80,4 @@ function SavedPost_display() {
 
 }
 
-
-export default SavedPost_display;
+export default IndvPost_display;

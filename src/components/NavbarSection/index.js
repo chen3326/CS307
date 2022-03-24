@@ -49,7 +49,8 @@ function Navbar(){
 
                                     // your data array of objects
                                 }}
-                            > profile </NavBtnLinkR>
+                            > profile
+                            </NavBtnLinkR>
 
                         </NavBtn>
 

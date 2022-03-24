@@ -22,10 +22,6 @@ export const Post = styled.div`
   margin: 20px;
   padding: 20px;
   border-radius: 15px;
-
-
-
-
 `
 export const PostHeader = styled.div`
   display: flex;

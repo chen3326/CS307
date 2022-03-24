@@ -15,7 +15,7 @@ import {
     where,
     query,
     setDoc,
-    onSnapshot,
+    onSnapshot, updateDoc,
 } from "firebase/firestore";
 import {useAuth, database, storage, auth} from "../../firebase";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
@@ -60,7 +60,7 @@ const years = [
 ];
 
 
-//function SettingsSection(userRef, email, uName, uYear, uAge, uBio, uMajor) {
+//settings for the current user
 function SettingsSection() {
     //https://firebase.google.com/docs/firestore/data-model
     //variables to keep user's input
@@ -106,7 +106,7 @@ function SettingsSection() {
     //add user to database in ./users
     const editUser = async () => {
         //set doc overwrites the original doc,thus updating it
-        await setDoc(doc(database,"users",getAuth().currentUser.uid),{
+        await updateDoc(doc(database,"users",getAuth().currentUser.uid),{
             id: auth.currentUser.uid,
             email: email,
             author: {
