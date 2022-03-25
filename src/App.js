@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Switch, Route, useParams} from 'react-router-dom';
 import Home from './pages/index';
 import login_page from './pages/login_page.js';
 import Signup from "./pages/signup_page";
@@ -26,7 +26,7 @@ function App() {
                 <Route path='/home' component={Home} exact/>
                 savedPost_page
                 <Route path='/saved' component={SavedPost_page} exact/>
-                <Route path='/indv' component={Indvpost_page} exact/>
+                <Route path="/home/:postid" component={Indvpost_page} />
 
                 //login_page, Profile, Home
                 <Route path='/settings' component={Settings} exact/>
@@ -36,5 +36,16 @@ function App() {
         </Router>
     );
 }
+
+const Indv = () => {
+    const { postid } = useParams()
+    return (
+        // props.match.params.name
+        <div>
+            <h1>{postid}</h1>
+            <></>
+        </div>
+    )
+};
 
 export default App;

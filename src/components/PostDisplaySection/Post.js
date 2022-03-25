@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Post, PostDisplayContainer, PostHeader, PostHeaderTitle} from "./PostDisplayElements";
 import indv_post from "./indv_post";
 import settings_page from "../../pages/settings_page";
-import settingsSection from "../SettingsSection";
+import settingsSection from "../SettingsSection/index";
 
 
 import {
@@ -177,28 +177,17 @@ function OnePost({
     }
 
     async function handleIndvClick() {
-        //alert(postid);
-        //return (<indv_post postid={postid}/>);
-        //return <settings_page/>
         alert(postid);
-        return <settingsSection/>;
-        //window.location = "/settings";
-
+        console.log("hey there");
+        window.location = `/home/${postid}`;
     }
-
-
-
-
 
         return (
 
             <Post>
                 <PostHeader>
-
-
                     <PostHeaderTitle>
                         <h1> {title}</h1>
-
                         <Link
                             to={{
                                 pathname: "/profile",
@@ -389,8 +378,6 @@ function OnePost({
 
 
             </Post>
-
-
         );
 
 

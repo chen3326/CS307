@@ -23,7 +23,6 @@ function SavedPost_display() {
         })
 
         return unsubscribe;
-
     });
 
     const [user, loading, error] = useAuthState(auth);
@@ -41,10 +40,8 @@ function SavedPost_display() {
     } else if (user) {
         return (
             <PostDisplayContainer>
-                <PostHeader> Posts saved by {user.email} </PostHeader>
 
                 {postLists1.map((post) => {
-
 
                     return (
                         <div>
