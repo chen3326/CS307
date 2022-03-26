@@ -1,3 +1,4 @@
+import React, { CSSProperties } from 'react';
 import styled from 'styled-components';
 
 export const ProfileContainer = styled.div`
@@ -66,7 +67,6 @@ export const UserName = styled.div`
   color: black;
   font-size: 4rem;
   font-weight: bold;
-
 `
 
 export const ProfileText = styled.div`
@@ -76,8 +76,6 @@ export const ProfileText = styled.div`
   color: white;
   width: 20vw;
   max-width: 1200px;
-
-  
 `
 
 
@@ -118,8 +116,39 @@ export const TabCard = styled.div`
 
 `;
 export const FollowButton = styled.div`
-    margin: 10px 0px 20px 0px; 
+    margin: 10px 0px 20px 0px;
+`;
 
+// /**@type {{gridRHS: {alignItems: string, justifyContent: string, direction: string}}}**/
+export const styles = {
+    modalBox: {
+        width: '100%',
+        maxWidth: 360,
+        // display: "flex",
+        // flexDirection: "column",
+        // // justifyContent: "center",
+        // alignItems: "center",
+        // position: "relative",
+        // textAlign: "center",
+        // justifyItems: "center",
+        // margin: "auto",
+    },
+    gridRHS: {
+        // RHS Column
+        direction: "column",
+        justifyContent: "flex-start",
+        alignItems: "stretch",
+    }
+
+};
+
+export const test1 = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  position: relative;
+  //align-items: center;
+  margin: auto;
 `;
 
 
