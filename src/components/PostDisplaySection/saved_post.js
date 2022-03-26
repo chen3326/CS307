@@ -19,45 +19,29 @@ function SavedPost_display() {
     const [uid, setUid] = useState("");
     useEffect(() => {
         const unsubscribe = onSnapshot(query(postsCollectionRef, orderBy('timestamp', 'desc')), snapshot => {
-
             setPostList1(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})));
         })
 
         return unsubscribe;
-
     });
 
-
     const [user, loading, error] = useAuthState(auth);
-
-
 
     useEffect(() => {
         if (user){
             onSnapshot(doc(database, "users", user.uid), (snapshot) =>
-
-
                 setSavedPosts(snapshot.data().savedPosts)
             )
         }
-
-
     },[user]);
-
-
 
     if (loading) {
         return <div> Loading... </div>;
     } else if (user) {
-
         return (
-
-
             <PostDisplayContainer>
-                <PostHeader> Posts saved by {user.email} </PostHeader>
 
                 {postLists1.map((post) => {
-
 
                     return (
                         <div>
@@ -75,19 +59,13 @@ function SavedPost_display() {
                                     FileURl={post?.FileURl}
                                     timestamp={post?.timestamp}
                                     likes={post?.likes}
-
                                 />
-
                             ) : (
                                 <div/>
 
                             )}
                         </div>
-
-
                     )
-
-
                 })}
 
             </PostDisplayContainer>
@@ -97,7 +75,6 @@ function SavedPost_display() {
     } else {
         return <div>There was an authentication error.</div>;
     }
-
 
 }
 

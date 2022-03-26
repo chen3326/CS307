@@ -84,7 +84,7 @@ function SignUpUser() {
     const [year, setYear] = useState("");
     const [bio, setBio] = useState("");
     //profile pic variables todo:default profile image
-    const [imageUrl, setImageUrl] = useState("https://firebasestorage.googleapis.com/v0/b/cs307-bdbca.appspot.com/o/files%2Fcat_pic.jpg?alt=media&token=86dc6a1d-f6a5-4f7e-be00-a25851f8e820");
+    const [profilePic, setProfilePic] = useState("https://firebasestorage.googleapis.com/v0/b/cs307-bdbca.appspot.com/o/files%2Fcat_pic.jpg?alt=media&token=86dc6a1d-f6a5-4f7e-be00-a25851f8e820");
     const [progress, setProgress] = useState(0);
     //topic var
     const [topic1, setTopic1] = useState("");
@@ -111,8 +111,8 @@ function SignUpUser() {
                 major: major,
                 year: year,
                 bio: bio,
+                profilePic:profilePic,
                 privateUser: false,
-                imageUrl:imageUrl,
             },
             topics: {
                 topic1: topic1,
@@ -139,8 +139,8 @@ function SignUpUser() {
 
                     //topics window not working for now, put all on one page    Topics(email, nickName, age, major, year);
                     //set automatic profile pic as cat.jpeg
-                    if (imageUrl === ""){
-                        setImageUrl('https://firebasestorage.googleapis.com/v0/b/cs307-bdbca.appspot.com/o/files%2Fcat_pic.jpg?alt=media&token=86dc6a1d-f6a5-4f7e-be00-a25851f8e820');
+                    if (profilePic === ""){
+                        setProfilePic('https://firebasestorage.googleapis.com/v0/b/cs307-bdbca.appspot.com/o/files%2Fcat_pic.jpg?alt=media&token=86dc6a1d-f6a5-4f7e-be00-a25851f8e820');
                     }
                     createUser();
                 } else {
@@ -179,7 +179,7 @@ function SignUpUser() {
             (error) => console.log(error),
             () => {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    setImageUrl(downloadURL);
+                    setProfilePic(downloadURL);
                 });
             }
         );

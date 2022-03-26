@@ -1,5 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {Post, PostDisplayContainer, PostHeader, PostHeaderTitle} from "./PostDisplayElements";
+import indv_post from "./indv_post";
+import settings_page from "../../pages/settings_page";
+import settingsSection from "../SettingsSection/index";
+
 
 import {
 
@@ -136,8 +140,6 @@ function OnePost({
             await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
                 likedPosts: arrayUnion(postid)
             });
-
-
         }
     };
 
@@ -157,7 +159,6 @@ function OnePost({
 
             });
         }
-
     };
 
 
@@ -175,22 +176,18 @@ function OnePost({
         }
     }
 
-
-
-
-
-
+    async function handleIndvClick() {
+        alert(postid);
+        console.log("hey there");
+        window.location = `/home/${postid}`;
+    }
 
         return (
 
-
             <Post>
                 <PostHeader>
-
-
                     <PostHeaderTitle>
                         <h1> {title}</h1>
-
                         <Link
                             to={{
                                 pathname: "/profile",
@@ -242,8 +239,6 @@ function OnePost({
                             {topic}
 
                         </Link>
-
-
                     }
                     {/*
                     <Link
@@ -259,97 +254,100 @@ function OnePost({
                     </Link>*/}
 
                     {postText}
-                    <ImageList sx={{width: 500, height: 450}} cols={3} rowHeight={164}>
+                    <div onClick={handleIndvClick}>
 
-                        <ImageListItem>
-                            {imageUrl !== "" &&
-                                <img
-                                    src={`${imageUrl}?w=164&h=164&fit=crop&auto=format`}
-                                    srcSet={`${imageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                        <ImageList sx={{width: 500, height: 450}} cols={3} rowHeight={164}>
 
-                                    loading="lazy"
-                                />
+                            <ImageListItem>
+                                {imageUrl !== "" &&
+                                    <img
+                                        src={`${imageUrl}?w=164&h=164&fit=crop&auto=format`}
+                                        srcSet={`${imageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+
+                                        loading="lazy"
+                                    />
+                                }
+
+
+                            </ImageListItem>
+                            <ImageListItem>
+
+                                {imageUrl2 !== "" &&
+                                    <img
+                                        src={`${imageUrl2}?w=164&h=164&fit=crop&auto=format`}
+                                        srcSet={`${imageUrl2}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+
+                                        loading="lazy"
+                                    />
+                                }
+
+
+                            </ImageListItem>
+                            <ImageListItem>
+
+                                {imageUrl3 !== "" &&
+                                    <img
+                                        src={`${imageUrl3}?w=164&h=164&fit=crop&auto=format`}
+                                        srcSet={`${imageUrl3}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+
+                                        loading="lazy"
+                                    />
+                                }
+
+                            </ImageListItem>
+                            {FileURl !== "" &&
+                                <a href={FileURl} style={{marginTop: '-30px'}}> download attached file</a>
                             }
 
+                        </ImageList>
+                        <CardActions>
+                            <Button variant='outlined' color='primary' onClick={handleClick('bottom')}
+                                    style={{marginTop: '-200px'}}> Reply </Button>
+                            <Popper open={open} anchorEl={anchorEl} placement={placement} transition>
+                                {({TransitionProps}) => (
+                                    <Fade {...TransitionProps} timeout={350}>
+                                        <Paper>
+                                            <Typography variant="h6" component="h2" marginLeft='10px' marginTop='5px'
+                                                        width='450px'>
+                                                Create A Comment here
+                                            </Typography>
+                                            <Typography sx={{p: 2}}>
+                                                click the 'Reply' button again to close
+                                                <div className="inputGp">
 
-                        </ImageListItem>
-                        <ImageListItem>
-
-                            {imageUrl2 !== "" &&
-                                <img
-                                    src={`${imageUrl2}?w=164&h=164&fit=crop&auto=format`}
-                                    srcSet={`${imageUrl2}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-
-                                    loading="lazy"
-                                />
-                            }
-
-
-                        </ImageListItem>
-                        <ImageListItem>
-
-                            {imageUrl3 !== "" &&
-                                <img
-                                    src={`${imageUrl3}?w=164&h=164&fit=crop&auto=format`}
-                                    srcSet={`${imageUrl3}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-
-                                    loading="lazy"
-                                />
-                            }
-
-                        </ImageListItem>
-                        {FileURl !== "" &&
-                            <a href={FileURl} style={{marginTop: '-30px'}}> download attached file</a>
-                        }
-
-
-                    </ImageList>
-                    <CardActions>
-                        <Button variant='outlined' color='primary' onClick={handleClick('bottom')}
-                                style={{marginTop: '-200px'}}> Reply </Button>
-                        <Popper open={open} anchorEl={anchorEl} placement={placement} transition>
-                            {({TransitionProps}) => (
-                                <Fade {...TransitionProps} timeout={350}>
-                                    <Paper>
-                                        <Typography variant="h6" component="h2" marginLeft='10px' marginTop='5px'
-                                                    width='450px'>
-                                            Create A Comment here
-                                        </Typography>
-                                        <Typography sx={{p: 2}}>
-                                            click the 'Reply' button again to close
-                                            <div className="inputGp">
-
-                                                        <textarea
-                                                            style={{
-                                                                width: '400px',
-                                                                height: '80px',
-                                                                marginTop: '0px',
-                                                                marginBottom: '15px',
-                                                                border: '2px solid #0D67B5',
-                                                                borderRadius: '5px'
-                                                            }}
-                                                            placeholder=" Comment..."
-                                                            maxLength="140"
-                                                            onInput={checkUnderLimit}
-                                                            onChange={(event) => {
-                                                                setCommentText(event.target.value);
-                                                            }}
-                                                        />
-                                            </div>
-                                            <Stack spacing={1} direction="row">
-                                                <label>
-                                                    <Button onClick={createComment}
-                                                            style={{color: '#0D67B5'}}>SUBMIT</Button>
-                                                </label>
+                                                            <textarea
+                                                                style={{
+                                                                    width: '400px',
+                                                                    height: '80px',
+                                                                    marginTop: '0px',
+                                                                    marginBottom: '15px',
+                                                                    border: '2px solid #0D67B5',
+                                                                    borderRadius: '5px'
+                                                                }}
+                                                                placeholder=" Comment..."
+                                                                maxLength="140"
+                                                                onInput={checkUnderLimit}
+                                                                onChange={(event) => {
+                                                                    setCommentText(event.target.value);
+                                                                }}
+                                                            />
+                                                </div>
+                                                <Stack spacing={1} direction="row">
+                                                    <label>
+                                                        <Button onClick={createComment}
+                                                                style={{color: '#0D67B5'}}>SUBMIT</Button>
+                                                    </label>
 
 
-                                            </Stack>
-                                        </Typography>
-                                    </Paper>
-                                </Fade>
-                            )}
-                        </Popper>
-                    </CardActions>
+                                                </Stack>
+                                            </Typography>
+                                        </Paper>
+                                    </Fade>
+                                )}
+                            </Popper>
+                        </CardActions>
+                    </div>
+
                     <div>
                         {commentList.map((comment) => {
                             return (
@@ -380,7 +378,6 @@ function OnePost({
 
 
             </Post>
-
         );
 
 

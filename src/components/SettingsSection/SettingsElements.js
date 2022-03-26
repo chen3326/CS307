@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 export const SettingsContainer = styled.div`
-  
   display: flex;
   //align-items: center;
   height: 1050px;
@@ -11,7 +10,6 @@ export const SettingsContainer = styled.div`
 `;
 
 export const ProfilePic = styled.img`
-  
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -27,12 +25,10 @@ export const ProfileContent = styled.div`
   //justify-content: center;
   position: relative;
   align-items: center;
-
   height: 900px;
   width: 50%;
-  
-
 `;
+
 export const UserName = styled.div`
   width: 30vw;
   color: black;
@@ -54,7 +50,3 @@ export const SaveButton = styled.div`
     margin: 10px 0 20px 0; 
 
 `;
-
-
-
-
