@@ -115,33 +115,50 @@ function FullWidthTabs() {
         setValue(index);
     };
 
-    const [postLists, setPostList] = useState([]);
+    const [likedPosts, setLikedPosts] = useState([]);
+
+    const [postLists1, setPostList1] = useState([]);
     const postsCollectionRef = collection(database, "posts");
+    const [uid, setUid] = useState("");
     useEffect(() => {
-        const unsubscribe = onSnapshot(query(postsCollectionRef, orderBy('timestamp', 'desc')), snapshot =>{
-            setPostList(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})));
+        const unsubscribe = onSnapshot(query(postsCollectionRef, orderBy('timestamp', 'desc')), snapshot => {
+            setPostList1(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})));
         })
+
         return unsubscribe;
     });
 
-    return (
+    const [user, loading, error] = useAuthState(auth);
 
-        <Box sx={{ bgcolor: 'orange', borderRadius: '10px'}}>
-            <AppBar position="static" sx={{borderRadius: '10px'}}>
-                <Tabs
-                    value={value}
-                    onChange={handleChange}
-                    indicatorColor="secondary"
-                    textColor="inherit"
-                    variant="fullWidth"
-                    aria-label="full width tabs example"
-                >
-                    <Tab label="Posts" {...a11yProps(0)} />
-                    <Tab label="Liked" {...a11yProps(1)} />
-                    <Tab label="Saved" {...a11yProps(2)} />
-                    <Tab label="Comments" {...a11yProps(3)} />
-                </Tabs>
-            </AppBar>
+    useEffect(() => {
+        if (user){
+            onSnapshot(doc(database, "users", user.uid), (snapshot) =>
+                setLikedPosts(snapshot.data().likedPosts)
+            )
+        }
+    },[user]);
+
+    if (loading) {
+        return <div> Loading... </div>;
+    } else if (user) {
+        return (
+
+            <Box sx={{ bgcolor: 'orange', borderRadius: '10px'}}>
+                <AppBar position="static" sx={{borderRadius: '10px'}}>
+                    <Tabs
+                        value={value}
+                        onChange={handleChange}
+                        indicatorColor="secondary"
+                        textColor="inherit"
+                        variant="fullWidth"
+                        aria-label="full width tabs example"
+                    >
+                        <Tab label="Posts" {...a11yProps(0)} />
+                        <Tab label="Liked" {...a11yProps(1)} />
+                        <Tab label="Saved" {...a11yProps(2)} />
+                        <Tab label="Comments" {...a11yProps(3)} />
+                    </Tabs>
+                </AppBar>
                 <TabPanel value={value} index={0} dir={theme.direction}>
                     <TabCard>
                         <OutlinedCard/>
@@ -151,41 +168,52 @@ function FullWidthTabs() {
                     </TabCard>
                 </TabPanel>
                 <TabPanel value={value} index={1} dir={theme.direction}>
-                <TabCard>
-                    {postLists.map((post) => {
-                        return (
+                    <TabCard>
+                        {postLists1.map((post) => {
+                            return (
+                                <div>
+                                    {likedPosts.includes(post.id) ? (
+                                        <OnePost
+                                            postid={post?.id}
+                                            title={post?.title}
+                                            topic={post?.topic}
+                                            topicAuthor={post?.topicAuthor?.email}
+                                            postText={post?.postText}
+                                            authorEmail={post?.author?.email}
+                                            imageUrl={post?.imageUrl}
+                                            imageUrl2={post?.imageUrl2}
+                                            imageUrl3={post?.imageUrl3}
+                                            FileURl={post?.FileURl}
+                                            timestamp={post?.timestamp}
+                                            likes={post?.likes}
+                                        />
+                                    ) : (
+                                        <div/>
 
-                            <OnePost
-                                postid={post?.id}
-                                title={post?.title}
-                                topic={post?.topic}
-                                topicAuthor={post?.topicAuthor?.email}
-                                postText={post?.postText}
-                                authorEmail={post?.author?.email}
-                                imageUrl={post?.imageUrl}
-                                imageUrl2={post?.imageUrl2}
-                                imageUrl3={post?.imageUrl3}
-                                FileURl={post?.FileURl}
-                                timestamp={post?.timestamp}
-                                likes = {post?.likes}
-
-                            />
-                        )
-                    })}
-                </TabCard>
+                                    )}
+                                </div>
+                            )
+                        })}
+                    </TabCard>
                 </TabPanel>
                 <TabPanel value={value} index={2} dir={theme.direction}>
-                <TabCard>
-                    <OutlinedCard/>
-                </TabCard>
+                    <TabCard>
+                        <OutlinedCard/>
+                    </TabCard>
                 </TabPanel>
                 <TabPanel value={value} index={3} dir={theme.direction}>
-                <TabCard>
-                    <OutlinedCard/>
-                </TabCard>
+                    <TabCard>
+                        <OutlinedCard/>
+                    </TabCard>
                 </TabPanel>
-        </Box>
-    );
+            </Box>
+        );
+    }else if (error) {
+        return <div>There was an authentication error.</div>;
+    } else {
+        return <div>There was an authentication error.</div>;
+    }
+
 }
 
 const card = (
