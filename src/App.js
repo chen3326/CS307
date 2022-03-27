@@ -12,6 +12,7 @@ import Inner_topic from "./pages/inner_topic";
 import Settings from "./pages/settings_page";
 import SavedPost_page from "./pages/savedpost_page";
 import Indvpost_page from "./pages/indvpost_page";
+import Email_verification_page from "./pages/email_verification_page";
 
 function App() {
     return (
@@ -27,7 +28,7 @@ function App() {
                 savedPost_page
                 <Route path='/saved' component={SavedPost_page} exact/>
                 <Route path="/home/:postid" component={Indvpost_page} />
-
+                <Route path="/email_verification" component={Email_verification_page} />
                 //login_page, Profile, Home
                 <Route path='/settings' component={Settings} exact/>
 

@@ -13,7 +13,6 @@ function PostDisplaySection() {
     const postsCollectionRef = collection(database, "posts");
     useEffect(() => {
         const unsubscribe = onSnapshot(query(postsCollectionRef, orderBy('timestamp', 'desc')), snapshot =>{
-
             setPostList(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})));
         })
 

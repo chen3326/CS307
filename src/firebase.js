@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import {getFirestore} from "firebase/firestore";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updatePassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updatePassword, sendEmailVerification, updateEmail } from "firebase/auth";
 
 
 import {useEffect, useState} from "react";
@@ -47,8 +47,14 @@ export function useAuth() {
         const unsub = onAuthStateChanged(auth, user => setCurrentUser(user));
         return unsub;
     }, [])
-
     return currentUser;
+}
+export function emailUpdate(email) {
+    return updateEmail(auth.currentUser, email);
+}
+
+export function verificationEmail(email) {
+    return sendEmailVerification(auth.currentUser, email);
 }
 
 export const storage =  getStorage();

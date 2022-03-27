@@ -122,7 +122,7 @@ function SignUpUser() {
                 topic5: topic5,
             }
         });
-        window.location.pathname = "/home"; //redirects now logged in user to homepage
+        window.location.pathname = "/email_verification"; //redirects now logged in user to email verification page
     };
 
     //create user in database authentication, but don't push to collections

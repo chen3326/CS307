@@ -141,7 +141,7 @@ function FullWidthTabs() {
                 </TabPanel>
                 <TabPanel value={value} index={1} dir={theme.direction}>
                 <TabCard>
-                    <OutlinedCard/>
+
                 </TabCard>
                 </TabPanel>
                 <TabPanel value={value} index={2} dir={theme.direction}>

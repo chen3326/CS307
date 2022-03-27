@@ -153,6 +153,9 @@ function SettingsSection() {
     async function handleFPClick() {
         window.location = "/forgot_password";
     }
+    async function handleEVClick() {
+        window.location = "/email_verification"
+    }
 
     //upload new user's profile pic
     const uploadFiles = (file) => {
@@ -313,6 +316,29 @@ function SettingsSection() {
                                             </FormGroup>
                                         </Grid>
                                     </Grid>
+                                    <Grid container
+                                          wrap="nowrap"
+                                          spacing={2}
+                                          justifyContent="center"
+                                          item xs={10}
+                                    >
+                                        <Grid item xs>
+                                            <FormGroup>
+                                                <Stack direction="row" spacing={1} alignItems="center">
+                                                    <Typography>Light</Typography>
+                                                    <FormControlLabel control={
+                                                        <Switch checked={privateUser}
+                                                                value={privateUser}
+                                                                onChange={handlePrivateUser}
+                                                        />
+                                                    }
+                                                                      label=""
+                                                    />
+                                                    <Typography>Dark</Typography>
+                                                </Stack>
+                                            </FormGroup>
+                                        </Grid>
+                                    </Grid>
 
                                     {/*name*/}
                                     <Grid container
@@ -384,6 +410,19 @@ function SettingsSection() {
                                                     variant="outlined"
                                                     onClick={handleFPClick}
                                                 >Change Password
+                                                </Button>
+                                            </SaveButton>
+                                        </Grid>
+                                        <Grid item xs>
+                                            <SaveButton>
+                                                <Button
+                                                    container
+                                                    direction="column"
+                                                    justifyContent="center"
+                                                    alignItems="center"
+                                                    variant="outlined"
+                                                    onClick={handleEVClick}
+                                                >Verify Email
                                                 </Button>
                                             </SaveButton>
                                         </Grid>
