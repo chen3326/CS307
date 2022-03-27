@@ -182,6 +182,7 @@ function OnePost({
         window.location = `/home/${postid}`;
     }
 
+
         return (
 
             <Post>
@@ -228,12 +229,14 @@ function OnePost({
                     <h4> {timestamp.toDate().toString()}</h4>
                     {topic !== "" &&
                         <Link
+
                             to={{
+
                                 pathname: "/inner_topic",
                                 state: topic,
                                 topicAuthor: topicAuthor,
 
-                                // your data array of objects
+
                             }}
                         >
                             {topic}
