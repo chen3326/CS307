@@ -24,6 +24,7 @@ import ThumbUpAltRoundedIcon from '@mui/icons-material/ThumbUpAltRounded';
 import TextsmsRoundedIcon from '@mui/icons-material/TextsmsRounded';
 import BookmarkRoundedIcon from '@mui/icons-material/BookmarkRounded';
 import PropTypes from 'prop-types';
+import OnePost from "../PostDisplaySection/Post";
 
 import {
     FollowButton,
@@ -53,6 +54,7 @@ import {getAuth, onAuthStateChanged, updateEmail} from "firebase/auth";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {useEffect, useState} from "react";
 import {useLocation} from "react-router-dom";
+import Post from "../PostDisplaySection/Post";
 
 const style = {
     position: 'absolute',
@@ -113,6 +115,15 @@ function FullWidthTabs() {
         setValue(index);
     };
 
+    const [postLists, setPostList] = useState([]);
+    const postsCollectionRef = collection(database, "posts");
+    useEffect(() => {
+        const unsubscribe = onSnapshot(query(postsCollectionRef, orderBy('timestamp', 'desc')), snapshot =>{
+            setPostList(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})));
+        })
+        return unsubscribe;
+    });
+
     return (
 
         <Box sx={{ bgcolor: 'orange', borderRadius: '10px'}}>
@@ -141,7 +152,26 @@ function FullWidthTabs() {
                 </TabPanel>
                 <TabPanel value={value} index={1} dir={theme.direction}>
                 <TabCard>
+                    {postLists.map((post) => {
+                        return (
 
+                            <OnePost
+                                postid={post?.id}
+                                title={post?.title}
+                                topic={post?.topic}
+                                topicAuthor={post?.topicAuthor?.email}
+                                postText={post?.postText}
+                                authorEmail={post?.author?.email}
+                                imageUrl={post?.imageUrl}
+                                imageUrl2={post?.imageUrl2}
+                                imageUrl3={post?.imageUrl3}
+                                FileURl={post?.FileURl}
+                                timestamp={post?.timestamp}
+                                likes = {post?.likes}
+
+                            />
+                        )
+                    })}
                 </TabCard>
                 </TabPanel>
                 <TabPanel value={value} index={2} dir={theme.direction}>
@@ -192,10 +222,50 @@ const card = (
     </React.Fragment>
 );
 
+const postCard = (
+    <React.Fragment>
+        <CardContent>
+            {/*<Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>*/}
+            {/*    Lorem Ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.*/}
+            {/*</Typography>*/}
+            <OnePost></OnePost>
+        </CardContent>
+        <CardActions>
+            <Container>
+                <Grid
+                    container
+                    direction="row"
+                    justifyContent="flex-start"
+                    alignItems="center">
+                    <ThumbUpAltRoundedIcon/>
+                    <TextsmsRoundedIcon/>
+                </Grid>
+            </Container>
+            <Container>
+                <Grid
+                    container
+                    direction="row"
+                    justifyContent="flex-end"
+                    alignItems="center">
+                    <BookmarkRoundedIcon/>
+                </Grid>
+            </Container>
+        </CardActions>
+    </React.Fragment>
+);
+
 function OutlinedCard() {
     return (
         <Box sx={{ minWidth: 275 }}>
             <Card variant="outlined">{card}</Card>
+        </Box>
+    );
+}
+
+function OutlinedPostCard() {
+    return (
+        <Box sx={{ minWidth: 275 }}>
+            <Card variant="outlined">{postCard}</Card>
         </Box>
     );
 }

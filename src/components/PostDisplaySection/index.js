@@ -10,7 +10,7 @@ import OnePost from "./Post";
 
 function PostDisplaySection() {
     const [postLists, setPostList] = useState([]);
-    const postsCollectionRef = collection(database, "users");
+    const postsCollectionRef = collection(database, "posts");
     useEffect(() => {
         const unsubscribe = onSnapshot(query(postsCollectionRef, orderBy('timestamp', 'desc')), snapshot =>{
             setPostList(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})));
