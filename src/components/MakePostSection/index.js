@@ -90,6 +90,12 @@ function MakePost(){
 
         });
 
+        //for (let i in topicsCollectionRef) {
+            //if (i.topicName === topic) {
+                //add post to this topic
+            //}
+       // }
+
         await addDoc(topicsCollectionRef, {
             author: { email: invisibleTopic?"anonymous@unknown.com":auth.currentUser.email, id: auth.currentUser.uid },
             realAuthor: {realEmail: auth.currentUser.email},
