@@ -46,8 +46,7 @@ export default function EmailVerification()
     const [newEmail, setNewEmail] = useState("");
     const [confirmNewEmail, setConfirmNewEmail] = useState("");
     //get collection of users
-    const userCollectionRef = collection(database, "users");
-    const verificationStatus = auth.currentUser.emailVerified;
+    const userCollectionRef = collection(database, "users",);
 
     async function handleEmailChange() {
         try {

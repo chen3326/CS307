@@ -28,11 +28,9 @@ function App() {
                 savedPost_page
                 <Route path='/saved' component={SavedPost_page} exact/>
                 <Route path="/home/:postid" component={Indvpost_page} />
-                <Route path="/email_verification" component={Email_verification_page} />
+                <Route path="/email_verification" component={Email_verification_page} exact/>
                 //login_page, Profile, Home
                 <Route path='/settings' component={Settings} exact/>
-
-
             </Switch>
         </Router>
     );
