@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Post, PostDisplayContainer, PostHeader, PostHeaderTitle} from "./PostDisplayElements";
+import {NewLine, Post, PostDisplayContainer, PostHeader, PostHeaderTitle} from "./PostDisplayElements";
 import indv_post from "./indv_post";
 import settings_page from "../../pages/settings_page";
 import settingsSection from "../SettingsSection/index";
@@ -15,6 +15,7 @@ import {CardActions, Fade, Paper, Popper} from "@mui/material";
 import Button from "@material-ui/core/Button";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
+
 import {
     addDoc,
     collection,
@@ -176,9 +177,8 @@ function OnePost({
         }
     }
 
+    //directs user to post's page with more information ie. comments
     async function handleIndvClick() {
-        alert(postid);
-        console.log("hey there");
         window.location = `/home/${postid}`;
     }
 
@@ -189,20 +189,38 @@ function OnePost({
                 <PostHeader>
                     <PostHeaderTitle>
                         <h1> {title}</h1>
-                        <Link
-                            to={{
+
+                        <Stack direction="row"   alignItems="center" spacing={1}>
+                            {/*author email and profile*/}
+
+                            <Link to={{
                                 pathname: "/profile",
                                 state: authorEmail
-
-                                // your data array of objects
                             }}
-                        >
-                            {authorEmail}
+                            >
+                                {authorEmail}
+                            </Link>
 
-                        </Link>
+                            <div>|</div>
+                            {/*topic section*/}
+                            {topic !== "" &&
+                                <Link to={{
+                                    pathname: "/inner_topic",
+                                    state: topic,
+                                    topicAuthor: topicAuthor,
+                                    // your data array of objects
+                                }}
+                                >
+                                    {topic}
+                                </Link>
+                            }
+                        </Stack>
+                        {/*todo: time section makes white screen out for second loading*/}
+
 
 
                     </PostHeaderTitle>
+                    {/*like button*/}
                     <div>
                         {hasLiked ? (
                             <Button onClick={likePost} href=""> <FavoriteIcon style={{color: 'red'}}/> {likes.length}
@@ -211,7 +229,7 @@ function OnePost({
                             <Button onClick={likePost} href=""> <FavoriteBorderIcon/> {likes.length} </Button>
                         )}
                     </div>
-
+                    {/*save button*/}
                     <div>
                         {hasSaved ? (
                             <Button onClick={savePost}> <SavedIcon style={{color: 'blue'}}/> </Button>
@@ -219,104 +237,73 @@ function OnePost({
                         ) : (
                             <Button onClick={savePost}> <SavedIcon/></Button>
                         )}
-
                     </div>
-
-
                 </PostHeader>
-                {/* <a href={topic}>{topic}</a> */}
+
                 <PostDisplayContainer>
-                    <h4> {timestamp.toDate().toString()}</h4>
-                    {topic !== "" &&
-                        <Link
-
-                            to={{
-
-                                pathname: "/inner_topic",
-                                state: topic,
-                                topicAuthor: topicAuthor,
-
-
-                            }}
-                        >
-                            {topic}
-
-                        </Link>
-                    }
-                    {/*
-                    <Link
-                        to={{
-                            pathname: "/inner_topic",
-                            state: authorEmail,
-
-                            // your data array of objects
-                        }}
-                    >
-                        {topic}
-
-                    </Link>*/}
-
-                    {postText}
+                    {/*click to go to seperate post page*/}
                     <div onClick={handleIndvClick}>
 
-                        <ImageList sx={{width: 500, height: 450}} cols={3} rowHeight={164}>
+                        {/*post content and images*/}
+                        <NewLine>{postText}</NewLine>
+                        {imageUrl != "" &&
+                            <ImageList sx={{width: 500, height: 200}} cols={3} rowHeight={164}>
 
-                            <ImageListItem>
-                                {imageUrl !== "" &&
-                                    <img
-                                        src={`${imageUrl}?w=164&h=164&fit=crop&auto=format`}
-                                        srcSet={`${imageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                                <ImageListItem>
+                                    {imageUrl !== "" &&
+                                        <img
+                                            src={`${imageUrl}?w=164&h=164&fit=crop&auto=format`}
+                                            srcSet={`${imageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
 
-                                        loading="lazy"
-                                    />
+                                            loading="lazy"
+                                        />
+                                    }
+
+
+                                </ImageListItem>
+                                <ImageListItem>
+                                    {imageUrl2 !== "" &&
+                                        <img
+                                            src={`${imageUrl2}?w=164&h=164&fit=crop&auto=format`}
+                                            srcSet={`${imageUrl2}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+
+                                            loading="lazy"
+                                        />
+                                    }
+                                </ImageListItem>
+                                <ImageListItem>
+                                    {imageUrl3 !== "" &&
+                                        <img
+                                            src={`${imageUrl3}?w=164&h=164&fit=crop&auto=format`}
+                                            srcSet={`${imageUrl3}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+
+                                            loading="lazy"
+                                        />
+                                    }
+                                </ImageListItem>
+                                {FileURl !== "" &&
+                                    <a href={FileURl}> download attached file</a>
                                 }
 
+                            </ImageList>
+                        }
+                    </div>
 
-                            </ImageListItem>
-                            <ImageListItem>
-
-                                {imageUrl2 !== "" &&
-                                    <img
-                                        src={`${imageUrl2}?w=164&h=164&fit=crop&auto=format`}
-                                        srcSet={`${imageUrl2}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-
-                                        loading="lazy"
-                                    />
-                                }
-
-
-                            </ImageListItem>
-                            <ImageListItem>
-
-                                {imageUrl3 !== "" &&
-                                    <img
-                                        src={`${imageUrl3}?w=164&h=164&fit=crop&auto=format`}
-                                        srcSet={`${imageUrl3}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-
-                                        loading="lazy"
-                                    />
-                                }
-
-                            </ImageListItem>
-                            {FileURl !== "" &&
-                                <a href={FileURl} style={{marginTop: '-30px'}}> download attached file</a>
-                            }
-
-                        </ImageList>
-                        <CardActions>
-                            <Button variant='outlined' color='primary' onClick={handleClick('bottom')}
-                                    style={{marginTop: '-200px'}}> Reply </Button>
-                            <Popper open={open} anchorEl={anchorEl} placement={placement} transition>
-                                {({TransitionProps}) => (
-                                    <Fade {...TransitionProps} timeout={350}>
-                                        <Paper>
-                                            <Typography variant="h6" component="h2" marginLeft='10px' marginTop='5px'
-                                                        width='450px'>
-                                                Create A Comment here
-                                            </Typography>
-                                            <Typography sx={{p: 2}}>
-                                                click the 'Reply' button again to close
-                                                <div className="inputGp">
+                    {/*adding a comment button*/}
+                    <CardActions>
+                        <Button variant='outlined' color='primary' onClick={handleClick('bottom')}
+                        > Add a Comment </Button>
+                        <Popper open={open} anchorEl={anchorEl} placement={placement} transition>
+                            {({TransitionProps}) => (
+                                <Fade {...TransitionProps} timeout={350}>
+                                    <Paper>
+                                        <Typography variant="h6" component="h2" marginLeft='10px' marginTop='5px'
+                                                    width='450px'>
+                                            Create A Comment here
+                                        </Typography>
+                                        <Typography sx={{p: 2}}>
+                                            click the 'Reply' button again to close
+                                            <div className="inputGp">
 
                                                             <textarea
                                                                 style={{
@@ -334,50 +321,24 @@ function OnePost({
                                                                     setCommentText(event.target.value);
                                                                 }}
                                                             />
-                                                </div>
-                                                <Stack spacing={1} direction="row">
-                                                    <label>
-                                                        <Button onClick={createComment}
-                                                                style={{color: '#0D67B5'}}>SUBMIT</Button>
-                                                    </label>
+                                            </div>
+                                            <Stack spacing={1} direction="row">
+                                                <label>
+                                                    <Button onClick={createComment}
+                                                            style={{color: '#0D67B5'}}>SUBMIT</Button>
+                                                </label>
 
 
-                                                </Stack>
-                                            </Typography>
-                                        </Paper>
-                                    </Fade>
-                                )}
-                            </Popper>
-                        </CardActions>
-                    </div>
-
-                    <div>
-                        {commentList.map((comment) => {
-                            return (
-
-
-                                <div> {comment.commentText} -- By <Link
-                                    to={{
-                                        pathname: "/profile",
-                                        state: comment.commentAuthorEmail
-
-                                        // your data array of objects
-                                    }}
-                                >
-                                    {comment.commentAuthorEmail}
-
-                                </Link>
-                                </div>
-                            )
-
-
-                        })}
-
-
-                    </div>
-
+                                            </Stack>
+                                        </Typography>
+                                    </Paper>
+                                </Fade>
+                            )}
+                        </Popper>
+                    </CardActions>
 
                 </PostDisplayContainer>
+
 
 
             </Post>
