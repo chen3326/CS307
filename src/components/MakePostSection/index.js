@@ -349,10 +349,10 @@ function MakePost(){
 
             >
                 <Box sx={style}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                    <Typography id="modal-modal-title" variant="h6" component="h2" style={{marginTop:'-8px'}}>
                         Create A Post
                     </Typography>
-                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }} style={{marginTop:'-8px'}}>
                         <label> Title:</label>
                         <div className="inputGp">
 
@@ -372,7 +372,7 @@ function MakePost(){
                         <div className="inputGp">
 
                             <input
-                                style={{width:'450px', height:'30px',marginBottom:'5px', border: '2px solid #0D67B5', borderRadius:'5px'}}
+                                style={{width:'450px', height:'30px', border: '2px solid #0D67B5', borderRadius:'5px'}}
                                 placeholder=" Topic..."
                                 width=""
                                 maxLength="35"
@@ -393,6 +393,17 @@ function MakePost(){
                                     control={<Switch checked={invisibleTopic} onChange={AnonymousSetTopic} />}
                                     label="Anonymous Topic"
                                 />
+                                {invisibleTopic ? (
+                                    <Stack sx={{width: '100%'}} spacing={1} onInvalid="false">
+                                        <Alert severity="error" style={{fontSize:'3px'}}>By choosing topic anonymously, you can't change
+                                            option after send!</Alert>
+                                    </Stack>
+                                ) : (
+                                    <Stack sx={{width: '100%'}} spacing={1} onInvalid="false">
+
+                                    </Stack>
+                                )
+                                }
                             </div>
                         </Stack>
 
@@ -466,9 +477,18 @@ function MakePost(){
                                 control={<Switch checked={invisible} onChange={AnonymousSet} />}
                                 label="Anonymous Post"
                             />
-                            <Stack sx={{ width: '100%' }} spacing={1} onInvalid="false">
-                                <Alert severity="error">If you choose to post or topic anonymously, you can't change the option after submit!</Alert>
-                            </Stack>
+                            {invisible ? (
+                                <Stack sx={{width: '100%'}} spacing={1} onInvalid="false">
+                                    <Alert severity="error" style={{fontSize:'3px'}}>By choosing post anonymously, you can't change
+                                        option after sent!</Alert>
+                                </Stack>
+                            ) : (
+                                <Stack sx={{width: '100%'}} spacing={1} onInvalid="false">
+
+                                </Stack>
+                            )
+                            }
+
                         </div>
                     </Stack>
 
