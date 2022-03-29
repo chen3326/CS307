@@ -75,6 +75,7 @@ function SettingsSection() {
     const [profilePic, setProfilePic] = useState("");
     const [progress, setProgress] = useState(0);
     const [privateUser, setPrivateUser] = React.useState(false);
+    const [darkTheme, setDarkTheme] = useState(false);
 
     const [queried, setQueried] = useState(false); //lock
     const min = 1; //minimum for age input
@@ -99,6 +100,7 @@ function SettingsSection() {
                 setYear(doc.data().author.year);
                 setProfilePic(doc.data().author.profilePic);
                 setPrivateUser(doc.data().author.privateUser);
+                setDarkTheme(doc.data().author.darkTheme);
             });
         });
     }
@@ -117,10 +119,14 @@ function SettingsSection() {
                 bio: bio,
                 profilePic:profilePic,
                 privateUser: privateUser,
+                darkTheme: darkTheme,
             },
         });
-        window.location.pathname = "/profile"; //redirects now logged-in user to homepage
+        await handleProfClick()//redirects now logged-in user to homepage
     };
+    async function handleProfClick() {
+        window.location = `/profile/${user.uid}`;
+    }
 
     //firebase will error if unsuccessful inputs ie. email is already taken or isn't an email
     async function handleUserSettings() {
@@ -147,6 +153,13 @@ function SettingsSection() {
     //change privateUser var
     const handlePrivateUser = async () => {
         setPrivateUser(!privateUser);
+    };
+
+    const handleDarkTheme = async () => {
+        setDarkTheme(!darkTheme);
+        if (darkTheme) {
+
+        }
     };
 
     //forgot password, moves to forgot password page
@@ -316,6 +329,7 @@ function SettingsSection() {
                                             </FormGroup>
                                         </Grid>
                                     </Grid>
+
                                     <Grid container
                                           wrap="nowrap"
                                           spacing={2}
@@ -327,12 +341,12 @@ function SettingsSection() {
                                                 <Stack direction="row" spacing={1} alignItems="center">
                                                     <Typography>Light</Typography>
                                                     <FormControlLabel control={
-                                                        <Switch checked={privateUser}
-                                                                value={privateUser}
-                                                                onChange={handlePrivateUser}
+                                                        <Switch checked={darkTheme}
+                                                                value={darkTheme}
+                                                                onChange={handleDarkTheme}
                                                         />
                                                     }
-                                                                      label=""
+                                                                      label=" "
                                                     />
                                                     <Typography>Dark</Typography>
                                                 </Stack>

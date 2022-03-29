@@ -1,33 +1,38 @@
 import React from 'react';
 import {
     HeroContainer, HeroContent,
-    HeroSLogo,
+    HeroSLogo, HeroContainer2,HeroH1_2,
 } from './HeroElements';
 import logo from '../../images/Boiler Breakouts-logos.jpeg';
 import {useAuth} from "../../firebase";
 
+import {useTheme, ThemeProvider, createTheme} from "@mui/material/styles";
 
 function HeroSection() {
 
     const currentUser = useAuth();
     const email = currentUser?.email;
-
+    const darkThemeApp = createTheme( {
+        palette: {
+            mode:'dark',
+        },
+    });
     return (
-        <HeroContainer id='home'>
+        <ThemeProvider theme={darkThemeApp}>
+            <HeroContainer id='home'>
 
 
-            <HeroContent>
-                <div>Currently logged in as: { email  } </div>
+                <HeroContent>
+                    <div>Currently logged in as: { email  } </div>
 
-                <HeroSLogo src={logo}/>
+                    <HeroSLogo src={logo}/>
 
-            </HeroContent>
+                </HeroContent>
+            </HeroContainer>
+        </ThemeProvider>
 
 
 
-
-
-        </HeroContainer>
     );
 }
 

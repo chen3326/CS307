@@ -39,6 +39,7 @@ function PostDisplaySection() {
                         FileURl={post?.FileURl}
                         timestamp={post?.timestamp}
                         likes = {post?.likes}
+                        authorid = {post?.author?.id}
 
                     />
                 )

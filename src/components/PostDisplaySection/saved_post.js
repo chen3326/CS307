@@ -7,8 +7,7 @@ import {collection, onSnapshot, query, orderBy, where, getFirestore, doc} from "
 import {PostDisplayContainer, PostHeader} from "./PostDisplayElements";
 
 import OnePost from "./Post";
-import {getAuth} from "firebase/auth";
-import {useDocument} from "react-firebase-hooks/firestore";
+
 
 
 function SavedPost_display() {

@@ -12,19 +12,26 @@ import {
     NavBtn,
     NavBtnLink, NavBtnLinkR
 } from './NavbarElements';
-import {auth, useAuth,logout} from "../../firebase";
-import {
+import {useAuthState} from "react-firebase-hooks/auth";
+import {auth} from "../../firebase";
+import Button from "@material-ui/core/Button";
 
-
-    Link
-} from "react-router-dom";
 
 function Navbar(){
-    const currentUser = useAuth();
-    const email = currentUser?.email;
+    const [user, loading, error] = useAuthState(auth);
+    async function handelsettingsclick() {
+        window.location = `/settings`;
+    }
 
-    return (
-        <>
+    async function handleProfClick() {
+        window.location = `/profile/${user.uid}`;
+    }
+
+    if (loading) {
+        return <div> Loading... </div>;
+    } else if (user) {
+        return (
+            <>
                 <Nav >
                     <NavbarContainer>
 
@@ -32,25 +39,15 @@ function Navbar(){
                         <NavLogo>
                             Boiler Breakouts
                         </NavLogo>
-                        {/*<NavMenu>*/}
-                        {/*    <NavBtnLink href="home" > Homepage </NavBtnLink>*/}
-                        {/*</NavMenu>*/}
-                        <NavBtn>
-                            <NavBtnLink href="settings" > Settings </NavBtnLink>
-                        </NavBtn>
-                        {/*<NavBtn>*/}
-                        {/*    <NavBtnLink href=""> Notifications</NavBtnLink>*/}
-                        {/*</NavBtn>*/}
-                        <NavBtn>
-                            <NavBtnLinkR
-                                to={{
-                                    pathname: "/profile",
-                                    state: email
 
-                                    // your data array of objects
-                                }}
+                        <NavBtn>
+                            <Button onClick={handelsettingsclick} > Settings </Button>
+                        </NavBtn>
+
+                        <NavBtn>
+                            <Button onClick={handleProfClick}
                             > profile
-                            </NavBtnLinkR>
+                            </Button>
 
                         </NavBtn>
 
@@ -60,8 +57,18 @@ function Navbar(){
                     </NavbarContainer>
                 </Nav>
 
-        </>
-    );
+            </>
+        );
+
+    } else if (error) {
+        return <div>There was an authentication error.</div>;
+    } else {
+        return <div>There was an authentication error.</div>;
+    }
+
+
+
+
 }
 
 export default Navbar;

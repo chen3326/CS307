@@ -15,21 +15,23 @@ import { PostDisplayContainer} from "../components/PostDisplaySection/PostDispla
 import OnePost from "../components/PostDisplaySection/Post";
 import {useEffect, useState} from "react";
 function Inner_topic() {
-    const { state , topicAuthor} = useLocation();
+    const { state } = useLocation();
     const [postListsTopic, setPostListTopic] = useState([]);
-    //const [topicAuthor, setTopicAuthor] = useState("");
+    const [topicAuthor, setTopicAuthor] = useState("");
     const postsTopicCollectionRef = collection(database, "posts");
-    const postsTopicAuthorCollectionRef = collection(database, "posts", "topicAuthor", "email");
-    //const q = query(postsTopicCollectionRef, where("topic", "==",state), orderBy("timestamp", "asc"), limit(1));
+    const q = query(postsTopicCollectionRef, where("topic", "==",state), orderBy("timestamp", "asc"), limit(1));
     const backq = query(postsTopicCollectionRef, where("topic", "==",state));
-    //setTopicAuthor(q);
     useEffect(() => {
         const unsubscribeTopic = onSnapshot(backq, snapshot =>{
 
             setPostListTopic(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})));
         })
-
-        return unsubscribeTopic;
+        const unsubscribeAuthor = onSnapshot(q, (querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                setTopicAuthor(doc.data().topicAuthor.email);
+            });
+        });
+        return {unsubscribeTopic, unsubscribeAuthor};
 
     });
 

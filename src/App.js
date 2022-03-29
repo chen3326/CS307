@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
 
 import {BrowserRouter as Router, Switch, Route, useParams} from 'react-router-dom';
@@ -14,25 +14,36 @@ import SavedPost_page from "./pages/savedpost_page";
 import Indvpost_page from "./pages/indvpost_page";
 import Email_verification_page from "./pages/email_verification_page";
 
+import {useTheme, ThemeProvider, createTheme} from "@mui/material/styles";
+
 function App() {
+    const [darkMode, setDarkMode] = useState(false);
+    const darkThemeApp = createTheme( {
+      palette: {
+          mode:"dark",
+      },
+    });
+
     return (
-        <Router>
-            <Switch>
-                <Route path='/' component={login_page} exact/>
-                <Route path='/signup' component={Signup} exact/>
-                <Route path='/inner_topic' component={Inner_topic} exact/>
-                <Route path='/forgot_password' component={Forgot_password} exact/>
-                <Route path='/reset_password' component={Reset_Password} exact/>
-                <Route path='/profile' component={Profile} exact/>
-                <Route path='/home' component={Home} exact/>
-                savedPost_page
-                <Route path='/saved' component={SavedPost_page} exact/>
-                <Route path="/home/:postid" component={Indvpost_page} />
-                <Route path="/email_verification" component={Email_verification_page} exact/>
-                //login_page, Profile, Home
-                <Route path='/settings' component={Settings} exact/>
-            </Switch>
-        </Router>
+        //now only working on setting page
+        //<ThemeProvider theme={darkThemeApp}>
+            <Router>
+                <Switch>
+                    <Route path='/' component={login_page} exact/>
+                    <Route path='/signup' component={Signup} exact/>
+                    <Route path='/inner_topic' component={Inner_topic} exact/>
+                    <Route path='/forgot_password' component={Forgot_password} exact/>
+                    <Route path='/reset_password' component={Reset_Password} exact/>
+                    <Route path='/profile/:profile_uid' component={Profile} exact/>
+                    <Route path='/home' component={Home} exact/>
+                    savedPost_page
+                    <Route path='/saved' component={SavedPost_page} exact/>
+                    <Route path="/home/:postid" component={Indvpost_page} />
+                    <Route path="/email_verification" component={Email_verification_page} exact/>
+                    <Route path='/settings' component={Settings} exact/>
+                </Switch>
+            </Router>
+        //</ThemeProvider>
     );
 }
 
@@ -42,6 +53,17 @@ const Indv = () => {
         // props.match.params.name
         <div>
             <h1>{postid}</h1>
+            <></>
+        </div>
+    )
+};
+
+const Prof = () => {
+    const { profile_uid } = useParams()
+    return (
+        // props.match.params.name
+        <div>
+            <h1>{profile_uid}</h1>
             <></>
         </div>
     )
