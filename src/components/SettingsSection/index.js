@@ -75,7 +75,7 @@ function SettingsSection() {
     const [profilePic, setProfilePic] = useState("");
     const [progress, setProgress] = useState(0);
     const [privateUser, setPrivateUser] = React.useState(false);
-    const [darkTheme, setDarkTheme] = React.useState(false);
+    const [darkTheme, setDarkTheme] = useState(false);
 
     const [queried, setQueried] = useState(false); //lock
     const min = 1; //minimum for age input
@@ -326,6 +326,7 @@ function SettingsSection() {
                                             </FormGroup>
                                         </Grid>
                                     </Grid>
+
                                     <Grid container
                                           wrap="nowrap"
                                           spacing={2}
