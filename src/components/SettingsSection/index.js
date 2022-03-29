@@ -122,8 +122,11 @@ function SettingsSection() {
                 darkTheme: darkTheme,
             },
         });
-        window.location.pathname = "/profile"; //redirects now logged-in user to homepage
+        await handleProfClick()//redirects now logged-in user to homepage
     };
+    async function handleProfClick() {
+        window.location = `/profile/${user.uid}`;
+    }
 
     //firebase will error if unsuccessful inputs ie. email is already taken or isn't an email
     async function handleUserSettings() {

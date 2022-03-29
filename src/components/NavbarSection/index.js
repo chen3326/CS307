@@ -14,10 +14,19 @@ import {
 } from './NavbarElements';
 import {useAuthState} from "react-firebase-hooks/auth";
 import {auth} from "../../firebase";
+import Button from "@material-ui/core/Button";
 
 
 function Navbar(){
     const [user, loading, error] = useAuthState(auth);
+    async function handelsettingsclick() {
+        window.location = `/settings`;
+    }
+
+    async function handleProfClick() {
+        window.location = `/profile/${user.uid}`;
+    }
+
     if (loading) {
         return <div> Loading... </div>;
     } else if (user) {
@@ -30,25 +39,15 @@ function Navbar(){
                         <NavLogo>
                             Boiler Breakouts
                         </NavLogo>
-                        {/*<NavMenu>*/}
-                        {/*    <NavBtnLink href="home" > Homepage </NavBtnLink>*/}
-                        {/*</NavMenu>*/}
+
                         <NavBtn>
-                            <NavBtnLink href="settings" > Settings </NavBtnLink>
+                            <Button onClick={handelsettingsclick} > Settings </Button>
                         </NavBtn>
-                        {/*<NavBtn>*/}
-                        {/*    <NavBtnLink href=""> Notifications</NavBtnLink>*/}
-                        {/*</NavBtn>*/}
+
                         <NavBtn>
-                            <NavBtnLinkR
-                                to={{
-                                    pathname: `/profile/${auth.currentUser.uid}`,
-
-
-                                    // your data array of objects
-                                }}
+                            <Button onClick={handleProfClick}
                             > profile
-                            </NavBtnLinkR>
+                            </Button>
 
                         </NavBtn>
 
