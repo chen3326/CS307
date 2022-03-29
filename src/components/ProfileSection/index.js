@@ -116,6 +116,8 @@ function FullWidthTabs() {
     };
 
     const [likedPosts, setLikedPosts] = useState([]);
+    const [commentedPosts, setCommentedPosts] = useState([]);
+    const [savedPosts, setSavedPosts] = useState([]);
 
     const [postLists1, setPostList1] = useState([]);
     const postsCollectionRef = collection(database, "posts");
@@ -138,11 +140,26 @@ function FullWidthTabs() {
         }
     },[user]);
 
+    useEffect(() => {
+        if (user){
+            onSnapshot(doc(database, "users", user.uid), (snapshot) =>
+                setCommentedPosts(snapshot.data().likedPosts)
+            )
+        }
+    },[user]);
+
+    useEffect(() => {
+        if (user){
+            onSnapshot(doc(database, "users", user.uid), (snapshot) =>
+                setSavedPosts(snapshot.data().likedPosts)
+            )
+        }
+    },[user]);
+
     if (loading) {
         return <div> Loading... </div>;
     } else if (user) {
         return (
-
             <Box sx={{ bgcolor: 'orange', borderRadius: '10px'}}>
                 <AppBar position="static" sx={{borderRadius: '10px'}}>
                     <Tabs
@@ -198,12 +215,60 @@ function FullWidthTabs() {
                 </TabPanel>
                 <TabPanel value={value} index={2} dir={theme.direction}>
                     <TabCard>
-                        <OutlinedCard/>
+                        {postLists1.map((post) => {
+                            return (
+                                <div>
+                                    {commentedPosts.includes(post.id) ? (
+                                        <OnePost
+                                            postid={post?.id}
+                                            title={post?.title}
+                                            topic={post?.topic}
+                                            topicAuthor={post?.topicAuthor?.email}
+                                            postText={post?.postText}
+                                            authorEmail={post?.author?.email}
+                                            imageUrl={post?.imageUrl}
+                                            imageUrl2={post?.imageUrl2}
+                                            imageUrl3={post?.imageUrl3}
+                                            FileURl={post?.FileURl}
+                                            timestamp={post?.timestamp}
+                                            likes={post?.likes}
+                                        />
+                                    ) : (
+                                        <div/>
+
+                                    )}
+                                </div>
+                            )
+                        })}
                     </TabCard>
                 </TabPanel>
                 <TabPanel value={value} index={3} dir={theme.direction}>
                     <TabCard>
-                        <OutlinedCard/>
+                        {postLists1.map((post) => {
+                            return (
+                                <div>
+                                    {savedPosts.includes(post.id) ? (
+                                        <OnePost
+                                            postid={post?.id}
+                                            title={post?.title}
+                                            topic={post?.topic}
+                                            topicAuthor={post?.topicAuthor?.email}
+                                            postText={post?.postText}
+                                            authorEmail={post?.author?.email}
+                                            imageUrl={post?.imageUrl}
+                                            imageUrl2={post?.imageUrl2}
+                                            imageUrl3={post?.imageUrl3}
+                                            FileURl={post?.FileURl}
+                                            timestamp={post?.timestamp}
+                                            likes={post?.likes}
+                                        />
+                                    ) : (
+                                        <div/>
+
+                                    )}
+                                </div>
+                            )
+                        })}
                     </TabCard>
                 </TabPanel>
             </Box>
