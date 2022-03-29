@@ -12,19 +12,17 @@ import {
     NavBtn,
     NavBtnLink, NavBtnLinkR
 } from './NavbarElements';
-import {auth, useAuth,logout} from "../../firebase";
-import {
+import {useAuthState} from "react-firebase-hooks/auth";
+import {auth} from "../../firebase";
 
-
-    Link
-} from "react-router-dom";
 
 function Navbar(){
-    const currentUser = useAuth();
-    const email = currentUser?.email;
-
-    return (
-        <>
+    const [user, loading, error] = useAuthState(auth);
+    if (loading) {
+        return <div> Loading... </div>;
+    } else if (user) {
+        return (
+            <>
                 <Nav >
                     <NavbarContainer>
 
@@ -44,8 +42,8 @@ function Navbar(){
                         <NavBtn>
                             <NavBtnLinkR
                                 to={{
-                                    pathname: "/profile",
-                                    state: email
+                                    pathname: `/profile/${auth.currentUser.uid}`,
+
 
                                     // your data array of objects
                                 }}
@@ -60,8 +58,18 @@ function Navbar(){
                     </NavbarContainer>
                 </Nav>
 
-        </>
-    );
+            </>
+        );
+
+    } else if (error) {
+        return <div>There was an authentication error.</div>;
+    } else {
+        return <div>There was an authentication error.</div>;
+    }
+
+
+
+
 }
 
 export default Navbar;
