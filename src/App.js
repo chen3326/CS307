@@ -34,7 +34,7 @@ function App() {
                     <Route path='/inner_topic' component={Inner_topic} exact/>
                     <Route path='/forgot_password' component={Forgot_password} exact/>
                     <Route path='/reset_password' component={Reset_Password} exact/>
-                    <Route path='/profile' component={Profile} exact/>
+                    <Route path='/profile/:profile_uid' component={Profile} exact/>
                     <Route path='/home' component={Home} exact/>
                     savedPost_page
                     <Route path='/saved' component={SavedPost_page} exact/>
@@ -53,6 +53,17 @@ const Indv = () => {
         // props.match.params.name
         <div>
             <h1>{postid}</h1>
+            <></>
+        </div>
+    )
+};
+
+const Prof = () => {
+    const { profile_uid } = useParams()
+    return (
+        // props.match.params.name
+        <div>
+            <h1>{profile_uid}</h1>
             <></>
         </div>
     )

@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 
 import {database} from "../../firebase";
 import {collection, onSnapshot, query, orderBy} from "firebase/firestore";
-import { PostDisplayContainer} from "./PostDisplayElements";
+import {PostDisplayContainer} from "./PostDisplayElements";
 
 import OnePost from "./Post";
 
@@ -12,7 +12,7 @@ function PostDisplaySection() {
     const [postLists, setPostList] = useState([]);
     const postsCollectionRef = collection(database, "posts");
     useEffect(() => {
-        const unsubscribe = onSnapshot(query(postsCollectionRef, orderBy('timestamp', 'desc')), snapshot =>{
+        const unsubscribe = onSnapshot(query(postsCollectionRef, orderBy('timestamp', 'desc')), snapshot => {
             setPostList(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})));
         })
         return unsubscribe;
@@ -30,7 +30,7 @@ function PostDisplaySection() {
                         postid={post?.id}
                         title={post?.title}
                         topic={post?.topic}
-                        topicAuthor={post?.topicAuthor?.email}
+                        topicAuthor={post?.topicAuthor?.id}
                         postText={post?.postText}
                         authorEmail={post?.author?.email}
                         imageUrl={post?.imageUrl}
@@ -38,7 +38,7 @@ function PostDisplaySection() {
                         imageUrl3={post?.imageUrl3}
                         FileURl={post?.FileURl}
                         timestamp={post?.timestamp}
-                        likes = {post?.likes}
+                        likes={post?.likes}
 
                     />
                 )
