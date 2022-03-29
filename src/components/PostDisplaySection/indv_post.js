@@ -50,7 +50,7 @@ function IndvPost_display() {
     const [postText, setPostText] = useState("");
     const [authorEmail, setAuthorEmail] = useState("");
     const [authorName, setAuthorName] = useState("");
-
+    const [authorid, setAuthorid] = useState("");
     const [imageUrl, setImageUrl] = useState("");
     const [imageUrl2, setImageUrl2] = useState("");
     const [imageUrl3, setImageUrl3] = useState("");
@@ -71,6 +71,7 @@ function IndvPost_display() {
             setTitle(docSnap.data().title);
             setTopic(docSnap.data().topic);
             setPostText(docSnap.data().postText);
+            setAuthorid(docSnap.data().author.id)
             setAuthorEmail(docSnap.data().realAuthor.realEmail);
             setTopicAuthor(docSnap.data().topicAuthor.email);
             setImageUrl(docSnap.data().imageUrl);
@@ -223,6 +224,10 @@ function IndvPost_display() {
         console.info('You clicked the Chip.');
     };
 
+    async function handleProfClick() {
+        window.location = `/profile/${authorid}`;
+    }
+
     //get comments
     useEffect(() => {
         const getComments = async () => {
@@ -267,13 +272,12 @@ function IndvPost_display() {
                                         src={authorProfilePic}
                                     />
                                     <h3>{authorName}</h3>
-                                    <Link to={{
-                                        pathname: "/profile",
-                                        state: authorEmail
-                                    }}
-                                    >
+
+                                    <Button onClick={handleProfClick}>
+
+
                                         {authorEmail}
-                                    </Link>
+                                    </Button>
 
                                     <div>|</div>
                                     {/*topic section*/}

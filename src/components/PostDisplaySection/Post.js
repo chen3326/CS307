@@ -46,6 +46,7 @@ function OnePost({
                      imageUrl2,
                      imageUrl3,
                      FileURl,
+                     authorid
 
 
                  }) {
@@ -177,7 +178,7 @@ function OnePost({
     }
 
     async function handleProfClick() {
-        window.location = `/profile/${topicAuthor}`;
+        window.location = `/profile/${authorid}`;
     }
 
 
