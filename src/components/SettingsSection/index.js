@@ -75,6 +75,7 @@ function SettingsSection() {
     const [profilePic, setProfilePic] = useState("");
     const [progress, setProgress] = useState(0);
     const [privateUser, setPrivateUser] = React.useState(false);
+    const [darkTheme, setDarkTheme] = React.useState(false);
 
     const [queried, setQueried] = useState(false); //lock
     const min = 1; //minimum for age input
@@ -99,6 +100,7 @@ function SettingsSection() {
                 setYear(doc.data().author.year);
                 setProfilePic(doc.data().author.profilePic);
                 setPrivateUser(doc.data().author.privateUser);
+                setDarkTheme(doc.data().author.darkTheme);
             });
         });
     }
@@ -117,6 +119,7 @@ function SettingsSection() {
                 bio: bio,
                 profilePic:profilePic,
                 privateUser: privateUser,
+                darkTheme: darkTheme,
             },
         });
         window.location.pathname = "/profile"; //redirects now logged-in user to homepage
@@ -147,6 +150,13 @@ function SettingsSection() {
     //change privateUser var
     const handlePrivateUser = async () => {
         setPrivateUser(!privateUser);
+    };
+
+    const handleDarkTheme = async () => {
+        setDarkTheme(!darkTheme);
+        if (darkTheme) {
+
+        }
     };
 
     //forgot password, moves to forgot password page
@@ -327,12 +337,12 @@ function SettingsSection() {
                                                 <Stack direction="row" spacing={1} alignItems="center">
                                                     <Typography>Light</Typography>
                                                     <FormControlLabel control={
-                                                        <Switch checked={privateUser}
-                                                                value={privateUser}
-                                                                onChange={handlePrivateUser}
+                                                        <Switch checked={darkTheme}
+                                                                value={darkTheme}
+                                                                onChange={handleDarkTheme}
                                                         />
                                                     }
-                                                                      label=""
+                                                                      label=" "
                                                     />
                                                     <Typography>Dark</Typography>
                                                 </Stack>
