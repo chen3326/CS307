@@ -105,8 +105,10 @@ function IndvPost_display() {
     const commentsCollectionRef = collection(database, 'posts', postid, 'comments',)
     const [likes, setLikes] = useState([]);
     const [saved, setSaved] = useState([]);
+    const [commented, setCommented] = useState([]);
     const [hasLiked, setHasLiked] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
+    const [hasCommented, setHasCommented] = useState(false);
 
     //get a user's profile pic based on their user id
     async function getAuthorData(uid){
@@ -124,6 +126,8 @@ function IndvPost_display() {
         }
     }
 
+    // adds comment to user's comments section
+
     const createComment = async () => {
 
         await addDoc(commentsCollectionRef, {
@@ -131,8 +135,11 @@ function IndvPost_display() {
             commentAuthorId: auth.currentUser.uid,
             commentAuthorEmail: auth.currentUser.email
         });
+        await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
+                commentedPosts: arrayUnion(postid)
+        });
+        window.location.pathname = "/home";
         //window.location.pathname = "/home";
-
     };
 
     async function getCommentData(uid){
@@ -214,8 +221,6 @@ function IndvPost_display() {
             });
             await setDoc(doc(database, "posts", postid, "savedby", getAuth().currentUser.uid), {
                 username: getAuth().currentUser.email,
-
-
             });
         }
     };
