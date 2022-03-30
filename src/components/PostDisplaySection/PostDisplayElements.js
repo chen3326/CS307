@@ -10,6 +10,17 @@ export const PostDisplayContainer = styled.div`
   padding-top: 20px;
 `;
 
+export const PostDisplayContainerDark = styled.div`
+  width: 100%;
+  //min-height: calc(100vh - 80px);
+  background: #121212;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+`;
+
 export const Post = styled.div`
   width: 600px;
   height: auto;
@@ -21,6 +32,20 @@ export const Post = styled.div`
   padding: 20px;
   border-radius: 15px;
 `
+
+export const PostDark = styled.div`
+  width: 600px;
+  height: auto;
+  //max-height: 800px;
+  max-width: 600px;
+  color: rgba(255, 255, 255, 0.85);
+  background-color: rgb(75, 75, 75);
+  //box-shadow: rgba(250, 250, 250, 0.24) 0px 3px 8px;
+  margin: 20px;
+  padding: 20px;
+  border-radius: 15px;
+`
+
 export const PostHeader = styled.div`
   display: flex;
   justify-content: center;

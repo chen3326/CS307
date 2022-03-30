@@ -20,7 +20,7 @@ export const ProfileContainerBlack = styled.div`
   display: flex;
   //align-items: center;
   height: 100%;
-  background: black;
+  background: #121212;
   //margin: 80px auto 0 auto;
   //max-width: 1200px;
 
@@ -90,7 +90,7 @@ export const UserNameBlack = styled.div`
 */}
 
   width: 30vw;
-  color: white;
+  color: rgba(255, 255, 255, 0.85);
   font-size: 4rem;
   font-weight: bold;
 `

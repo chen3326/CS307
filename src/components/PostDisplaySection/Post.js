@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {NewLine, Post, PostDisplayContainer, PostHeader, PostHeaderTitle} from "./PostDisplayElements";
+import {NewLine, Post, PostDark, PostDisplayContainer, PostHeader, PostHeaderTitle} from "./PostDisplayElements";
 
 
 import {
@@ -23,7 +23,7 @@ import {
     deleteDoc,
     updateDoc,
     arrayUnion,
-    arrayRemove,
+    arrayRemove, query, where,
 
 } from "firebase/firestore";
 import {auth, database} from "../../firebase";
@@ -33,7 +33,10 @@ import SavedIcon from '@mui/icons-material/BookmarkAdded';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
-import {getAuth} from "firebase/auth";
+import {getAuth, onAuthStateChanged} from "firebase/auth";
+import {useAuthState} from "react-firebase-hooks/auth";
+import {HeroContainer, HeroContainer2, HeroContent, HeroH1_2, HeroSLogo} from "../HeroSection/HeroElements";
+import logo from "../../images/Boiler Breakouts-logos.jpeg";
 
 function OnePost({
                      postid,
@@ -184,125 +187,160 @@ function OnePost({
         window.location = `/profile/${authorid}`;
     }
 
+    const [themeModeForCheckTheme, setThemeModeForCheckTheme] = useState(false);
+    const [themeEmail, setThemeEmail] = useState("");
+    const [queriedTheme, setQueriedTheme] = useState(false);
 
-    return (
+    async function getUserTheme(){
+        const q = query(collection(database, "users"), where("email", "==", themeEmail));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                setThemeModeForCheckTheme(doc.data().author.darkTheme);
+            });
+        });
+    }
 
-        <Post>
-            <PostHeader>
-                <PostHeaderTitle>
-                    <h1> {title}</h1>
+    const [user, buffering, error] = useAuthState(auth);
 
-                    <Stack direction="row" alignItems="center" spacing={1}>
+    if (buffering) {
+        return (
+            <h1 style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}>
+                Loading...
+            </h1>
+        );
+    } else if (user) {
+        //get current user's email and settings data
+        onAuthStateChanged(auth, (user) => {
+            if (user&&!queriedTheme) {
+                setThemeEmail(user.email); //sets user's email to email
+                getUserTheme();
+                setQueriedTheme(true); //stops overwriting var from firebase backend
+            }
+        });
 
+    if (!themeModeForCheckTheme) {
+        return (
 
-                        <Button onClick={handleProfClick}>
+            <Post>
+                <PostHeader>
+                    <PostHeaderTitle>
+                        <h1> {title}</h1>
 
-
-                            {authorEmail}
-                        </Button>
-
-                        <div>|</div>
-                        {/*topic section*/}
-                        {topic !== "" &&
-                            <Link to={{
-                                pathname: "/inner_topic",
-                                state: topic,
-                                topicAuthor: topicAuthor,
-                                // your data array of objects
-                            }}
-                            >
-                                {topic}
-                            </Link>
-                        }
-                    </Stack>
-                    {/*todo: time section makes white screen out for second loading*/}
-
-
-                </PostHeaderTitle>
-                {/*like button*/}
-                <div>
-                    {hasLiked ? (
-                        <Button onClick={likePost} href=""> <FavoriteIcon style={{color: 'red'}}/> {likes.length}
-                        </Button>
-                    ) : (
-                        <Button onClick={likePost} href=""> <FavoriteBorderIcon/> {likes.length} </Button>
-                    )}
-                </div>
-                {/*save button*/}
-                <div>
-                    {hasSaved ? (
-                        <Button onClick={savePost}> <SavedIcon style={{color: 'blue'}}/> </Button>
-
-                    ) : (
-                        <Button onClick={savePost}> <SavedIcon/></Button>
-                    )}
-                </div>
-            </PostHeader>
-
-            <PostDisplayContainer>
-                {/*click to go to seperate post page*/}
-                <div onClick={handleIndvClick}>
-
-                    {/*post content and images*/}
-                    <NewLine>{postText}</NewLine>
-                    {imageUrl !== "" &&
-                        <ImageList sx={{width: 500, height: 200}} cols={3} rowHeight={164}>
-
-                            <ImageListItem>
-                                {imageUrl !== "" &&
-                                    <img
-                                        src={`${imageUrl}?w=164&h=164&fit=crop&auto=format`}
-                                        srcSet={`${imageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-
-                                        loading="lazy"
-                                    />
-                                }
+                        <Stack direction="row" alignItems="center" spacing={1}>
 
 
-                            </ImageListItem>
-                            <ImageListItem>
-                                {imageUrl2 !== "" &&
-                                    <img
-                                        src={`${imageUrl2}?w=164&h=164&fit=crop&auto=format`}
-                                        srcSet={`${imageUrl2}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                            <Button onClick={handleProfClick}>
 
-                                        loading="lazy"
-                                    />
-                                }
-                            </ImageListItem>
-                            <ImageListItem>
-                                {imageUrl3 !== "" &&
-                                    <img
-                                        src={`${imageUrl3}?w=164&h=164&fit=crop&auto=format`}
-                                        srcSet={`${imageUrl3}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
 
-                                        loading="lazy"
-                                    />
-                                }
-                            </ImageListItem>
-                            {FileURl !== "" &&
-                                <a href={FileURl}> download attached file</a>
+                                {authorEmail}
+                            </Button>
+
+                            <div>|</div>
+                            {/*topic section*/}
+                            {topic !== "" &&
+                                <Link to={{
+                                    pathname: "/inner_topic",
+                                    state: topic,
+                                    topicAuthor: topicAuthor,
+                                    // your data array of objects
+                                }}
+                                >
+                                    {topic}
+                                </Link>
                             }
+                        </Stack>
+                        {/*todo: time section makes white screen out for second loading*/}
 
-                        </ImageList>
-                    }
-                </div>
 
-                {/*adding a comment button*/}
-                <CardActions>
-                    <Button variant='outlined' color='primary' onClick={handleClick('bottom')}
-                    > Add a Comment </Button>
-                    <Popper open={open} anchorEl={anchorEl} placement={placement} transition>
-                        {({TransitionProps}) => (
-                            <Fade {...TransitionProps} timeout={350}>
-                                <Paper>
-                                    <Typography variant="h6" component="h2" marginLeft='10px' marginTop='5px'
-                                                width='450px'>
-                                        Create A Comment here
-                                    </Typography>
-                                    <Typography sx={{p: 2}}>
-                                        click the 'Reply' button again to close
-                                        <div className="inputGp">
+                    </PostHeaderTitle>
+                    {/*like button*/}
+                    <div>
+                        {hasLiked ? (
+                            <Button onClick={likePost} href=""> <FavoriteIcon style={{color: 'red'}}/> {likes.length}
+                            </Button>
+                        ) : (
+                            <Button onClick={likePost} href=""> <FavoriteBorderIcon/> {likes.length} </Button>
+                        )}
+                    </div>
+                    {/*save button*/}
+                    <div>
+                        {hasSaved ? (
+                            <Button onClick={savePost}> <SavedIcon style={{color: 'blue'}}/> </Button>
+
+                        ) : (
+                            <Button onClick={savePost}> <SavedIcon/></Button>
+                        )}
+                    </div>
+                </PostHeader>
+
+                <PostDisplayContainer>
+                    {/*click to go to seperate post page*/}
+                    <div onClick={handleIndvClick}>
+
+                        {/*post content and images*/}
+                        <NewLine>{postText}</NewLine>
+                        {imageUrl !== "" &&
+                            <ImageList sx={{width: 500, height: 200}} cols={3} rowHeight={164}>
+
+                                <ImageListItem>
+                                    {imageUrl !== "" &&
+                                        <img
+                                            src={`${imageUrl}?w=164&h=164&fit=crop&auto=format`}
+                                            srcSet={`${imageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+
+                                            loading="lazy"
+                                        />
+                                    }
+
+
+                                </ImageListItem>
+                                <ImageListItem>
+                                    {imageUrl2 !== "" &&
+                                        <img
+                                            src={`${imageUrl2}?w=164&h=164&fit=crop&auto=format`}
+                                            srcSet={`${imageUrl2}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+
+                                            loading="lazy"
+                                        />
+                                    }
+                                </ImageListItem>
+                                <ImageListItem>
+                                    {imageUrl3 !== "" &&
+                                        <img
+                                            src={`${imageUrl3}?w=164&h=164&fit=crop&auto=format`}
+                                            srcSet={`${imageUrl3}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+
+                                            loading="lazy"
+                                        />
+                                    }
+                                </ImageListItem>
+                                {FileURl !== "" &&
+                                    <a href={FileURl}> download attached file</a>
+                                }
+
+                            </ImageList>
+                        }
+                    </div>
+
+                    {/*adding a comment button*/}
+                    <CardActions>
+                        <Button variant='outlined' color='primary' onClick={handleClick('bottom')}
+                        > Add a Comment </Button>
+                        <Popper open={open} anchorEl={anchorEl} placement={placement} transition>
+                            {({TransitionProps}) => (
+                                <Fade {...TransitionProps} timeout={350}>
+                                    <Paper>
+                                        <Typography variant="h6" component="h2" marginLeft='10px' marginTop='5px'
+                                                    width='450px'>
+                                            Add a Comment here
+                                        </Typography>
+                                        <Typography sx={{p: 2}}>
+                                            click the 'Add a Comment' button again to close
+                                            <div className="inputGp">
 
                                                             <textarea
                                                                 style={{
@@ -320,27 +358,193 @@ function OnePost({
                                                                     setCommentText(event.target.value);
                                                                 }}
                                                             />
-                                        </div>
-                                        <Stack spacing={1} direction="row">
-                                            <label>
-                                                <Button onClick={createComment}
-                                                        style={{color: '#0D67B5'}}>SUBMIT</Button>
-                                            </label>
+                                            </div>
+                                            <Stack spacing={1} direction="row">
+                                                <label>
+                                                    <Button onClick={createComment}
+                                                            style={{color: '#0D67B5'}}>SUBMIT</Button>
+                                                </label>
 
 
-                                        </Stack>
-                                    </Typography>
-                                </Paper>
-                            </Fade>
+                                            </Stack>
+                                        </Typography>
+                                    </Paper>
+                                </Fade>
+                            )}
+                        </Popper>
+                    </CardActions>
+
+                </PostDisplayContainer>
+
+
+            </Post>
+        );
+    } else {
+        return (
+            <PostDark>
+                <PostHeader>
+                    <PostHeaderTitle>
+                        <h1> {title}</h1>
+
+                        <Stack direction="row" alignItems="center" spacing={1}>
+
+
+                            <Button onClick={handleProfClick} style={{color:'rgba(255, 255, 255, 0.85)'}}>
+
+
+                                {authorEmail}
+                            </Button>
+
+                            <div>|</div>
+                            {/*topic section*/}
+                            {topic !== "" &&
+                                <Link to={{
+                                    pathname: "/inner_topic",
+                                    state: topic,
+                                    topicAuthor: topicAuthor,
+                                    // your data array of objects
+                                }}
+                                      style={{color: 'yellow'}}
+                                >
+                                    {topic}
+                                </Link>
+                            }
+                        </Stack>
+                        {/*todo: time section makes white screen out for second loading*/}
+
+
+                    </PostHeaderTitle>
+                    {/*like button*/}
+                    <div>
+                        {hasLiked ? (
+                            <Button onClick={likePost} style={{color:'rgba(255, 255, 255, 0.85)'}} href=""> <FavoriteIcon style={{color: 'red'}}/> {likes.length}
+                            </Button>
+                        ) : (
+                            <Button onClick={likePost} style={{color:'rgba(255, 255, 255, 0.85)'}} href=""> <FavoriteBorderIcon/> {likes.length} </Button>
                         )}
-                    </Popper>
-                </CardActions>
+                    </div>
+                    {/*save button*/}
+                    <div>
+                        {hasSaved ? (
+                            <Button onClick={savePost} style={{color:'rgba(255, 255, 255, 0.85)'}} > <SavedIcon style={{color: 'blue'}}/> </Button>
 
-            </PostDisplayContainer>
+                        ) : (
+                            <Button onClick={savePost} style={{color:'rgba(255, 255, 255, 0.85)'}} > <SavedIcon/></Button>
+                        )}
+                    </div>
+                </PostHeader>
+
+                <PostDisplayContainer>
+                    {/*click to go to seperate post page*/}
+                    <div onClick={handleIndvClick}>
+
+                        {/*post content and images*/}
+                        <NewLine>{postText}</NewLine>
+                        {imageUrl !== "" &&
+                            <ImageList sx={{width: 500, height: 200}} cols={3} rowHeight={164}>
+
+                                <ImageListItem>
+                                    {imageUrl !== "" &&
+                                        <img
+                                            src={`${imageUrl}?w=164&h=164&fit=crop&auto=format`}
+                                            srcSet={`${imageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+
+                                            loading="lazy"
+                                        />
+                                    }
 
 
-        </Post>
-    );
+                                </ImageListItem>
+                                <ImageListItem>
+                                    {imageUrl2 !== "" &&
+                                        <img
+                                            src={`${imageUrl2}?w=164&h=164&fit=crop&auto=format`}
+                                            srcSet={`${imageUrl2}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+
+                                            loading="lazy"
+                                        />
+                                    }
+                                </ImageListItem>
+                                <ImageListItem>
+                                    {imageUrl3 !== "" &&
+                                        <img
+                                            src={`${imageUrl3}?w=164&h=164&fit=crop&auto=format`}
+                                            srcSet={`${imageUrl3}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+
+                                            loading="lazy"
+                                        />
+                                    }
+                                </ImageListItem>
+                                {FileURl !== "" &&
+                                    <a href={FileURl}> download attached file</a>
+                                }
+
+                            </ImageList>
+                        }
+                    </div>
+
+                    {/*adding a comment button*/}
+                    <CardActions>
+                        <Button variant='outlined' style={{color:'lightblue'}} onClick={handleClick('bottom')}
+                        > Add a Comment </Button>
+                        <Popper open={open} anchorEl={anchorEl} placement={placement} transition>
+                            {({TransitionProps}) => (
+                                <Fade {...TransitionProps} timeout={350}>
+                                    <Paper>
+                                        <Typography variant="h6" component="h2" marginLeft='10px' marginTop='5px'
+                                                    width='450px'>
+                                            Add a Comment here
+                                        </Typography>
+                                        <Typography sx={{p: 2}}>
+                                            click the 'Add a Comment' button again to close
+                                            <div className="inputGp">
+
+                                                            <textarea
+                                                                style={{
+                                                                    width: '400px',
+                                                                    height: '80px',
+                                                                    marginTop: '0px',
+                                                                    marginBottom: '15px',
+                                                                    border: '2px solid #0D67B5',
+                                                                    borderRadius: '5px'
+                                                                }}
+                                                                placeholder=" Comment..."
+                                                                maxLength="140"
+                                                                onInput={checkUnderLimit}
+                                                                onChange={(event) => {
+                                                                    setCommentText(event.target.value);
+                                                                }}
+                                                            />
+                                            </div>
+                                            <Stack spacing={1} direction="row">
+                                                <label>
+                                                    <Button onClick={createComment}
+                                                            style={{color: '#0D67B5'}}>SUBMIT</Button>
+                                                </label>
+
+
+                                            </Stack>
+                                        </Typography>
+                                    </Paper>
+                                </Fade>
+                            )}
+                        </Popper>
+                    </CardActions>
+
+                </PostDisplayContainer>
+
+
+            </PostDark>
+        )
+    }
+
+} else if (error) {
+    alert("There was an authentication error.")
+    window.location.pathname = "/"
+    //return <div>There was an authentication error.</div>;
+} else {
+    window.location.pathname = "/"
+}
 
 
 }

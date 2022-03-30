@@ -771,12 +771,12 @@ function SettingsSection() {
                                     item xs={4}
                                 >
                                     <ProfilePic src={profilePic}/>
-                                    <FormControl margin="normal" style={{color:'white'}}>
+                                    <FormControl margin="normal" style={{color:'rgba(255, 255, 255, 0.85)'}}>
                                         <form onChange={event => doUpload(event)}>
                                             <input type="file" className="input"/>
                                         </form>
                                         <hr/>
-                                        <h4 style={{color:'white'}}>Profile Picture Loading... {progress}%</h4>
+                                        <h4 style={{color:'rgba(255, 255, 255, 0.85)'}}>Profile Picture Loading... {progress}%</h4>
                                     </FormControl>
                                 </Grid>
 
@@ -820,7 +820,7 @@ function SettingsSection() {
                                                 <Grid item xs>
                                                     <FormGroup>
                                                         <Stack direction="row" spacing={1} alignItems="center">
-                                                            <Typography style={{color:'white'}}>Public</Typography>
+                                                            <Typography style={{color:'rgba(255, 255, 255, 0.85)'}}>Public</Typography>
                                                             <FormControlLabel control={
                                                                 <Switch checked={privateUser}
                                                                         value={privateUser}
@@ -831,7 +831,7 @@ function SettingsSection() {
                                                                               label=""
                                                                               style={{background:'grey', borderRadius:'5px'}}
                                                             />
-                                                            <Typography style={{color:'white'}}>Private</Typography>
+                                                            <Typography style={{color:'rgba(255, 255, 255, 0.85)'}}>Private</Typography>
                                                         </Stack>
                                                     </FormGroup>
                                                 </Grid>
@@ -846,7 +846,7 @@ function SettingsSection() {
                                                 <Grid item xs>
                                                     <FormGroup>
                                                         <Stack direction="row" spacing={1} alignItems="center">
-                                                            <Typography style={{color:'white'}}>Light</Typography>
+                                                            <Typography style={{color:'rgba(255, 255, 255, 0.85)'}}>Light</Typography>
                                                             <FormControlLabel control={
                                                                 <Switch checked={darkTheme}
                                                                         value={darkTheme}
@@ -856,7 +856,7 @@ function SettingsSection() {
                                                                               label=" "
                                                                               style={{background:'grey', borderRadius:'5px'}}
                                                             />
-                                                            <Typography style={{color:'white'}}>Dark</Typography>
+                                                            <Typography style={{color:'rgba(255, 255, 255, 0.85)'}}>Dark</Typography>
                                                         </Stack>
                                                     </FormGroup>
                                                 </Grid>
@@ -870,7 +870,7 @@ function SettingsSection() {
                                                   item xs={10}
                                             >
                                                 <Grid item>
-                                                    <p style={{color:'white'}}>Name:</p>
+                                                    <p style={{color:'rgba(255, 255, 255, 0.85)'}}>Name:</p>
                                                 </Grid>
                                                 <Grid item xs>
                                                     {/*TODO: clean up the id's on this page*/}
@@ -895,7 +895,7 @@ function SettingsSection() {
                                                   item xs={10}
                                             >
                                                 <Grid item>
-                                                    <p style={{color:'white'}}>Email:</p>
+                                                    <p style={{color:'rgba(255, 255, 255, 0.85)'}}>Email:</p>
                                                 </Grid>
                                                 <Grid item xs>
                                                     <TextField
@@ -920,7 +920,7 @@ function SettingsSection() {
                                                   item xs={10}
                                             >
                                                 <Grid item>
-                                                    <p style={{color:'white'}}>Password:</p>
+                                                    <p style={{color:'rgba(255, 255, 255, 0.85)'}}>Password:</p>
                                                 </Grid>
                                                 <Grid item xs>
                                                     <SaveButton>
@@ -958,7 +958,7 @@ function SettingsSection() {
                                                   item xs={10}
                                             >
                                                 <Grid item>
-                                                    <p style={{color:'white'}}>Bio:</p>
+                                                    <p style={{color:'rgba(255, 255, 255, 0.85)'}}>Bio:</p>
                                                 </Grid>
                                                 <Grid item xs>
                                                     <TextField
@@ -984,7 +984,7 @@ function SettingsSection() {
                                                   item xs={4}
                                             >
                                                 <Grid item>
-                                                    <p style={{color:'white'}}>Age:</p>
+                                                    <p style={{color:'rgba(255, 255, 255, 0.85)'}}>Age:</p>
                                                 </Grid>
                                                 <Grid item xs>
                                                     <TextField
@@ -1019,7 +1019,7 @@ function SettingsSection() {
                                                   item xs={4}
                                             >
                                                 <Grid item>
-                                                    <p style={{color:'white'}}>Year:</p>
+                                                    <p style={{color:'rgba(255, 255, 255, 0.85)'}}>Year:</p>
                                                 </Grid>
                                                 <Grid item xs>
                                                     <FormControl variant="filled" sx={{m: 1, minWidth: 120, background:'grey', borderRadius:'8px'}}>
@@ -1053,7 +1053,7 @@ function SettingsSection() {
                                                   item xs={10}
                                             >
                                                 <Grid item>
-                                                    <p style={{color:'white'}}>Major:</p>
+                                                    <p style={{color:'rgba(255, 255, 255, 0.85)'}}>Major:</p>
                                                 </Grid>
                                                 <Grid item xs>
                                                     <TextField

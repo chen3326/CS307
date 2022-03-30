@@ -18,7 +18,7 @@ export const HeroContainer = styled.div`
 
 export const HeroContainer2 = styled.div`
 
-  background: black;//rgb(234,159,68);
+  background: #121212;//rgb(234,159,68);
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -59,7 +59,7 @@ export const HeroH1 = styled.div`
 export const HeroH1_2 = styled.div`
 
 
-  color: lavenderblush;
+  color: rgba(255, 255, 255, 0.9);
   font-size: 15px;
 
   font-weight: bold;

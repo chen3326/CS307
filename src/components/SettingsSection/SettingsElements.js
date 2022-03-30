@@ -14,7 +14,7 @@ export const SettingsContainerBlack = styled.div`
   
   //align-items: center;
   height: 100%;
-  background: black;
+  background: #121212;
   //padding: 80px;// auto 0 auto;
   //max-width: 1200px;
 `;
@@ -48,7 +48,7 @@ export const UserName = styled.div`
 
 export const UserNameBlack = styled.div`
   width: 30vw;
-  color: white;
+  color: rgba(255, 255, 255, 0.85);
   font-size: 5rem;
   font-weight: bold;
 `;
