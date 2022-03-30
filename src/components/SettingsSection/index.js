@@ -21,7 +21,7 @@ import {
     query,
     onSnapshot,
     updateDoc,
-    deleteDoc, orderBy, limit, getDocs,
+    deleteDoc, orderBy, limit, getDocs,arrayRemove
 } from "firebase/firestore";
 import {useAuth, database, storage, auth, deleteU, login} from "../../firebase";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";

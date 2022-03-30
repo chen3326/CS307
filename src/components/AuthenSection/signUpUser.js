@@ -22,7 +22,8 @@ import HardwareIcon from '@mui/icons-material/Hardware';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import React, {useRef, useState, useEffect} from "react";
-import {addDoc, setDoc, collection, doc} from "firebase/firestore";
+
+import {addDoc, setDoc, collection, doc, arrayUnion, arrayRemove,} from "firebase/firestore";
 import Grid from "@mui/material/Grid";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
 import imageCompression from "browser-image-compression";
@@ -114,13 +115,11 @@ function SignUpUser() {
                 profilePic:profilePic,
                 privateUser: false,
             },
-            topics: {
-                topic1: topic1,
-                topic2: topic2,
-                topic3: topic3,
-                topic4: topic4,
-                topic5: topic5,
-            }
+            following:arrayUnion(),
+            followingTopics:arrayUnion(),
+            savedPosts: arrayUnion(),
+            likedPosts:arrayUnion(),
+            commentedPosts: arrayUnion(),
         });
         window.location.pathname = "/email_verification"; //redirects now logged in user to email verification page
     };
