@@ -20,7 +20,9 @@ import {
     NewLine,
     newLine,
     Post,
+    PostDark,
     PostDisplayContainer,
+    PostDisplayContainerDark,
     PostHeader,
     PostHeaderTitle,
     PostTextContainer,
@@ -249,6 +251,19 @@ function IndvPost_display() {
         }
     }
 
+    const [themeModeForCheckTheme, setThemeModeForCheckTheme] = useState(false);
+    const [themeEmail, setThemeEmail] = useState("");
+    const [queriedTheme, setQueriedTheme] = useState(false);
+
+    async function getUserTheme(){
+        const q = query(collection(database, "users"), where("email", "==", themeEmail));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                setThemeModeForCheckTheme(doc.data().author.darkTheme);
+            });
+        });
+    }
+
 //pre-loading and display single post
     const [user, loading, error] = useAuthState(auth);
     if (loading) {
@@ -257,133 +272,140 @@ function IndvPost_display() {
         onAuthStateChanged(auth, (user) => {
             if (user&&!queried) {
                 getUser(); //set other user var
+                setThemeEmail(user.email);
+                getUserTheme();
+                setQueriedTheme(true);
                 setQueried(true); //stops overwriting var from firebase backend
+
             }
         });
         //show page error if postid address doesn't exist
         if (postExists){
-            return (
-                <PostDisplayContainer>
-                    <Post>
-                        <PostHeader>
-                            <PostHeaderTitle>
-                                <h1> {title}</h1>
+            if (!themeModeForCheckTheme) {
+                return (
+                    <PostDisplayContainer>
+                        <Post>
+                            <PostHeader>
+                                <PostHeaderTitle>
+                                    <h1> {title}</h1>
 
-                                <Stack direction="row"   alignItems="center" spacing={1}>
-                                    {/*author email and profile*/}
-                                    <Avatar
-                                        sx={{ width: 30, height: 30 }}
-                                        alt={authorEmail}
-                                        src={authorProfilePic}
-                                    />
-                                    <h3>{authorName}</h3>
+                                    <Stack direction="row" alignItems="center" spacing={1}>
+                                        {/*author email and profile*/}
+                                        <Avatar
+                                            sx={{width: 30, height: 30}}
+                                            alt={authorEmail}
+                                            src={authorProfilePic}
+                                        />
+                                        <h3>{authorName}</h3>
 
-                                    <Button onClick={handleProfClick}>
-
-
-                                        {authorEmail}
-                                    </Button>
-
-                                    <div>|</div>
-                                    {/*topic section*/}
-                                    {topic !== "" &&
-                                        <Link to={{
-                                            pathname: "/inner_topic",
-                                            state: topic,
-                                            topicAuthor: topicAuthor,
-                                            // your data array of objects
-                                        }}
-                                        >
-                                            {topic}
-                                        </Link>
-                                    }
-                                </Stack>
-                                {/*todo: time section makes white screen out for second loading*/}
+                                        <Button onClick={handleProfClick}>
 
 
+                                            {authorEmail}
+                                        </Button>
 
-                            </PostHeaderTitle>
-                            {/*like button*/}
-                            <div>
-                                {hasLiked ? (
-                                    <Button onClick={likePost} href=""> <FavoriteIcon style={{color: 'red'}}/> {likes.length}
-                                    </Button>
-                                ) : (
-                                    <Button onClick={likePost} href=""> <FavoriteBorderIcon/> {likes.length} </Button>
-                                )}
-                            </div>
-                            {/*save button*/}
-                            <div>
-                                {hasSaved ? (
-                                    <Button onClick={savePost}> <SavedIcon style={{color: 'blue'}}/> </Button>
-
-                                ) : (
-                                    <Button onClick={savePost}> <SavedIcon/></Button>
-                                )}
-                            </div>
-                        </PostHeader>
+                                        <div>|</div>
+                                        {/*topic section*/}
+                                        {topic !== "" &&
+                                            <Link to={{
+                                                pathname: "/inner_topic",
+                                                state: topic,
+                                                topicAuthor: topicAuthor,
+                                                // your data array of objects
+                                            }}
+                                            >
+                                                {topic}
+                                            </Link>
+                                        }
+                                    </Stack>
+                                    {/*todo: time section makes white screen out for second loading*/}
 
 
-                        <PostDisplayContainer>
-                            {/*post content and images*/}
-                            <NewLine>{postText}</NewLine>
-                            {imageUrl != "" &&
-                                <ImageList sx={{width: 500, height: 200}} cols={3} rowHeight={164}>
+                                </PostHeaderTitle>
+                                {/*like button*/}
+                                <div>
+                                    {hasLiked ? (
+                                        <Button onClick={likePost} href=""> <FavoriteIcon
+                                            style={{color: 'red'}}/> {likes.length}
+                                        </Button>
+                                    ) : (
+                                        <Button onClick={likePost} href=""> <FavoriteBorderIcon/> {likes.length}
+                                        </Button>
+                                    )}
+                                </div>
+                                {/*save button*/}
+                                <div>
+                                    {hasSaved ? (
+                                        <Button onClick={savePost}> <SavedIcon style={{color: 'blue'}}/> </Button>
 
-                                    <ImageListItem>
-                                        {imageUrl !== "" &&
-                                            <img
-                                                src={`${imageUrl}?w=164&h=164&fit=crop&auto=format`}
-                                                srcSet={`${imageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                                    ) : (
+                                        <Button onClick={savePost}> <SavedIcon/></Button>
+                                    )}
+                                </div>
+                            </PostHeader>
 
-                                                loading="lazy"
-                                            />
+
+                            <PostDisplayContainer>
+                                {/*post content and images*/}
+                                <NewLine>{postText}</NewLine>
+                                {imageUrl != "" &&
+                                    <ImageList sx={{width: 500, height: 200}} cols={3} rowHeight={164}>
+
+                                        <ImageListItem>
+                                            {imageUrl !== "" &&
+                                                <img
+                                                    src={`${imageUrl}?w=164&h=164&fit=crop&auto=format`}
+                                                    srcSet={`${imageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+
+                                                    loading="lazy"
+                                                />
+                                            }
+
+
+                                        </ImageListItem>
+                                        <ImageListItem>
+                                            {imageUrl2 !== "" &&
+                                                <img
+                                                    src={`${imageUrl2}?w=164&h=164&fit=crop&auto=format`}
+                                                    srcSet={`${imageUrl2}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+
+                                                    loading="lazy"
+                                                />
+                                            }
+                                        </ImageListItem>
+                                        <ImageListItem>
+                                            {imageUrl3 !== "" &&
+                                                <img
+                                                    src={`${imageUrl3}?w=164&h=164&fit=crop&auto=format`}
+                                                    srcSet={`${imageUrl3}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+
+                                                    loading="lazy"
+                                                />
+                                            }
+                                        </ImageListItem>
+                                        {FileURl !== "" &&
+                                            <a href={FileURl}> download attached file</a>
                                         }
 
+                                    </ImageList>
+                                }
 
-                                    </ImageListItem>
-                                    <ImageListItem>
-                                        {imageUrl2 !== "" &&
-                                            <img
-                                                src={`${imageUrl2}?w=164&h=164&fit=crop&auto=format`}
-                                                srcSet={`${imageUrl2}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-
-                                                loading="lazy"
-                                            />
-                                        }
-                                    </ImageListItem>
-                                    <ImageListItem>
-                                        {imageUrl3 !== "" &&
-                                            <img
-                                                src={`${imageUrl3}?w=164&h=164&fit=crop&auto=format`}
-                                                srcSet={`${imageUrl3}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-
-                                                loading="lazy"
-                                            />
-                                        }
-                                    </ImageListItem>
-                                    {FileURl !== "" &&
-                                        <a href={FileURl}> download attached file</a>
-                                    }
-
-                                </ImageList>
-                            }
-
-                            {/*adding a comment button*/}
-                            <CardActions>
-                                <Button variant='outlined' color='primary' onClick={handleClick('bottom')}
-                                        > Add a Comment </Button>
-                                <Popper open={open} anchorEl={anchorEl} placement={placement} transition>
-                                    {({TransitionProps}) => (
-                                        <Fade {...TransitionProps} timeout={350}>
-                                            <Paper>
-                                                <Typography variant="h6" component="h2" marginLeft='10px' marginTop='5px'
-                                                            width='450px'>
-                                                    Create A Comment here
-                                                </Typography>
-                                                <Typography sx={{p: 2}}>
-                                                    click the 'Reply' button again to close
-                                                    <div className="inputGp">
+                                {/*adding a comment button*/}
+                                <CardActions>
+                                    <Button variant='outlined' color='primary' onClick={handleClick('bottom')}
+                                    > Add a Comment </Button>
+                                    <Popper open={open} anchorEl={anchorEl} placement={placement} transition>
+                                        {({TransitionProps}) => (
+                                            <Fade {...TransitionProps} timeout={350}>
+                                                <Paper>
+                                                    <Typography variant="h6" component="h2" marginLeft='10px'
+                                                                marginTop='5px'
+                                                                width='450px'>
+                                                        Create A Comment here
+                                                    </Typography>
+                                                    <Typography sx={{p: 2}}>
+                                                        click the 'Reply' button again to close
+                                                        <div className="inputGp">
 
                                                             <textarea
                                                                 style={{
@@ -401,74 +423,292 @@ function IndvPost_display() {
                                                                     setCommentText(event.target.value);
                                                                 }}
                                                             />
-                                                    </div>
-                                                    <Stack spacing={1} direction="row">
-                                                        <label>
-                                                            <Button onClick={createComment}
-                                                                    style={{color: '#0D67B5'}}>SUBMIT</Button>
-                                                        </label>
+                                                        </div>
+                                                        <Stack spacing={1} direction="row">
+                                                            <label>
+                                                                <Button onClick={createComment}
+                                                                        style={{color: '#0D67B5'}}>SUBMIT</Button>
+                                                            </label>
 
 
+                                                        </Stack>
+                                                    </Typography>
+                                                </Paper>
+                                            </Fade>
+                                        )}
+                                    </Popper>
+                                </CardActions>
+                                {/*comments display*/}
+                                <NewLine>
+                                    {commentList.map((comment) => {
+                                        //console.log(comment.commentAuthorId);
+                                        //getCommentData(comment.commentAuthorId);
+                                        return (
+                                            <NewLine>
+                                                <Stack direction="row" alignItems="center" spacing={1}>
+                                                    {/*author email and profile*/}
+                                                    <Avatar
+                                                        sx={{width: 30, height: 30}}
+                                                        alt={comment.commentAuthorEmail}
+                                                        src={commentProfilePic}
+                                                    />
+
+                                                    <Stack direction="column" spacing={1}>
+                                                        <h3>{commentName}</h3>
+                                                        <Link
+                                                            to={{
+                                                                pathname: "/profile",
+                                                                state: comment.commentAuthorEmail
+                                                                // your data array of objects
+                                                            }}
+                                                        >
+                                                            {comment.commentAuthorEmail}
+                                                        </Link>
+
+                                                        {comment.commentText}
                                                     </Stack>
-                                                </Typography>
-                                            </Paper>
-                                        </Fade>
-                                    )}
-                                </Popper>
-                            </CardActions>
-                            {/*comments display*/}
-                            <NewLine>
-                                {commentList.map((comment) => {
-                                    //console.log(comment.commentAuthorId);
-                                    //getCommentData(comment.commentAuthorId);
-                                    return (
-                                    <NewLine>
-                                            <Stack direction="row"   alignItems="center" spacing={1}>
-                                                {/*author email and profile*/}
-                                                <Avatar
-                                                    sx={{ width: 30, height: 30 }}
-                                                    alt={comment.commentAuthorEmail}
-                                                    src={commentProfilePic}
-                                                />
 
-                                                <Stack direction="column" spacing={1}>
-                                                    <h3>{commentName}</h3>
-                                                    <Link
-                                                        to={{
-                                                            pathname: "/profile",
-                                                            state: comment.commentAuthorEmail
-                                                            // your data array of objects
-                                                        }}
-                                                    >
-                                                        {comment.commentAuthorEmail}
-                                                    </Link>
-
-                                                    {comment.commentText}
                                                 </Stack>
+                                            </NewLine>
+                                        )
+                                    })}
+                                </NewLine>
+                            </PostDisplayContainer>
+                        </Post>
+                    </PostDisplayContainer>
 
-                                            </Stack>
-                                    </NewLine>
-                                    )
-                                })}
-                            </NewLine>
-                        </PostDisplayContainer>
-                    </Post>
-                </PostDisplayContainer>
+                );
+            } else {
+                return (
+                    <PostDisplayContainerDark style={{paddingBottom:'800px'}}>
+                        <PostDark>
+                            <PostHeader>
+                                <PostHeaderTitle>
+                                    <h1> {title}</h1>
 
-            );
+                                    <Stack direction="row" alignItems="center" spacing={1}>
+                                        {/*author email and profile*/}
+                                        <Avatar
+                                            sx={{width: 30, height: 30}}
+                                            alt={authorEmail}
+                                            src={authorProfilePic}
+                                        />
+                                        <h3>{authorName}</h3>
+
+                                        <Button onClick={handleProfClick} style={{color:'rgba(250,250,250,0.85)'}}>
+
+
+                                            {authorEmail}
+                                        </Button>
+
+                                        <div>|</div>
+                                        {/*topic section*/}
+                                        {topic !== "" &&
+                                            <Link to={{
+                                                pathname: "/inner_topic",
+                                                state: topic,
+                                                topicAuthor: topicAuthor,
+
+                                                // your data array of objects
+                                            }}
+                                                  style={{color:'#F0E68C'}}
+                                            >
+                                                {topic}
+                                            </Link>
+                                        }
+                                    </Stack>
+                                    {/*todo: time section makes white screen out for second loading*/}
+
+
+                                </PostHeaderTitle>
+                                {/*like button*/}
+                                <div>
+                                    {hasLiked ? (
+                                        <Button onClick={likePost} href="" style={{color:'rgba(250,250,250,0.85)'}}> <FavoriteIcon
+                                            style={{color: 'red'}}/> {likes.length}
+                                        </Button>
+                                    ) : (
+                                        <Button onClick={likePost} href="" style={{color:'rgba(250,250,250,0.85)'}}> <FavoriteBorderIcon/> {likes.length}
+                                        </Button>
+                                    )}
+                                </div>
+                                {/*save button*/}
+                                <div>
+                                    {hasSaved ? (
+                                        <Button onClick={savePost} style={{color:'rgba(250,250,250,0.85)'}}> <SavedIcon style={{color: 'blue'}}/> </Button>
+
+                                    ) : (
+                                        <Button onClick={savePost} style={{color:'rgba(250,250,250,0.85)'}}> <SavedIcon/></Button>
+                                    )}
+                                </div>
+                            </PostHeader>
+
+
+                            <PostDisplayContainerDark style={{background: 'rgb(75, 75, 75)'}}>
+                                {/*post content and images*/}
+                                <NewLine>{postText}</NewLine>
+                                {imageUrl != "" &&
+                                    <ImageList sx={{width: 500, height: 200}} cols={3} rowHeight={164}>
+
+                                        <ImageListItem>
+                                            {imageUrl !== "" &&
+                                                <img
+                                                    src={`${imageUrl}?w=164&h=164&fit=crop&auto=format`}
+                                                    srcSet={`${imageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+
+                                                    loading="lazy"
+                                                />
+                                            }
+
+
+                                        </ImageListItem>
+                                        <ImageListItem>
+                                            {imageUrl2 !== "" &&
+                                                <img
+                                                    src={`${imageUrl2}?w=164&h=164&fit=crop&auto=format`}
+                                                    srcSet={`${imageUrl2}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+
+                                                    loading="lazy"
+                                                />
+                                            }
+                                        </ImageListItem>
+                                        <ImageListItem>
+                                            {imageUrl3 !== "" &&
+                                                <img
+                                                    src={`${imageUrl3}?w=164&h=164&fit=crop&auto=format`}
+                                                    srcSet={`${imageUrl3}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+
+                                                    loading="lazy"
+                                                />
+                                            }
+                                        </ImageListItem>
+                                        {FileURl !== "" &&
+                                            <a href={FileURl}> download attached file</a>
+                                        }
+
+                                    </ImageList>
+                                }
+
+                                {/*adding a comment button*/}
+                                <CardActions>
+                                    <Button variant='outlined' style={{color:'lightblue'}}  onClick={handleClick('bottom')}
+                                    > Add a Comment </Button>
+                                    <Popper open={open} anchorEl={anchorEl} placement={placement} transition>
+                                        {({TransitionProps}) => (
+                                            <Fade {...TransitionProps} timeout={350}>
+                                                <Paper>
+                                                    <Typography variant="h6" component="h2" marginLeft='10px'
+                                                                marginTop='5px'
+                                                                width='450px'>
+                                                        Create A Comment here
+                                                    </Typography>
+                                                    <Typography sx={{p: 2}}>
+                                                        click the 'Reply' button again to close
+                                                        <div className="inputGp">
+
+                                                            <textarea
+                                                                style={{
+                                                                    width: '400px',
+                                                                    height: '80px',
+                                                                    marginTop: '0px',
+                                                                    marginBottom: '15px',
+                                                                    border: '2px solid #0D67B5',
+                                                                    borderRadius: '5px'
+                                                                }}
+                                                                placeholder=" Comment..."
+                                                                maxLength="140"
+                                                                onInput={checkUnderLimit}
+                                                                onChange={(event) => {
+                                                                    setCommentText(event.target.value);
+                                                                }}
+                                                            />
+                                                        </div>
+                                                        <Stack spacing={1} direction="row">
+                                                            <label>
+                                                                <Button onClick={createComment}
+                                                                        style={{color: '#0D67B5'}}>SUBMIT</Button>
+                                                            </label>
+
+
+                                                        </Stack>
+                                                    </Typography>
+                                                </Paper>
+                                            </Fade>
+                                        )}
+                                    </Popper>
+                                </CardActions>
+                                {/*comments display*/}
+                                <NewLine>
+                                    {commentList.map((comment) => {
+                                        //console.log(comment.commentAuthorId);
+                                        //getCommentData(comment.commentAuthorId);
+                                        return (
+                                            <NewLine>
+                                                <Stack direction="row" alignItems="center" spacing={1}>
+                                                    {/*author email and profile*/}
+                                                    <Avatar
+                                                        sx={{width: 30, height: 30}}
+                                                        alt={comment.commentAuthorEmail}
+                                                        src={commentProfilePic}
+                                                    />
+
+                                                    <Stack direction="column" spacing={1}>
+                                                        <h3>{commentName}</h3>
+                                                        <Link
+                                                            to={{
+                                                                pathname: "/profile",
+                                                                state: comment.commentAuthorEmail
+                                                                // your data array of objects
+                                                            }}
+                                                            style={{color:'#F0E68C'}}
+                                                        >
+                                                            {comment.commentAuthorEmail}
+                                                        </Link>
+
+                                                        {comment.commentText}
+                                                    </Stack>
+
+                                                </Stack>
+                                            </NewLine>
+                                        )
+                                    })}
+                                </NewLine>
+                            </PostDisplayContainerDark>
+                        </PostDark>
+                    </PostDisplayContainerDark>
+
+                );
+            }
         }
         else {
-            return (
-                <PostDisplayContainer>
-                    <div>{postid}</div>
-                    <h1>POST DOES NOT EXIST</h1>
-                </PostDisplayContainer>
-            );
+            if (!themeModeForCheckTheme) {
+                return (
+                    <PostDisplayContainer>
+                        <div>{postid}</div>
+                        <h1>POST DOES NOT EXIST</h1>
+                    </PostDisplayContainer>
+                );
+            } else {
+                return (
+                    <PostDisplayContainerDark>
+                        <div style={{color:'rgba(250,250,250,0.85)'}}>{postid}</div>
+                        <h1 style={{color:'rgba(250,250,250,0.85)', paddingBottom:'1000px'}}>POST DOES NOT EXIST</h1>
+                    </PostDisplayContainerDark>
+                );
+            }
         }
     } else if (error) {
-        return <div>There was an authentication error.</div>;
+        if (!themeModeForCheckTheme) {
+            return <div>There was an authentication error.</div>;
+        } else {
+            return <div style={{color:'rgba(250,250,250,0.85)', background:'rgba(255, 255, 255, 0.08)', paddingBottom:'1000px'}}>There was an authentication error.</div>;
+        }
     } else {
-        return <div>There was an authentication error.</div>;
+        if (!themeModeForCheckTheme) {
+            return <div>There was an authentication error.</div>;
+        } else {
+            return <div style={{color:'rgba(250,250,250,0.85)', background:'rgba(255, 255, 255, 0.08)', paddingBottom:'1000px'}}>There was an authentication error.</div>;
+        }
     }
 
 }

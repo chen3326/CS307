@@ -122,12 +122,150 @@ function FullWidthTabs() {
         }
     }, [user]);
 
+    const [themeModeForCheckTheme, setThemeModeForCheckTheme] = useState(false);
+    const [themeEmail, setThemeEmail] = useState("");
+    const [queriedTheme, setQueriedTheme] = useState(false);
+
+    async function getUserTheme(){
+        const q = query(collection(database, "users"), where("email", "==", themeEmail));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                setThemeModeForCheckTheme(doc.data().author.darkTheme);
+            });
+        });
+    }
+
     if (loading) {
         return <div> Loading... </div>;
     } else if (user) {
-        return (
+        onAuthStateChanged(auth, (user) => {
+            if (user&&!queriedTheme) {
+                setThemeEmail(user.email); //sets user's email to email
+                getUserTheme();
+                setQueriedTheme(true); //stops overwriting var from firebase backend
+            }
+        });
 
-            <Box sx={{bgcolor: 'orange', borderRadius: '10px'}}>
+        if (!themeModeForCheckTheme) {
+
+            return (
+
+                <Box sx={{bgcolor: 'orange', borderRadius: '10px'}}>
+                    <AppBar position="static" sx={{borderRadius: '10px'}}>
+                        <Tabs
+                            value={value}
+                            onChange={handleChange}
+                            indicatorColor="secondary"
+                            textColor="inherit"
+                            variant="fullWidth"
+                            aria-label="full width tabs example"
+                        >
+                            <Tab label="Posts" {...a11yProps(0)} />
+                            <Tab label="Liked" {...a11yProps(1)} />
+                            <Tab label="Saved" {...a11yProps(2)} />
+                            <Tab label="Comments" {...a11yProps(3)} />
+                        </Tabs>
+                    </AppBar>
+                    <TabPanel value={value} index={0} dir={theme.direction}>
+                        <TabCard>
+                            {postLists1.map((post) => {
+                                return (
+                                    <div>
+                                        {post.author.id === profile_uid ? (
+                                            <OnePost
+                                                postid={post?.id}
+                                                title={post?.title}
+                                                topic={post?.topic}
+                                                topicAuthor={post?.topicAuthor?.email}
+                                                postText={post?.postText}
+                                                authorEmail={post?.author?.email}
+                                                imageUrl={post?.imageUrl}
+                                                imageUrl2={post?.imageUrl2}
+                                                imageUrl3={post?.imageUrl3}
+                                                FileURl={post?.FileURl}
+                                                timestamp={post?.timestamp}
+                                                likes={post?.likes}
+                                                authorid={post?.author?.id}
+                                            />
+                                        ) : (
+                                            <div/>
+
+                                        )}
+                                    </div>
+                                )
+                            })}
+                        </TabCard>
+                    </TabPanel>
+                    <TabPanel value={value} index={1} dir={theme.direction}>
+                        <TabCard>
+                            {postLists1.map((post) => {
+                                return (
+                                    <div>
+                                        {likedPosts.includes(post.id) ? (
+                                            <OnePost
+                                                postid={post?.id}
+                                                title={post?.title}
+                                                topic={post?.topic}
+                                                topicAuthor={post?.topicAuthor?.email}
+                                                postText={post?.postText}
+                                                authorEmail={post?.author?.email}
+                                                imageUrl={post?.imageUrl}
+                                                imageUrl2={post?.imageUrl2}
+                                                imageUrl3={post?.imageUrl3}
+                                                FileURl={post?.FileURl}
+                                                timestamp={post?.timestamp}
+                                                likes={post?.likes}
+                                                authorid={post?.author?.id}
+                                            />
+                                        ) : (
+                                            <div/>
+
+                                        )}
+                                    </div>
+                                )
+                            })}
+                        </TabCard>
+                    </TabPanel>
+                    <TabPanel value={value} index={2} dir={theme.direction}>
+                        <TabCard>
+                            <OutlinedCard/>
+                        </TabCard>
+                    </TabPanel>
+                    <TabPanel value={value} index={3} dir={theme.direction}>
+                        <TabCard>
+                            {postLists1.map((post) => {
+                                return (
+                                    <div>
+                                        {commentedPosts.includes(post.id) ? (
+                                            <OnePost
+                                                postid={post?.id}
+                                                title={post?.title}
+                                                topic={post?.topic}
+                                                topicAuthor={post?.topicAuthor?.email}
+                                                postText={post?.postText}
+                                                authorEmail={post?.author?.email}
+                                                imageUrl={post?.imageUrl}
+                                                imageUrl2={post?.imageUrl2}
+                                                imageUrl3={post?.imageUrl3}
+                                                FileURl={post?.FileURl}
+                                                timestamp={post?.timestamp}
+                                                likes={post?.likes}
+                                                authorid={post?.author?.id}
+                                            />
+                                        ) : (
+                                            <div/>
+
+                                        )}
+                                    </div>
+                                )
+                            })}
+                        </TabCard>
+                    </TabPanel>
+                </Box>
+            );
+        } else {
+            return (
+            <Box sx={{bgcolor: 'rgba(255, 255, 255, 0.1)', borderRadius: '10px'}}>
                 <AppBar position="static" sx={{borderRadius: '10px'}}>
                     <Tabs
                         value={value}
@@ -240,6 +378,7 @@ function FullWidthTabs() {
                 </TabPanel>
             </Box>
         );
+        }
     } else if (error) {
         return <div>There was an authentication error.</div>;
     } else {

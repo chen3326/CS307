@@ -404,7 +404,7 @@ function OnePost({
                                     topicAuthor: topicAuthor,
                                     // your data array of objects
                                 }}
-                                      style={{color: 'yellow'}}
+                                      style={{color: '#F0E68C'}}
                                 >
                                     {topic}
                                 </Link>

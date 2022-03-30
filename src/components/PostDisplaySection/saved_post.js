@@ -4,9 +4,10 @@ import {useAuthState} from 'react-firebase-hooks/auth';
 
 import {auth, database} from "../../firebase";
 import {collection, onSnapshot, query, orderBy, where, getFirestore, doc} from "firebase/firestore";
-import {PostDisplayContainer, PostHeader} from "./PostDisplayElements";
+import {PostDisplayContainer, PostDisplayContainerDark, PostHeader} from "./PostDisplayElements";
 
 import OnePost from "./Post";
+import {onAuthStateChanged} from "firebase/auth";
 
 
 
@@ -24,6 +25,19 @@ function SavedPost_display() {
         return unsubscribe;
     });
 
+    const [themeModeForCheckTheme, setThemeModeForCheckTheme] = useState(false);
+    const [themeEmail, setThemeEmail] = useState("");
+    const [queriedTheme, setQueriedTheme] = useState(false);
+
+    async function getUserTheme(){
+        const q = query(collection(database, "users"), where("email", "==", themeEmail));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                setThemeModeForCheckTheme(doc.data().author.darkTheme);
+            });
+        });
+    }
+
     const [user, loading, error] = useAuthState(auth);
 
     useEffect(() => {
@@ -37,38 +51,83 @@ function SavedPost_display() {
     if (loading) {
         return <div> Loading... </div>;
     } else if (user) {
-        return (
-            <PostDisplayContainer>
+        onAuthStateChanged(auth, (user) => {
+            if (user&&!queriedTheme) {
+                setThemeEmail(user.email); //sets user's email to email
+                getUserTheme();
+                setQueriedTheme(true); //stops overwriting var from firebase backend
+            }
+        });
+        if (!themeModeForCheckTheme) {
+            return (
 
-                {postLists1.map((post) => {
+                <PostDisplayContainer>
 
-                    return (
-                        <div>
-                            {savedPosts.includes(post.id) ? (
-                                <OnePost
-                                    postid={post?.id}
-                                    title={post?.title}
-                                    topic={post?.topic}
-                                    topicAuthor={post?.topicAuthor?.email}
-                                    postText={post?.postText}
-                                    authorEmail={post?.author?.email}
-                                    imageUrl={post?.imageUrl}
-                                    imageUrl2={post?.imageUrl2}
-                                    imageUrl3={post?.imageUrl3}
-                                    FileURl={post?.FileURl}
-                                    timestamp={post?.timestamp}
-                                    likes={post?.likes}
-                                />
-                            ) : (
-                                <div/>
+                    {postLists1.map((post) => {
 
-                            )}
-                        </div>
-                    )
-                })}
+                        return (
+                            <div>
+                                {savedPosts.includes(post.id) ? (
+                                    <OnePost
+                                        postid={post?.id}
+                                        title={post?.title}
+                                        topic={post?.topic}
+                                        topicAuthor={post?.topicAuthor?.email}
+                                        postText={post?.postText}
+                                        authorEmail={post?.author?.email}
+                                        imageUrl={post?.imageUrl}
+                                        imageUrl2={post?.imageUrl2}
+                                        imageUrl3={post?.imageUrl3}
+                                        FileURl={post?.FileURl}
+                                        timestamp={post?.timestamp}
+                                        likes={post?.likes}
+                                    />
+                                ) : (
+                                    <div/>
 
-            </PostDisplayContainer>
-        );
+                                )}
+                            </div>
+                        )
+                    })}
+
+                </PostDisplayContainer>
+            );
+        } else {
+            return (
+
+                <PostDisplayContainerDark style={{paddingBottom:'500px'}}>
+
+                    {postLists1.map((post) => {
+
+                        return (
+                            <div>
+                                {savedPosts.includes(post.id) ? (
+                                    <OnePost
+                                        postid={post?.id}
+                                        title={post?.title}
+                                        topic={post?.topic}
+                                        topicAuthor={post?.topicAuthor?.email}
+                                        postText={post?.postText}
+                                        authorEmail={post?.author?.email}
+                                        imageUrl={post?.imageUrl}
+                                        imageUrl2={post?.imageUrl2}
+                                        imageUrl3={post?.imageUrl3}
+                                        FileURl={post?.FileURl}
+                                        timestamp={post?.timestamp}
+                                        likes={post?.likes}
+                                    />
+                                ) : (
+                                    <div/>
+
+                                )}
+                            </div>
+                        )
+                    })}
+
+                </PostDisplayContainerDark>
+
+            );
+        }
     } else if (error) {
         return <div>There was an authentication error.</div>;
     } else {
