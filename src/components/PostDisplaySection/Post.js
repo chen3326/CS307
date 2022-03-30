@@ -75,6 +75,9 @@ function OnePost({
             commentAuthorId: auth.currentUser.uid,
             commentAuthorEmail: auth.currentUser.email
         });
+        await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
+            commentedPosts: arrayUnion(postid)
+        });
         window.location.pathname = "/home";
 
     };
