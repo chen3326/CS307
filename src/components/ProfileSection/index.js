@@ -41,7 +41,7 @@ import {auth, database} from "../../firebase";
 
 import {useAuthState} from "react-firebase-hooks/auth";
 import {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 
 import {getAuth} from "firebase/auth";
 
@@ -148,7 +148,7 @@ function FullWidthTabs() {
                         {postLists1.map((post) => {
                             return (
                                 <div>
-                                    {post.author.id === user.uid ? (
+                                    {post.author.id === profile_uid ? (
                                         <OnePost
                                             postid={post?.id}
                                             title={post?.title}
@@ -302,27 +302,24 @@ function ProfileSection() {
     const [hasFollowed, setHasFollowed] = useState(false);
     const [profileUser, setProfileUser] = useState("");
     const [profile_following, setProfile_following] = useState([]);
+    const [topics_following, setTopics_following] = useState([]);
     const [me_following, setMe_following] = useState([]);
-    const [userlist, SetUserlist] = useState([]);
-    const [topicList, SetTopicList] = useState([]);
+
+
+
     async function handleProfClick(id) {
         window.location = `/profile/${id}`;
     }
 
+
     useEffect(() => {
-         onSnapshot(query(collection(database, "users")), snapshot => {
-            SetUserlist(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
-        })
+        if (user) {
+            onSnapshot(doc(database, "users", profile_uid), (snapshot) =>
 
-
-    });
-    useEffect(() => {
-        onSnapshot(query(collection(database, "topics")), snapshot => {
-            SetTopicList(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
-        })
-
-
-    });
+                setTopics_following(snapshot.data().followingTopics),
+            )
+        }
+    }, [user]);
 
 
     useEffect(() => {
@@ -347,7 +344,7 @@ function ProfileSection() {
     useEffect(() => {
         if (user) {
             setHasFollowed(
-                me_following.includes(profileUser),
+                JSON.stringify(me_following).includes(profile_uid)
             )
         }
     }, [user, me_following, profileUser]);
@@ -358,11 +355,11 @@ function ProfileSection() {
         if (hasFollowed) {
 
             await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
-                following: arrayRemove(profileUser)
+                following: arrayRemove({email: profileUser, id: profile_uid})
             });
         } else {
             await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
-                following: arrayUnion(profileUser)
+                following: arrayUnion({email: profileUser, id: profile_uid})
             });
 
         }
@@ -425,25 +422,41 @@ function ProfileSection() {
                                 <UserName>{profileUser}</UserName>
 
 
+                                {profile_following.map((this_user) => {
+
+                                    return (
 
 
-                                    {userlist.map((this_user) => {
-                                        if (profile_following.includes(this_user.email)){
-                                            return (
+                                        <Button onClick={() => handleProfClick(this_user.id)}>
+                                            {this_user.email}
+                                        </Button>
 
 
-                                                <Button onClick={() => handleProfClick(this_user.id)}>
-                                                    {this_user.email}
-                                                </Button>
+                                    )
 
 
-                                            )
-                                        }
+                                })}
+
+                                {topics_following.map((this_topic) => {
+
+                                    return (
 
 
-                                    })}
+                                        <Link to={{
+                                            pathname: "/inner_topic",
+                                            state: this_topic.topicName,
+                                            topicAuthor: this_topic.topicAuthor,
+                                            // your data array of objects
+                                        }}
+                                        >
+                                            {this_topic.topicName}
+                                        </Link>
 
 
+                                    )
+
+
+                                })}
 
 
                                 <Grid
