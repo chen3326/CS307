@@ -230,8 +230,31 @@ function SettingsSection() {
         querySnapshot.forEach((doc) => {
             // doc.data() is never undefined for query doc snapshots
             console.log(colName, doc.id, " => ", doc.data());
+            if (colName == "posts") {
+                //delete nested collections from this post
+                deleteNestedDocuments(colName, doc.id, "comments", "commentAuthorEmail", ogEmail);
+                deleteNestedDocuments(colName, doc.id, "likes", "username", ogEmail);
+                deleteNestedDocuments(colName, doc.id, "savedBy", "username", ogEmail);
+            }
             deleteDoc(doc.ref);
 
+        });
+    }
+
+    //deletesdocs from nested collections
+    async function deleteNestedDocuments (colName, docName, colName2, varName, checkName) {
+        const nestedCollectionRef = collection(database, colName, docName, colName2)
+        //todo: go into nested and delete post from users side (likes and savedBy)
+
+        //const q = query(nestedCollectionRef, where(varName, "==", checkName));
+        const q = query(nestedCollectionRef);
+
+        const querySnapshot = await getDocs(q);
+
+        querySnapshot.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            console.log(colName2, doc.id, " => ", doc.data());
+            deleteDoc(doc.ref);
         });
     }
 
@@ -244,28 +267,32 @@ function SettingsSection() {
 
 
             /** Delete all docs associated with user*/
-            deleteDocuments("users", "email", ogEmail);      // users
 
-
-            // post
-            deleteDocuments("posts", "author.email",  ogEmail);
-            //postTopics
-            deleteDocuments("postTopics", "author.email", ogEmail);
-            // users that intereacted this post wont see this post anymore, but will still show null backend
 
             // todo: user's likes,
             // todo: user's comments
 
+            deleteDocuments("posts", "author.email",  ogEmail);            // post
+            deleteDocuments("postTopics", "author.email", ogEmail);            //postTopics
+
+            // users that intereacted this post wont see this post anymore, but will still show null backend
+
+
+
+            // todo:delete clean up on other user's profiles
             // todo: Delete all user from all people’s following list
-            // todo:Turn all topics created by this user to anonymous
+            // todo:Turn all topics created by this user to anonymous - may be longer because all postTopics are their own post authors
 
 
 
             setLoading(false);
             console.log("CORRECT PASSWORD");
-            await deleteU();    //authen
 
-            window.location = "/"; //go to loading page
+             //deleteDocuments("users", "email", ogEmail);      // users
+             //await deleteU();    //authen
+
+             //window.location = "/"; //go to loading page
+
 
 
 
