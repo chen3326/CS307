@@ -5,10 +5,24 @@ export const ProfileContainer = styled.div`
   
   display: flex;
   //align-items: center;
-  height: 1050px;
-  //background: #232323;
-  margin: 80px auto 0 auto;
-  max-width: 1200px;
+  //height: 1050px;
+  //margin-top: 80px;
+  background: white;
+  //margin: 80px auto 0 auto;
+  //max-width: 1200px;
+  
+
+ 
+`;
+
+export const ProfileContainerBlack = styled.div`
+  
+  display: flex;
+  //align-items: center;
+  height: 100%;
+  background: black;
+  //margin: 80px auto 0 auto;
+  //max-width: 1200px;
 
  
 `;
@@ -52,8 +66,8 @@ export const ProfileContent = styled.div`
   position: relative;
   align-items: center;
 
-  height: 900px;
-  width: 50%;
+  //height: 900px;
+  width: 100%;
   
 
 `
@@ -65,6 +79,18 @@ export const UserName = styled.div`
 
   width: 30vw;
   color: black;
+  font-size: 4rem;
+  font-weight: bold;
+`
+
+export const UserNameBlack = styled.div`
+{/*display: flex;
+  flex-direction: row;
+  justify-content: center;
+*/}
+
+  width: 30vw;
+  color: white;
   font-size: 4rem;
   font-weight: bold;
 `

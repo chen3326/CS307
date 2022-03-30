@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 
 import {BrowserRouter as Router, Switch, Route, useParams} from 'react-router-dom';
@@ -13,22 +13,25 @@ import Settings from "./pages/settings_page";
 import SavedPost_page from "./pages/savedpost_page";
 import Indvpost_page from "./pages/indvpost_page";
 import Email_verification_page from "./pages/email_verification_page";
+//import {useTheme, ThemeProvider, createTheme} from "@mui/material/styles";
+//import { ThemeProvider } from "styled-components";
+import {database} from "./firebase";
+import {collection, onSnapshot, query, where} from "firebase/firestore";
+import {getAuth} from "firebase/auth";
 
-import {useTheme, ThemeProvider, createTheme} from "@mui/material/styles";
+
+
 
 function App() {
-    const [darkMode, setDarkMode] = useState(false);
-    const darkThemeApp = createTheme( {
-      palette: {
-          mode:"dark",
-      },
-    });
+
+
 
     return (
-        //now only working on setting page
-        //<ThemeProvider theme={darkThemeApp}>
+
             <Router>
+
                 <Switch>
+
                     <Route path='/' component={login_page} exact/>
                     <Route path='/signup' component={Signup} exact/>
                     <Route path='/inner_topic' component={Inner_topic} exact/>
@@ -42,8 +45,9 @@ function App() {
                     <Route path="/email_verification" component={Email_verification_page} exact/>
                     <Route path='/settings' component={Settings} exact/>
                 </Switch>
+
             </Router>
-        //</ThemeProvider>
+
     );
 }
 
@@ -68,5 +72,7 @@ const Prof = () => {
         </div>
     )
 };
+
+
 
 export default App;

@@ -22,8 +22,8 @@ import OnePost from "../PostDisplaySection/Post";
 
 import {
     FollowButton,
-    ProfileContainer,
-    ProfilePic, TabCard, UserName, UserStats,
+    ProfileContainer, ProfileContainerBlack,
+    ProfilePic, TabCard, UserName, UserNameBlack, UserStats,
 } from './ProfileElements';
 
 import pic from "../../images/cat_pic.jpg";
@@ -34,7 +34,7 @@ import {
     query,
     orderBy,
 
-    doc, deleteDoc, updateDoc, arrayRemove, arrayUnion, setDoc,
+    doc, deleteDoc, updateDoc, arrayRemove, arrayUnion, setDoc, where,
 
 } from "firebase/firestore";
 import {auth, database} from "../../firebase";
@@ -43,7 +43,7 @@ import {useAuthState} from "react-firebase-hooks/auth";
 import {useEffect, useState} from "react";
 import {Link, useParams} from "react-router-dom";
 
-import {getAuth} from "firebase/auth";
+import {getAuth, onAuthStateChanged} from "firebase/auth";
 
 
 function TabPanel(props) {
@@ -305,7 +305,18 @@ function ProfileSection() {
     const [topics_following, setTopics_following] = useState([]);
     const [me_following, setMe_following] = useState([]);
 
+    const [themeModeForCheckTheme, setThemeModeForCheckTheme] = useState(false);
+    const [themeEmail, setThemeEmail] = useState("");
+    const [queriedTheme, setQueriedTheme] = useState(false);
 
+    async function getUserTheme(){
+        const q = query(collection(database, "users"), where("email", "==", themeEmail));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                setThemeModeForCheckTheme(doc.data().author.darkTheme);
+            });
+        });
+    }
 
     async function handleProfClick(id) {
         window.location = `/profile/${id}`;
@@ -378,8 +389,18 @@ function ProfileSection() {
     if (loading) {
         return <div> Loading... </div>;
     } else if (user) {
+        onAuthStateChanged(auth, (user) => {
+            if (user&&!queriedTheme) {
+                setThemeEmail(user.email); //sets user's email to email
+                getUserTheme();
+                setQueriedTheme(true); //stops overwriting var from firebase backend
+            }
+        });
+
+        if (!themeModeForCheckTheme) {
         return (
-            <ProfileContainer>
+
+            <ProfileContainer style={{padding: '80px'}}>
                 <Container fixed>
 
                     <Grid
@@ -545,7 +566,179 @@ function ProfileSection() {
                     </Grid>
                 </Container>
             </ProfileContainer>
-        );
+        )
+        } else {
+            return (
+                <ProfileContainerBlack style={{padding: '80px'}}>
+                    <Container fixed>
+
+                        <Grid
+                            container
+                            direction="row"
+                            justifyContent="center"
+                            alignItems="flex-start"
+                            spacing={2}
+                        >
+
+                            <Grid
+                                // LHS Column
+                                container
+                                direction="column"
+                                justifyContent="flex-start"
+                                alignItems="center"
+                                item xs={4}
+                            >
+                                <ProfilePic src={pic}/>
+
+                            </Grid>
+
+                            <Grid
+                                // RHS Column
+                                container
+                                direction="column"
+                                justifyContent="flex-start"
+                                alignItems="stretch"
+                                item xs={8}
+
+                            >
+
+                                <Grid
+                                    // Name and Follow Button
+                                    container
+                                    direction="column"
+                                    justifyContent="flex-start"
+                                    alignItems="flex-start"
+                                >
+                                    <UserNameBlack>{profileUser}</UserNameBlack>
+
+
+                                    {profile_following.map((this_user) => {
+
+                                        return (
+
+
+                                            <Button onClick={() => handleProfClick(this_user.id)}>
+                                                {this_user.email}
+                                            </Button>
+
+
+                                        )
+
+
+                                    })}
+
+                                    {topics_following.map((this_topic) => {
+
+                                        return (
+
+
+                                            <Link to={{
+                                                pathname: "/inner_topic",
+                                                state: this_topic.topicName,
+                                                topicAuthor: this_topic.topicAuthor,
+                                                // your data array of objects
+                                            }}
+                                            >
+                                                {this_topic.topicName}
+                                            </Link>
+
+
+                                        )
+
+
+                                    })}
+
+
+                                    <Grid
+                                        // Follow Button container
+                                        container
+                                        direction="column"
+                                        justifyContent="flex-start"
+                                        alignItems="flex-start"
+                                    >
+
+                                        <div>
+                                            {hasFollowed ? (
+
+                                                <FollowButton>
+                                                    <Button
+                                                        container
+                                                        direction="column"
+                                                        justifyContent="center"
+                                                        alignItems="center"
+                                                        // fullWidth={true}
+
+                                                        variant="outlined"
+                                                        onClick={followUser}>unfollow</Button>
+                                                </FollowButton>
+
+                                            ) : (
+
+                                                <Button
+                                                    container
+                                                    direction="column"
+                                                    justifyContent="center"
+                                                    alignItems="center"
+                                                    // fullWidth={true}
+
+                                                    variant="outlined"
+                                                    onClick={followUser}>follow</Button>
+
+                                            )}
+                                        </div>
+
+                                    </Grid>
+                                </Grid>
+
+
+                                <UserStats>
+                                    <Grid
+                                        // User Stats
+                                        container
+                                        direction="row"
+                                        alignItems="center"
+                                        justifyContent="center"
+                                        spacing={2}
+                                    >
+                                        <Grid
+                                            container
+                                            direction="column"
+                                            alignItems="center"
+                                            justifyContent="center"
+                                            item xs={4}
+                                        >
+
+                                        </Grid>
+                                        <Grid container
+                                              direction="column"
+                                              alignItems="center"
+                                              justifyContent="center"
+                                              item xs={4}
+                                        >
+
+                                        </Grid>
+                                        <Grid container
+                                              direction="column"
+                                              alignItems="center"
+                                              justifyContent="center"
+                                              item xs={4}
+                                        >
+
+                                        </Grid>
+                                    </Grid>
+                                </UserStats>
+
+
+                                <FullWidthTabs/>
+
+                            </Grid>
+                        </Grid>
+                    </Container>
+                </ProfileContainerBlack>
+            )
+        }
+
+
     } else if (error) {
         return <div>There was an authentication error.</div>;
     } else {

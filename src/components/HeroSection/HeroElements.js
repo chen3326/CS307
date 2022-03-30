@@ -60,7 +60,7 @@ export const HeroH1_2 = styled.div`
 
 
   color: lavenderblush;
-  font-size: 10px;
+  font-size: 15px;
 
   font-weight: bold;
 

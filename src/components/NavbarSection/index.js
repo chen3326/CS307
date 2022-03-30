@@ -41,11 +41,11 @@ function Navbar(){
                         </NavLogo>
 
                         <NavBtn>
-                            <Button onClick={handelsettingsclick} > Settings </Button>
+                            <Button onClick={handelsettingsclick} style={{color:'white'}}  > Settings </Button>
                         </NavBtn>
 
                         <NavBtn>
-                            <Button onClick={handleProfClick}
+                            <Button onClick={handleProfClick} style={{color:'white'}}
                             > profile
                             </Button>
 
