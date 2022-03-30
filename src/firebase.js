@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import {getFirestore} from "firebase/firestore";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updatePassword, sendEmailVerification, updateEmail } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updatePassword, sendEmailVerification, updateEmail, deleteUser } from "firebase/auth";
 
 
 import {useEffect, useState} from "react";
@@ -33,6 +33,11 @@ export function login(email, password) {
 
 export function logout() {
     return signOut(auth);
+}
+
+export function deleteU() {
+    const user = auth.currentUser;
+    return deleteUser(user);
 }
 
 // TODO: Add password change and update function
