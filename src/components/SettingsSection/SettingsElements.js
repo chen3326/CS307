@@ -3,10 +3,20 @@ import styled from 'styled-components';
 export const SettingsContainer = styled.div`
   display: flex;
   //align-items: center;
-  height: 1050px;
+  //height: 1050px;
   //background: #232323;
-  margin: 80px auto 0 auto;
-  max-width: 1200px;
+  //margin: 80px auto 0 auto;
+  //max-width: 1200px;
+`;
+
+export const SettingsContainerBlack = styled.div`
+  display: flex;
+  
+  //align-items: center;
+  height: 100%;
+  background: black;
+  //padding: 80px;// auto 0 auto;
+  //max-width: 1200px;
 `;
 
 export const ProfilePic = styled.img`
@@ -25,7 +35,7 @@ export const ProfileContent = styled.div`
   //justify-content: center;
   position: relative;
   align-items: center;
-  height: 900px;
+  //height: 900px;
   width: 50%;
 `;
 
@@ -35,6 +45,14 @@ export const UserName = styled.div`
   font-size: 5rem;
   font-weight: bold;
 `;
+
+export const UserNameBlack = styled.div`
+  width: 30vw;
+  color: white;
+  font-size: 5rem;
+  font-weight: bold;
+`;
+
 export const UserSettings = styled.div`
   margin: 10px 0 10px 0;
 

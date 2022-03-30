@@ -34,7 +34,7 @@ import {useEffect, useState} from "react";
 import {
     SaveButton,
     SettingsContainer,
-    ProfilePic, UserName, UserSettings,
+    ProfilePic, UserName, UserSettings, SettingsContainerBlack,UserNameBlack,
 } from './SettingsElements';
 import imageCompression from "browser-image-compression";
 import {useLocation} from "react-router-dom";
@@ -91,7 +91,18 @@ function SettingsSection() {
     let [loadColor, setLoadColor] = useState("#F5A623");
     const [open, setOpen] = React.useState(false);
 
+    const [themeModeForCheckTheme, setThemeModeForCheckTheme] = useState(false);
+    const [themeEmail, setThemeEmail] = useState("");
+    const [queriedTheme, setQueriedTheme] = useState(false);
 
+    async function getUserTheme(){
+        const q = query(collection(database, "users"), where("email", "==", themeEmail));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                setThemeModeForCheckTheme(doc.data().author.darkTheme);
+            });
+        });
+    }
 
     //get user's profile doc and set text boxes with data
     async function getUser(){
@@ -200,9 +211,6 @@ function SettingsSection() {
     //change display theme
     const handleDarkTheme = async () => {
         setDarkTheme(!darkTheme);
-        if (darkTheme) {
-
-        }
     };
     //forgot password, moves to forgot password page
     async function handleFPClick() {
@@ -350,6 +358,9 @@ function SettingsSection() {
                 setEmail(user.email); //sets user's email to email
                 setOgEmail(user.email); //for comparison later
                 getUser(); //set other user var
+                setThemeEmail(user.email);
+                getUserTheme();
+                setQueriedTheme(true);
                 setQueried(true); //stops overwriting var from firebase backend
             }
         });
@@ -366,378 +377,756 @@ function SettingsSection() {
                 </h1>
             );
         } else {
-            return (
-                <SettingsContainer>
-                    <Container fixed>
-                        <Grid
-                            container
-                            direction="row"
-                            justifyContent="center"
-                            alignItems="flex-start"
-                            spacing={2}
-                        >
-                            {/*LEFT COLUMN*/}
-                            <Grid
-                                //profile picture here
-                                container
-                                direction="column"
-                                justifyContent="flex-start"
-                                alignItems="center"
-                                item xs={4}
-                            >
-                                <ProfilePic src={profilePic}/>
-                                <FormControl margin="normal" >
-                                    <form onChange={event => doUpload(event)}>
-                                        <input type="file" className="input" />
-                                    </form>
-                                    <hr />
-                                    <h4>Profile Picture Loading... {progress}%</h4>
-                                </FormControl>
-                            </Grid>
-
-
-                            {/*RIGHT COLUMN*/}
+            if (!themeModeForCheckTheme) {
+                return (
+                    <SettingsContainer style={{padding:'80px'}}>
+                        <Container fixed>
                             <Grid
                                 container
-                                direction="column"
-                                justifyContent="flex-start"
-                                alignItems="stretch"
-                                item xs={8}
+                                direction="row"
+                                justifyContent="center"
+                                alignItems="flex-start"
+                                spacing={2}
                             >
+                                {/*LEFT COLUMN*/}
                                 <Grid
-                                    //Display name
+                                    //profile picture here
                                     container
                                     direction="column"
                                     justifyContent="flex-start"
-                                    alignItems="flex-start"
+                                    alignItems="center"
+                                    item xs={4}
                                 >
-                                    <UserName>Settings:</UserName>
-                                    <UserName>{ogName}</UserName>
+                                    <ProfilePic src={profilePic}/>
+                                    <FormControl margin="normal">
+                                        <form onChange={event => doUpload(event)}>
+                                            <input type="file" className="input"/>
+                                        </form>
+                                        <hr/>
+                                        <h4>Profile Picture Loading... {progress}%</h4>
+                                    </FormControl>
                                 </Grid>
 
-                                {/*SETTINGS*/}
-                                <UserSettings>
+
+                                {/*RIGHT COLUMN*/}
+                                <Grid
+                                    container
+                                    direction="column"
+                                    justifyContent="flex-start"
+                                    alignItems="stretch"
+                                    item xs={8}
+                                >
                                     <Grid
-                                        //Settings section
+                                        //Display name
                                         container
-                                        direction="row"
-                                        alignItems="center"
+                                        direction="column"
                                         justifyContent="flex-start"
-                                        spacing={2}
+                                        alignItems="flex-start"
                                     >
-                                        {/*privacy settings */}
-                                        <Grid container
-                                              wrap="nowrap"
-                                              spacing={2}
-                                              justifyContent="center"
-                                              item xs={10}
-                                        >
-                                            <Grid item xs>
-                                                <FormGroup>
-                                                    <Stack direction="row" spacing={1} alignItems="center">
-                                                        <Typography>Public</Typography>
-                                                        <FormControlLabel control={
-                                                            <Switch checked={privateUser}
-                                                                    value={privateUser}
-                                                                    onChange={handlePrivateUser}
-                                                            />
-                                                        }
-                                                                          label=""
-                                                        />
-                                                        <Typography>Private</Typography>
-                                                    </Stack>
-                                                </FormGroup>
-                                            </Grid>
-                                        </Grid>
-
-                                        <Grid container
-                                              wrap="nowrap"
-                                              spacing={2}
-                                              justifyContent="center"
-                                              item xs={10}
-                                        >
-                                            <Grid item xs>
-                                                <FormGroup>
-                                                    <Stack direction="row" spacing={1} alignItems="center">
-                                                        <Typography>Light</Typography>
-                                                        <FormControlLabel control={
-                                                            <Switch checked={darkTheme}
-                                                                    value={darkTheme}
-                                                                    onChange={handleDarkTheme}
-                                                            />
-                                                        }
-                                                                          label=" "
-                                                        />
-                                                        <Typography>Dark</Typography>
-                                                    </Stack>
-                                                </FormGroup>
-                                            </Grid>
-                                        </Grid>
-
-                                        {/*name*/}
-                                        <Grid container
-                                              wrap="nowrap"
-                                              spacing={2}
-                                              justifyContent="center"
-                                              item xs={10}
-                                        >
-                                            <Grid item>
-                                                <p>Name:</p>
-                                            </Grid>
-                                            <Grid item xs>
-                                                {/*TODO: clean up the id's on this page*/}
-                                                <TextField
-                                                    id="filled-start-adornment"
-                                                    sx={{m: 1, width: '25ch'}}
-                                                    value={nickName}
-                                                    variant="filled"
-                                                    inputProps={{maxLength: 50}}
-                                                    onChange={(event) => {
-                                                        setnickName(event.target.value);
-                                                    }}
-                                                />
-                                            </Grid>
-                                        </Grid>
-
-                                        {/*email*/}
-                                        <Grid container
-                                              wrap="nowrap"
-                                              spacing={2}
-                                              justifyContent="center"
-                                              item xs={10}
-                                        >
-                                            <Grid item>
-                                                <p>Email:</p>
-                                            </Grid>
-                                            <Grid item xs>
-                                                <TextField
-                                                    id="filled-start-adornment"
-                                                    sx={{m: 1, width: '25ch'}}
-                                                    variant="filled"
-                                                    value={email}
-                                                    inputProps={{maxLength: 50}}
-                                                    onChange={(event) => {
-                                                        setEmail(event.target.value);
-                                                    }}
-                                                />
-                                            </Grid>
-                                        </Grid>
-
-
-                                        {/*change password*/}
-                                        <Grid container
-                                              wrap="nowrap"
-                                              spacing={2}
-                                              justifyContent="center"
-                                              item xs={10}
-                                        >
-                                            <Grid item>
-                                                <p>Password:</p>
-                                            </Grid>
-                                            <Grid item xs>
-                                                <SaveButton>
-                                                    <Button
-                                                        container
-                                                        direction="column"
-                                                        justifyContent="center"
-                                                        alignItems="center"
-                                                        variant="outlined"
-                                                        onClick={handleFPClick}
-                                                    >Change Password
-                                                    </Button>
-                                                </SaveButton>
-                                            </Grid>
-                                            <Grid item xs>
-                                                <SaveButton>
-                                                    <Button
-                                                        container
-                                                        direction="column"
-                                                        justifyContent="center"
-                                                        alignItems="center"
-                                                        variant="outlined"
-                                                        onClick={handleEVClick}
-                                                    >Verify Email
-                                                    </Button>
-                                                </SaveButton>
-                                            </Grid>
-                                        </Grid>
-
-                                        {/*bio*/}
-                                        <Grid container
-                                              wrap="nowrap"
-                                              spacing={2}
-                                              justifyContent="center"
-                                              item xs={10}
-                                        >
-                                            <Grid item>
-                                                <p>Bio:</p>
-                                            </Grid>
-                                            <Grid item xs>
-                                                <TextField
-                                                    id="filled-start-adornment"
-                                                    sx={{m: 1, width: '50ch'}}
-                                                    variant="filled"
-                                                    value={bio}
-                                                    multiline
-                                                    rows={5}
-                                                    inputProps={{maxLength: 200}}
-                                                    onChange={(event) => {
-                                                        setBio(event.target.value);
-                                                    }}
-                                                />
-                                            </Grid>
-                                        </Grid>
-
-                                        {/*Age*/}
-                                        <Grid container
-                                              wrap="nowrap"
-                                              spacing={2}
-                                              justifyContent="center"
-                                              item xs={4}
-                                        >
-                                            <Grid item>
-                                                <p>Age:</p>
-                                            </Grid>
-                                            <Grid item xs>
-                                                <TextField
-                                                    id="filled-number"
-                                                    sx={{m: 1, width: '15ch'}}
-                                                    //make sure that only unsigned int can be used as inputs
-                                                    type={"number"}
-                                                    inputProps={{min}} //min age
-                                                    value={age}
-                                                    onChange={(event) => {
-                                                        if (event.target.value === "") {
-                                                            setAge(event.target.value);
-                                                            return;
-                                                        }
-                                                        const value = +event.target.value;
-                                                        if (value < min) {
-                                                            setAge(min);
-                                                        } else {
-                                                            setAge(value);
-                                                        }
-                                                    }}
-                                                    variant="filled"
-                                                />
-                                            </Grid>
-                                        </Grid>
-
-                                        {/*Year*/}
-                                        <Grid container
-                                              wrap="nowrap"
-                                              spacing={2}
-                                              justifyContent="center"
-                                              item xs={4}
-                                        >
-                                            <Grid item>
-                                                <p>Year:</p>
-                                            </Grid>
-                                            <Grid item xs>
-                                                <FormControl variant="filled" sx={{m: 1, minWidth: 120}}>
-                                                    <InputLabel id="select-filled-label"></InputLabel>
-                                                    <Select
-                                                        labelId="select-filled-label"
-                                                        id="select-filled"
-                                                        value={year}
-                                                        onChange={(event) => {
-                                                            setYear(event.target.value);
-                                                        }}
-                                                    >
-                                                        <MenuItem value="">
-                                                            <em>None</em>
-                                                        </MenuItem>
-                                                        {years.map((option) => (
-                                                            <MenuItem key={option.value} value={option.value}>
-                                                                {option.label}
-                                                            </MenuItem>
-                                                        ))}
-                                                    </Select>
-                                                </FormControl>
-                                            </Grid>
-                                        </Grid>
-
-                                        {/*Major*/}
-                                        <Grid container
-                                              wrap="nowrap"
-                                              spacing={2}
-                                              justifyContent="center"
-                                              item xs={10}
-                                        >
-                                            <Grid item>
-                                                <p>Major:</p>
-                                            </Grid>
-                                            <Grid item xs>
-                                                <TextField
-                                                    id="filled-number"
-                                                    sx={{m: 1, width: '50ch'}}
-                                                    variant="filled"
-                                                    value={major}
-                                                    inputProps={{maxLength: 100}}
-                                                    onChange={(event) => {
-                                                        setMajor(event.target.value);
-                                                    }}
-                                                />
-                                            </Grid>
-                                        </Grid>
-
+                                        <UserName>Settings:</UserName>
+                                        <UserName>{ogName}</UserName>
                                     </Grid>
-                                </UserSettings>
 
-                                {/*BUTTONS*/}
-                                <Stack direction="row" spacing={30} alignItems="center">
-                                    {/*SAVE CHANGES*/}
-                                    <SaveButton>
-                                        <Button
+                                    {/*SETTINGS*/}
+                                    <UserSettings>
+                                        <Grid
+                                            //Settings section
                                             container
-                                            direction="column"
-                                            justifyContent="center"
+                                            direction="row"
                                             alignItems="center"
-                                            variant="contained"
-                                            onClick={handleUserSettings}
+                                            justifyContent="flex-start"
+                                            spacing={2}
                                         >
-                                            Save Settings
-                                        </Button>
-                                    </SaveButton>
+                                            {/*privacy settings */}
+                                            <Grid container
+                                                  wrap="nowrap"
+                                                  spacing={2}
+                                                  justifyContent="center"
+                                                  item xs={10}
+                                            >
+                                                <Grid item xs>
+                                                    <FormGroup>
+                                                        <Stack direction="row" spacing={1} alignItems="center">
+                                                            <Typography>Public</Typography>
+                                                            <FormControlLabel control={
+                                                                <Switch checked={privateUser}
+                                                                        value={privateUser}
+                                                                        onChange={handlePrivateUser}
+                                                                />
+                                                            }
+                                                                              label=""
+                                                            />
+                                                            <Typography>Private</Typography>
+                                                        </Stack>
+                                                    </FormGroup>
+                                                </Grid>
+                                            </Grid>
 
-                                    {/*DELETE ACCOUNT*/}
-                                    <div>
-                                        <Button variant="text" onClick={handleClickOpen}>
-                                            Delete Account
-                                        </Button>
-                                        <Dialog open={open} onClose={handleClose}>
-                                            <DialogTitle>Delete Account</DialogTitle>
-                                            <DialogContent>
-                                                <DialogContentText>
-                                                    Are you sure you want to delete your Boiler Breakouts Account?
-                                                    To delete your account, please enter your password.
-                                                    We'll take care of the rest.
-                                                </DialogContentText>
-                                                <TextField
-                                                    autoFocus
-                                                    value={password}
-                                                    margin="dense"
-                                                    id="deletion-password"
-                                                    label="Password"
-                                                    fullWidth
-                                                    variant="standard"
-                                                    onChange={(event) => {
-                                                        setPassword(event.target.value);
-                                                    }}
-                                                />
-                                            </DialogContent>
-                                            <DialogActions>
-                                                <Button onClick={handleClose}>Cancel</Button>
-                                                <Button onClick={handelDelete}>Delete Account</Button>
-                                            </DialogActions>
-                                        </Dialog>
-                                    </div>
-                                </Stack>
+                                            <Grid container
+                                                  wrap="nowrap"
+                                                  spacing={2}
+                                                  justifyContent="center"
+                                                  item xs={10}
+                                            >
+                                                <Grid item xs>
+                                                    <FormGroup>
+                                                        <Stack direction="row" spacing={1} alignItems="center">
+                                                            <Typography>Light</Typography>
+                                                            <FormControlLabel control={
+                                                                <Switch checked={darkTheme}
+                                                                        value={darkTheme}
+                                                                        onChange={handleDarkTheme}
+                                                                />
+                                                            }
+                                                                              label=" "
+                                                            />
+                                                            <Typography>Dark</Typography>
+                                                        </Stack>
+                                                    </FormGroup>
+                                                </Grid>
+                                            </Grid>
+
+                                            {/*name*/}
+                                            <Grid container
+                                                  wrap="nowrap"
+                                                  spacing={2}
+                                                  justifyContent="center"
+                                                  item xs={10}
+                                            >
+                                                <Grid item>
+                                                    <p>Name:</p>
+                                                </Grid>
+                                                <Grid item xs>
+                                                    {/*TODO: clean up the id's on this page*/}
+                                                    <TextField
+                                                        id="filled-start-adornment"
+                                                        sx={{m: 1, width: '25ch'}}
+                                                        value={nickName}
+                                                        variant="filled"
+                                                        inputProps={{maxLength: 50}}
+                                                        onChange={(event) => {
+                                                            setnickName(event.target.value);
+                                                        }}
+                                                    />
+                                                </Grid>
+                                            </Grid>
+
+                                            {/*email*/}
+                                            <Grid container
+                                                  wrap="nowrap"
+                                                  spacing={2}
+                                                  justifyContent="center"
+                                                  item xs={10}
+                                            >
+                                                <Grid item>
+                                                    <p>Email:</p>
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <TextField
+                                                        id="filled-start-adornment"
+                                                        sx={{m: 1, width: '25ch'}}
+                                                        variant="filled"
+                                                        value={email}
+                                                        inputProps={{maxLength: 50}}
+                                                        onChange={(event) => {
+                                                            setEmail(event.target.value);
+                                                        }}
+                                                    />
+                                                </Grid>
+                                            </Grid>
+
+
+                                            {/*change password*/}
+                                            <Grid container
+                                                  wrap="nowrap"
+                                                  spacing={2}
+                                                  justifyContent="center"
+                                                  item xs={10}
+                                            >
+                                                <Grid item>
+                                                    <p>Password:</p>
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <SaveButton>
+                                                        <Button
+                                                            container
+                                                            direction="column"
+                                                            justifyContent="center"
+                                                            alignItems="center"
+                                                            variant="outlined"
+                                                            onClick={handleFPClick}
+                                                        >Change Password
+                                                        </Button>
+                                                    </SaveButton>
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <SaveButton>
+                                                        <Button
+                                                            container
+                                                            direction="column"
+                                                            justifyContent="center"
+                                                            alignItems="center"
+                                                            variant="outlined"
+                                                            onClick={handleEVClick}
+                                                        >Verify Email
+                                                        </Button>
+                                                    </SaveButton>
+                                                </Grid>
+                                            </Grid>
+
+                                            {/*bio*/}
+                                            <Grid container
+                                                  wrap="nowrap"
+                                                  spacing={2}
+                                                  justifyContent="center"
+                                                  item xs={10}
+                                            >
+                                                <Grid item>
+                                                    <p>Bio:</p>
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <TextField
+                                                        id="filled-start-adornment"
+                                                        sx={{m: 1, width: '50ch'}}
+                                                        variant="filled"
+                                                        value={bio}
+                                                        multiline
+                                                        rows={5}
+                                                        inputProps={{maxLength: 200}}
+                                                        onChange={(event) => {
+                                                            setBio(event.target.value);
+                                                        }}
+                                                    />
+                                                </Grid>
+                                            </Grid>
+
+                                            {/*Age*/}
+                                            <Grid container
+                                                  wrap="nowrap"
+                                                  spacing={2}
+                                                  justifyContent="center"
+                                                  item xs={4}
+                                            >
+                                                <Grid item>
+                                                    <p>Age:</p>
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <TextField
+                                                        id="filled-number"
+                                                        sx={{m: 1, width: '15ch'}}
+                                                        //make sure that only unsigned int can be used as inputs
+                                                        type={"number"}
+                                                        inputProps={{min}} //min age
+                                                        value={age}
+                                                        onChange={(event) => {
+                                                            if (event.target.value === "") {
+                                                                setAge(event.target.value);
+                                                                return;
+                                                            }
+                                                            const value = +event.target.value;
+                                                            if (value < min) {
+                                                                setAge(min);
+                                                            } else {
+                                                                setAge(value);
+                                                            }
+                                                        }}
+                                                        variant="filled"
+                                                    />
+                                                </Grid>
+                                            </Grid>
+
+                                            {/*Year*/}
+                                            <Grid container
+                                                  wrap="nowrap"
+                                                  spacing={2}
+                                                  justifyContent="center"
+                                                  item xs={4}
+                                            >
+                                                <Grid item>
+                                                    <p>Year:</p>
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <FormControl variant="filled" sx={{m: 1, minWidth: 120}}>
+                                                        <InputLabel id="select-filled-label"></InputLabel>
+                                                        <Select
+                                                            labelId="select-filled-label"
+                                                            id="select-filled"
+                                                            value={year}
+                                                            onChange={(event) => {
+                                                                setYear(event.target.value);
+                                                            }}
+                                                        >
+                                                            <MenuItem value="">
+                                                                <em>None</em>
+                                                            </MenuItem>
+                                                            {years.map((option) => (
+                                                                <MenuItem key={option.value} value={option.value}>
+                                                                    {option.label}
+                                                                </MenuItem>
+                                                            ))}
+                                                        </Select>
+                                                    </FormControl>
+                                                </Grid>
+                                            </Grid>
+
+                                            {/*Major*/}
+                                            <Grid container
+                                                  wrap="nowrap"
+                                                  spacing={2}
+                                                  justifyContent="center"
+                                                  item xs={10}
+                                            >
+                                                <Grid item>
+                                                    <p>Major:</p>
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <TextField
+                                                        id="filled-number"
+                                                        sx={{m: 1, width: '50ch'}}
+                                                        variant="filled"
+                                                        value={major}
+                                                        inputProps={{maxLength: 100}}
+                                                        onChange={(event) => {
+                                                            setMajor(event.target.value);
+                                                        }}
+                                                    />
+                                                </Grid>
+                                            </Grid>
+
+                                        </Grid>
+                                    </UserSettings>
+
+                                    {/*BUTTONS*/}
+                                    <Stack direction="row" spacing={30} alignItems="center">
+                                        {/*SAVE CHANGES*/}
+                                        <SaveButton>
+                                            <Button
+                                                container
+                                                direction="column"
+                                                justifyContent="center"
+                                                alignItems="center"
+                                                variant="contained"
+                                                onClick={handleUserSettings}
+                                            >
+                                                Save Settings
+                                            </Button>
+                                        </SaveButton>
+
+                                        {/*DELETE ACCOUNT*/}
+                                        <div>
+                                            <Button variant="text" onClick={handleClickOpen}>
+                                                Delete Account
+                                            </Button>
+                                            <Dialog open={open} onClose={handleClose}>
+                                                <DialogTitle>Delete Account</DialogTitle>
+                                                <DialogContent>
+                                                    <DialogContentText>
+                                                        Are you sure you want to delete your Boiler Breakouts Account?
+                                                        To delete your account, please enter your password.
+                                                        We'll take care of the rest.
+                                                    </DialogContentText>
+                                                    <TextField
+                                                        autoFocus
+                                                        value={password}
+                                                        margin="dense"
+                                                        id="deletion-password"
+                                                        label="Password"
+                                                        fullWidth
+                                                        variant="standard"
+                                                        onChange={(event) => {
+                                                            setPassword(event.target.value);
+                                                        }}
+                                                    />
+                                                </DialogContent>
+                                                <DialogActions>
+                                                    <Button onClick={handleClose}>Cancel</Button>
+                                                    <Button onClick={handelDelete}>Delete Account</Button>
+                                                </DialogActions>
+                                            </Dialog>
+                                        </div>
+                                    </Stack>
+                                </Grid>
                             </Grid>
-                        </Grid>
-                    </Container>
-                </SettingsContainer>
-            );
+                        </Container>
+                    </SettingsContainer>
+                );
+            } else {
+                return (
+                    <SettingsContainerBlack style={{padding:'80px'}}>
+                        <Container fixed>
+                            <Grid
+                                container
+                                direction="row"
+                                justifyContent="center"
+                                alignItems="flex-start"
+                                spacing={2}
+                            >
+                                {/*LEFT COLUMN*/}
+                                <Grid
+                                    //profile picture here
+                                    container
+                                    direction="column"
+                                    justifyContent="flex-start"
+                                    alignItems="center"
+                                    item xs={4}
+                                >
+                                    <ProfilePic src={profilePic}/>
+                                    <FormControl margin="normal" style={{color:'white'}}>
+                                        <form onChange={event => doUpload(event)}>
+                                            <input type="file" className="input"/>
+                                        </form>
+                                        <hr/>
+                                        <h4 style={{color:'white'}}>Profile Picture Loading... {progress}%</h4>
+                                    </FormControl>
+                                </Grid>
+
+
+                                {/*RIGHT COLUMN*/}
+                                <Grid
+                                    container
+                                    direction="column"
+                                    justifyContent="flex-start"
+                                    alignItems="stretch"
+                                    item xs={8}
+                                >
+                                    <Grid
+                                        //Display name
+                                        container
+                                        direction="column"
+                                        justifyContent="flex-start"
+                                        alignItems="flex-start"
+                                    >
+                                        <UserNameBlack>Settings:</UserNameBlack>
+                                        <UserNameBlack>{ogName}</UserNameBlack>
+                                    </Grid>
+
+                                    {/*SETTINGS*/}
+                                    <UserSettings>
+                                        <Grid
+                                            //Settings section
+                                            container
+                                            direction="row"
+                                            alignItems="center"
+                                            justifyContent="flex-start"
+                                            spacing={2}
+                                        >
+                                            {/*privacy settings */}
+                                            <Grid container
+                                                  wrap="nowrap"
+                                                  spacing={2}
+                                                  justifyContent="center"
+                                                  item xs={10}
+                                            >
+                                                <Grid item xs>
+                                                    <FormGroup>
+                                                        <Stack direction="row" spacing={1} alignItems="center">
+                                                            <Typography style={{color:'white'}}>Public</Typography>
+                                                            <FormControlLabel control={
+                                                                <Switch checked={privateUser}
+                                                                        value={privateUser}
+                                                                        onChange={handlePrivateUser}
+
+                                                                />
+                                                            }
+                                                                              label=""
+                                                                              style={{background:'grey', borderRadius:'5px'}}
+                                                            />
+                                                            <Typography style={{color:'white'}}>Private</Typography>
+                                                        </Stack>
+                                                    </FormGroup>
+                                                </Grid>
+                                            </Grid>
+
+                                            <Grid container
+                                                  wrap="nowrap"
+                                                  spacing={2}
+                                                  justifyContent="center"
+                                                  item xs={10}
+                                            >
+                                                <Grid item xs>
+                                                    <FormGroup>
+                                                        <Stack direction="row" spacing={1} alignItems="center">
+                                                            <Typography style={{color:'white'}}>Light</Typography>
+                                                            <FormControlLabel control={
+                                                                <Switch checked={darkTheme}
+                                                                        value={darkTheme}
+                                                                        onChange={handleDarkTheme}
+                                                                />
+                                                            }
+                                                                              label=" "
+                                                                              style={{background:'grey', borderRadius:'5px'}}
+                                                            />
+                                                            <Typography style={{color:'white'}}>Dark</Typography>
+                                                        </Stack>
+                                                    </FormGroup>
+                                                </Grid>
+                                            </Grid>
+
+                                            {/*name*/}
+                                            <Grid container
+                                                  wrap="nowrap"
+                                                  spacing={2}
+                                                  justifyContent="center"
+                                                  item xs={10}
+                                            >
+                                                <Grid item>
+                                                    <p style={{color:'white'}}>Name:</p>
+                                                </Grid>
+                                                <Grid item xs>
+                                                    {/*TODO: clean up the id's on this page*/}
+                                                    <TextField
+                                                        id="filled-start-adornment"
+                                                        sx={{m: 1, width: '25ch', background:'grey', borderRadius:'8px'}}
+                                                        value={nickName}
+                                                        variant="filled"
+                                                        inputProps={{maxLength: 50}}
+                                                        onChange={(event) => {
+                                                            setnickName(event.target.value);
+                                                        }}
+                                                    />
+                                                </Grid>
+                                            </Grid>
+
+                                            {/*email*/}
+                                            <Grid container
+                                                  wrap="nowrap"
+                                                  spacing={2}
+                                                  justifyContent="center"
+                                                  item xs={10}
+                                            >
+                                                <Grid item>
+                                                    <p style={{color:'white'}}>Email:</p>
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <TextField
+                                                        id="filled-start-adornment"
+                                                        sx={{m: 1, width: '25ch', background:'grey', borderRadius:'8px'}}
+                                                        variant="filled"
+                                                        value={email}
+                                                        inputProps={{maxLength: 50}}
+                                                        onChange={(event) => {
+                                                            setEmail(event.target.value);
+                                                        }}
+                                                    />
+                                                </Grid>
+                                            </Grid>
+
+
+                                            {/*change password*/}
+                                            <Grid container
+                                                  wrap="nowrap"
+                                                  spacing={2}
+                                                  justifyContent="center"
+                                                  item xs={10}
+                                            >
+                                                <Grid item>
+                                                    <p style={{color:'white'}}>Password:</p>
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <SaveButton>
+                                                        <Button
+                                                            container
+                                                            direction="column"
+                                                            justifyContent="center"
+                                                            alignItems="center"
+                                                            variant="outlined"
+                                                            onClick={handleFPClick}
+                                                        >Change Password
+                                                        </Button>
+                                                    </SaveButton>
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <SaveButton>
+                                                        <Button
+                                                            container
+                                                            direction="column"
+                                                            justifyContent="center"
+                                                            alignItems="center"
+                                                            variant="outlined"
+                                                            onClick={handleEVClick}
+                                                        >Verify Email
+                                                        </Button>
+                                                    </SaveButton>
+                                                </Grid>
+                                            </Grid>
+
+                                            {/*bio*/}
+                                            <Grid container
+                                                  wrap="nowrap"
+                                                  spacing={2}
+                                                  justifyContent="center"
+                                                  item xs={10}
+                                            >
+                                                <Grid item>
+                                                    <p style={{color:'white'}}>Bio:</p>
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <TextField
+                                                        id="filled-start-adornment"
+                                                        sx={{m: 1, width: '50ch', background:'grey', borderRadius:'8px'}}
+                                                        variant="filled"
+                                                        value={bio}
+                                                        multiline
+                                                        rows={5}
+                                                        inputProps={{maxLength: 200}}
+                                                        onChange={(event) => {
+                                                            setBio(event.target.value);
+                                                        }}
+                                                    />
+                                                </Grid>
+                                            </Grid>
+
+                                            {/*Age*/}
+                                            <Grid container
+                                                  wrap="nowrap"
+                                                  spacing={2}
+                                                  justifyContent="center"
+                                                  item xs={4}
+                                            >
+                                                <Grid item>
+                                                    <p style={{color:'white'}}>Age:</p>
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <TextField
+                                                        id="filled-number"
+                                                        sx={{m: 1, width: '15ch', background:'grey', borderRadius:'8px'}}
+                                                        //make sure that only unsigned int can be used as inputs
+                                                        type={"number"}
+                                                        inputProps={{min}} //min age
+                                                        value={age}
+                                                        onChange={(event) => {
+                                                            if (event.target.value === "") {
+                                                                setAge(event.target.value);
+                                                                return;
+                                                            }
+                                                            const value = +event.target.value;
+                                                            if (value < min) {
+                                                                setAge(min);
+                                                            } else {
+                                                                setAge(value);
+                                                            }
+                                                        }}
+                                                        variant="filled"
+                                                    />
+                                                </Grid>
+                                            </Grid>
+
+                                            {/*Year*/}
+                                            <Grid container
+                                                  wrap="nowrap"
+                                                  spacing={2}
+                                                  justifyContent="center"
+                                                  item xs={4}
+                                            >
+                                                <Grid item>
+                                                    <p style={{color:'white'}}>Year:</p>
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <FormControl variant="filled" sx={{m: 1, minWidth: 120, background:'grey', borderRadius:'8px'}}>
+                                                        <InputLabel id="select-filled-label"></InputLabel>
+                                                        <Select
+                                                            labelId="select-filled-label"
+                                                            id="select-filled"
+                                                            value={year}
+                                                            onChange={(event) => {
+                                                                setYear(event.target.value);
+                                                            }}
+                                                        >
+                                                            <MenuItem value="">
+                                                                <em>None</em>
+                                                            </MenuItem>
+                                                            {years.map((option) => (
+                                                                <MenuItem key={option.value} value={option.value}>
+                                                                    {option.label}
+                                                                </MenuItem>
+                                                            ))}
+                                                        </Select>
+                                                    </FormControl>
+                                                </Grid>
+                                            </Grid>
+
+                                            {/*Major*/}
+                                            <Grid container
+                                                  wrap="nowrap"
+                                                  spacing={2}
+                                                  justifyContent="center"
+                                                  item xs={10}
+                                            >
+                                                <Grid item>
+                                                    <p style={{color:'white'}}>Major:</p>
+                                                </Grid>
+                                                <Grid item xs>
+                                                    <TextField
+                                                        id="filled-number"
+                                                        sx={{m: 1, width: '50ch', background:'grey', borderRadius:'8px'}}
+                                                        variant="filled"
+                                                        value={major}
+                                                        inputProps={{maxLength: 100}}
+                                                        onChange={(event) => {
+                                                            setMajor(event.target.value);
+                                                        }}
+                                                    />
+                                                </Grid>
+                                            </Grid>
+
+                                        </Grid>
+                                    </UserSettings>
+
+                                    {/*BUTTONS*/}
+                                    <Stack direction="row" spacing={30} alignItems="center">
+                                        {/*SAVE CHANGES*/}
+                                        <SaveButton>
+                                            <Button
+                                                container
+                                                direction="column"
+                                                justifyContent="center"
+                                                alignItems="center"
+                                                variant="contained"
+                                                onClick={handleUserSettings}
+                                            >
+                                                Save Settings
+                                            </Button>
+                                        </SaveButton>
+
+                                        {/*DELETE ACCOUNT*/}
+                                        <div>
+                                            <Button variant="text" onClick={handleClickOpen}>
+                                                Delete Account
+                                            </Button>
+                                            <Dialog open={open} onClose={handleClose}>
+                                                <DialogTitle>Delete Account</DialogTitle>
+                                                <DialogContent>
+                                                    <DialogContentText>
+                                                        Are you sure you want to delete your Boiler Breakouts Account?
+                                                        To delete your account, please enter your password.
+                                                        We'll take care of the rest.
+                                                    </DialogContentText>
+                                                    <TextField
+                                                        autoFocus
+                                                        value={password}
+                                                        margin="dense"
+                                                        id="deletion-password"
+                                                        label="Password"
+                                                        fullWidth
+                                                        variant="standard"
+                                                        onChange={(event) => {
+                                                            setPassword(event.target.value);
+                                                        }}
+                                                    />
+                                                </DialogContent>
+                                                <DialogActions>
+                                                    <Button onClick={handleClose}>Cancel</Button>
+                                                    <Button onClick={handelDelete}>Delete Account</Button>
+                                                </DialogActions>
+                                            </Dialog>
+                                        </div>
+                                    </Stack>
+                                </Grid>
+                            </Grid>
+                        </Container>
+                    </SettingsContainerBlack>
+                );
+            }
         }
     } else if (error) {
         alert("There was an authentication error.")
