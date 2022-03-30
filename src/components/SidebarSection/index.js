@@ -29,12 +29,7 @@ function Sidebar(){
                     <SideBtn>
                         <SideBtnLink href="/saved"> <SavedIcon/></SideBtnLink>
                     </SideBtn>
-                    {/*<SideBtn>*/}
-                    {/*    <SideBtnLink href=""> <ThumbUpIcon/></SideBtnLink>*/}
-                    {/*</SideBtn>*/}
-                    {/*<SideBtn>*/}
-                    {/*    <SideBtnLink href=""> <CommentIcon/></SideBtnLink>*/}
-                    {/*</SideBtn>*/}
+
                 </SidebarContainer>
             </Side>
 
