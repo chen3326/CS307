@@ -34,7 +34,7 @@ import {
     query,
     orderBy,
 
-    doc,
+    doc, deleteDoc, updateDoc, arrayRemove, arrayUnion, setDoc,
 
 } from "firebase/firestore";
 import {auth, database} from "../../firebase";
@@ -42,7 +42,8 @@ import {auth, database} from "../../firebase";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import Usersfollowing from "./following";
+
+import {getAuth} from "firebase/auth";
 
 
 function TabPanel(props) {
@@ -97,11 +98,11 @@ function FullWidthTabs() {
     const postsCollectionRef = collection(database, "posts");
 
     useEffect(() => {
-        const unsubscribe = onSnapshot(query(postsCollectionRef, orderBy('timestamp', 'desc')), snapshot => {
+        onSnapshot(query(postsCollectionRef, orderBy('timestamp', 'desc')), snapshot => {
             setPostList1(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})));
         })
 
-        return unsubscribe;
+
     });
 
 
@@ -160,8 +161,8 @@ function FullWidthTabs() {
                                             imageUrl3={post?.imageUrl3}
                                             FileURl={post?.FileURl}
                                             timestamp={post?.timestamp}
-                                            likes = {post?.likes}
-                                            authorid = {post?.author?.id}
+                                            likes={post?.likes}
+                                            authorid={post?.author?.id}
                                         />
                                     ) : (
                                         <div/>
@@ -190,8 +191,8 @@ function FullWidthTabs() {
                                             imageUrl3={post?.imageUrl3}
                                             FileURl={post?.FileURl}
                                             timestamp={post?.timestamp}
-                                            likes = {post?.likes}
-                                            authorid = {post?.author?.id}
+                                            likes={post?.likes}
+                                            authorid={post?.author?.id}
                                         />
                                     ) : (
                                         <div/>
@@ -225,8 +226,8 @@ function FullWidthTabs() {
                                             imageUrl3={post?.imageUrl3}
                                             FileURl={post?.FileURl}
                                             timestamp={post?.timestamp}
-                                            likes = {post?.likes}
-                                            authorid = {post?.author?.id}
+                                            likes={post?.likes}
+                                            authorid={post?.author?.id}
                                         />
                                     ) : (
                                         <div/>
@@ -298,14 +299,84 @@ function ProfileSection() {
 
     const [user, loading, error] = useAuthState(auth);
     const {profile_uid} = useParams();
+    const [hasFollowed, setHasFollowed] = useState(false);
     const [profileUser, setProfileUser] = useState("");
+    const [profile_following, setProfile_following] = useState([]);
+    const [me_following, setMe_following] = useState([]);
+    const [userlist, SetUserlist] = useState([]);
+    const [topicList, SetTopicList] = useState([]);
+    async function handleProfClick(id) {
+        window.location = `/profile/${id}`;
+    }
+
+    useEffect(() => {
+         onSnapshot(query(collection(database, "users")), snapshot => {
+            SetUserlist(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
+        })
+
+
+    });
+    useEffect(() => {
+        onSnapshot(query(collection(database, "topics")), snapshot => {
+            SetTopicList(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
+        })
+
+
+    });
+
+
+    useEffect(() => {
+        if (user) {
+            onSnapshot(doc(database, "users", profile_uid), (snapshot) =>
+
+                setProfile_following(snapshot.data().following),
+            )
+        }
+    }, [user]);
+
+    useEffect(() => {
+        if (user) {
+            onSnapshot(doc(database, "users", user.uid), (snapshot) =>
+
+                setMe_following(snapshot.data().following),
+            )
+        }
+    }, [user]);
+
+
+    useEffect(() => {
+        if (user) {
+            setHasFollowed(
+                me_following.includes(profileUser),
+            )
+        }
+    }, [user, me_following, profileUser]);
+
+
+    const followUser = async () => {
+
+        if (hasFollowed) {
+
+            await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
+                following: arrayRemove(profileUser)
+            });
+        } else {
+            await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
+                following: arrayUnion(profileUser)
+            });
+
+        }
+
+    };
+
     useEffect(() => {
         if (user) {
             onSnapshot(doc(database, "users", profile_uid), (snapshot) =>
                 setProfileUser(snapshot.data().email)
             )
         }
-    }, [user]);
+    }, [user, profileUser]);
+
 
     if (loading) {
         return <div> Loading... </div>;
@@ -313,7 +384,7 @@ function ProfileSection() {
         return (
             <ProfileContainer>
                 <Container fixed>
-                    <Usersfollowing/>
+
                     <Grid
                         container
                         direction="row"
@@ -353,6 +424,28 @@ function ProfileSection() {
                             >
                                 <UserName>{profileUser}</UserName>
 
+
+
+
+                                    {userlist.map((this_user) => {
+                                        if (profile_following.includes(this_user.email)){
+                                            return (
+
+
+                                                <Button onClick={() => handleProfClick(this_user.id)}>
+                                                    {this_user.email}
+                                                </Button>
+
+
+                                            )
+                                        }
+
+
+                                    })}
+
+
+
+
                                 <Grid
                                     // Follow Button container
                                     container
@@ -360,16 +453,37 @@ function ProfileSection() {
                                     justifyContent="flex-start"
                                     alignItems="flex-start"
                                 >
-                                    <FollowButton>
-                                        <Button
-                                            container
-                                            direction="column"
-                                            justifyContent="center"
-                                            alignItems="center"
-                                            // fullWidth={true}
 
-                                            variant="outlined">Follow</Button>
-                                    </FollowButton>
+                                    <div>
+                                        {hasFollowed ? (
+
+                                            <FollowButton>
+                                                <Button
+                                                    container
+                                                    direction="column"
+                                                    justifyContent="center"
+                                                    alignItems="center"
+                                                    // fullWidth={true}
+
+                                                    variant="outlined"
+                                                    onClick={followUser}>unfollow</Button>
+                                            </FollowButton>
+
+                                        ) : (
+
+                                            <Button
+                                                container
+                                                direction="column"
+                                                justifyContent="center"
+                                                alignItems="center"
+                                                // fullWidth={true}
+
+                                                variant="outlined"
+                                                onClick={followUser}>follow</Button>
+
+                                        )}
+                                    </div>
+
                                 </Grid>
                             </Grid>
 
