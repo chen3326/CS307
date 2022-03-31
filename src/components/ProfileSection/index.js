@@ -101,10 +101,7 @@ function FullWidthTabs() {
         onSnapshot(query(postsCollectionRef, orderBy('timestamp', 'desc')), snapshot => {
             setPostList1(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})));
         })
-
-
     });
-
 
     useEffect(() => {
         if (user) {

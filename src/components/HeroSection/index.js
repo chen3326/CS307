@@ -37,7 +37,12 @@ function HeroSection() {
     }
 
     const [user, buffering, error] = useAuthState(auth);
-
+    const [emailVerified, setEmailVerified] = useState(false);
+    useEffect(() => {
+        if (user) {
+            setEmailVerified(user.emailVerified);
+        }
+    });
     if (buffering) {
         return (
             <h1 style={{
@@ -71,6 +76,12 @@ function HeroSection() {
                                     <div> the choice about darkTheme is true (dark) </div>
                                 ) : (
                                     <div> the choice about darkTheme is false (light) </div>
+                                )
+                                }
+                                {emailVerified ? (
+                                    <div> The current user is Verified </div>
+                                ) : (
+                                    <div> The current user is Not Verified </div>
                                 )
                                 }
 
