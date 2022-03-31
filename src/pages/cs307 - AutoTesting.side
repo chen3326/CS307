@@ -1,7 +1,7 @@
 {
   "id": "07a6d7fa-d8bb-4c38-a2e6-ac9a0ba95bda",
   "version": "2.0",
-  "name": "cs307 - AutoTesting",
+  "name": "cs307 - WebApp",
   "url": "http://localhost:3000",
   "tests": [{
     "id": "f26b2717-ed8e-4191-9767-a7b06e5aef97",
@@ -339,6 +339,27 @@
       "target": "css=.fab-item",
       "targets": [],
       "value": ""
+    }, {
+      "id": "26e851de-28ae-4ed2-b54e-294a9925e500",
+      "comment": "",
+      "command": "//click",
+      "target": "css=.inputGp:nth-child(2) > input",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "bdf7bd3d-75b5-4916-8a47-368b36c5bdf4",
+      "comment": "Input Title",
+      "command": "//type",
+      "target": "css=.inputGp:nth-child(2) > input",
+      "targets": [],
+      "value": "testPost!"
+    }, {
+      "id": "57c51e30-9c9a-44fd-8397-b2a1264635fa",
+      "comment": "",
+      "command": "//storeValue",
+      "target": "css=.inputGp:nth-child(2) > input",
+      "targets": [],
+      "value": "titleVar"
     }, {
       "id": "45ba3346-ac53-4ddc-ab8d-abf0f276cc18",
       "comment": "Input Topic",
@@ -704,7 +725,7 @@
     }, {
       "id": "b8c13799-8b67-47eb-9775-a47fb674bd8f",
       "comment": "",
-      "command": "storeValue",
+      "command": "storeText",
       "target": "css=.inputGp:nth-child(4) > input",
       "targets": [],
       "value": "textVar"
@@ -733,13 +754,57 @@
       "id": "8548cb74-affc-47f0-930d-51b27ed46759",
       "comment": "",
       "command": "assertText",
-      "target": "xpath=//div[2]/div/div/div/div/a",
+      "target": "css=.sc-bBHxTw:nth-child(1) .css-1q36rmd-MuiStack-root",
+      "targets": [],
+      "value": "textVar"
+    }, {
+      "id": "2b554b05-d24a-4337-97e3-3afa59489cc0",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=${textVar}",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "408611be-c131-4dfc-b563-518db516ed5b",
+      "comment": "",
+      "command": "assertText",
+      "target": "linkText=new topic here test",
       "targets": [],
       "value": "${textVar}"
+    }, {
+      "id": "2a730954-e045-4eb3-9311-c995a011bd5c",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.MuiTypography-root > h1",
+      "targets": [],
+      "value": "Topic Name: ${textVar}"
+    }, {
+      "id": "589b5091-1602-4705-aaa9-b41d16ee17e8",
+      "comment": "",
+      "command": "type",
+      "target": "css=input:nth-child(1)",
+      "targets": [
+        ["css=input:nth-child(1)", "css:finder"],
+        ["xpath=//div[@id='fields']/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "qwerty@asdf.com"
+    }, {
+      "id": "6b72644c-80cc-4418-918d-199701128e8f",
+      "comment": "",
+      "command": "type",
+      "target": "css=input:nth-child(2)",
+      "targets": [
+        ["css=input:nth-child(2)", "css:finder"],
+        ["xpath=//input[@type='password']", "xpath:attributes"],
+        ["xpath=//div[@id='fields']/input[2]", "xpath:idRelative"],
+        ["xpath=//input[2]", "xpath:position"]
+      ],
+      "value": "Apple12!"
     }]
   }, {
     "id": "f2b0c6a5-096c-497b-8b4b-516897b6cde4",
-    "name": "6a) Post Topic - Format of Link",
+    "name": "5c) New Post - Only 1 topic (1)",
     "commands": [{
       "id": "006e34f4-cc1d-4254-a582-31bd2dd06906",
       "comment": "",
@@ -755,6 +820,76 @@
       "targets": [],
       "value": ""
     }, {
+      "id": "4e95c878-440a-40fb-8e9b-2cf838aa2d9d",
+      "comment": "Open New Post Modal",
+      "command": "click",
+      "target": "css=.fab-item",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "0a172583-765f-4e39-a7ac-28aa19d610ef",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "css=.fab-item",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d96bc255-2278-4b17-9563-f987d552a428",
+      "comment": "",
+      "command": "mouseOut",
+      "target": "css=.fab-item",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "79373c19-b450-42b9-a5de-b105ef54f6eb",
+      "comment": "",
+      "command": "click",
+      "target": "css=.inputGp:nth-child(2) > input",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "593e181c-eb5c-4d1b-8a69-8a22c70a2fce",
+      "comment": "Input Title",
+      "command": "type",
+      "target": "css=.inputGp:nth-child(2) > input",
+      "targets": [],
+      "value": "testPost!"
+    }, {
+      "id": "689059e0-488c-4e4d-8b94-78610d3bfbd2",
+      "comment": "Input Topic",
+      "command": "type",
+      "target": "css=.inputGp:nth-child(4) > input",
+      "targets": [],
+      "value": "new topic here test"
+    }, {
+      "id": "1f249f96-fb4c-4e7a-be1a-1cde3f1280b0",
+      "comment": "",
+      "command": "storeText",
+      "target": "css=.inputGp:nth-child(4) > input",
+      "targets": [],
+      "value": "textVar"
+    }, {
+      "id": "87601705-6a87-419d-9517-535ef0061d79",
+      "comment": "",
+      "command": "click",
+      "target": "css=textarea",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "7fb2f31b-5c07-43a9-87a4-0c53a2af25ee",
+      "comment": "Input Post Body",
+      "command": "type",
+      "target": "css=textarea",
+      "targets": [],
+      "value": "Blah blah blah!"
+    }, {
+      "id": "1d9f2d56-c724-4c12-bc1c-aa34f8e42e45",
+      "comment": "Submit Post",
+      "command": "click",
+      "target": "css=label:nth-child(1) > buttoninner",
+      "targets": [],
+      "value": ""
+    }, {
       "id": "49a6d6e2-196a-40d7-a8dd-af3845cd588c",
       "comment": "",
       "command": "store",
@@ -762,19 +897,26 @@
       "targets": [],
       "value": "textVar"
     }, {
-      "id": "035953cb-355b-4069-9d33-4f37aba83d28",
+      "id": "4623072b-7317-409b-bbfe-73f9ec5f3116",
       "comment": "",
-      "command": "//echo",
-      "target": "${textVar}",
+      "command": "click",
+      "target": "linkText=${textVar}",
       "targets": [],
       "value": ""
     }, {
-      "id": "e995c1a6-8dd0-4fe5-8080-c158f384350c",
+      "id": "15cec184-711e-4997-a894-1939e22db6f3",
       "comment": "",
       "command": "assertText",
-      "target": "xpath=//div[2]/div/div/div/div/a",
+      "target": "linkText=new topic here test",
       "targets": [],
       "value": "${textVar}"
+    }, {
+      "id": "fa23fab7-e149-4db1-938e-309b3f514f5d",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.MuiTypography-root > h1",
+      "targets": [],
+      "value": "Topic Name: ${textVar}"
     }]
   }, {
     "id": "7996cc8d-3c29-4c37-bfa0-a4ffc20bc098",
@@ -826,155 +968,6 @@
         ["xpath=//div[2]/div/div/div/div", "xpath:position"]
       ],
       "value": ""
-    }]
-  }, {
-    "id": "3c4e6de4-e251-48de-abcf-e5cf74d616a1",
-    "name": "6b) Follow/Unfollow Topic (1)",
-    "commands": [{
-      "id": "b7f6e271-ed35-401e-9248-249c6e489476",
-      "comment": "",
-      "command": "open",
-      "target": "/home",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "c4f901c8-0e8f-4be8-98e3-b60251a974ce",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1920x1175",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "48ca41e5-a9e8-4ab9-b7d8-0983b41387d1",
-      "comment": "",
-      "command": "click",
-      "target": "linkText=test topic anonymous",
-      "targets": [
-        ["linkText=test topic anonymous", "linkText"],
-        ["css=.sc-bBHxTw:nth-child(4) a", "css:finder"],
-        ["xpath=//a[contains(text(),'test topic anonymous')]", "xpath:link"],
-        ["xpath=//div[@id='root']/div[2]/div[4]/div/div/div/a", "xpath:idRelative"],
-        ["xpath=(//a[contains(@href, '/inner_topic')])[3]", "xpath:href"],
-        ["xpath=//div[4]/div/div/div/a", "xpath:position"],
-        ["xpath=//a[contains(.,'test topic anonymous')]", "xpath:innerText"]
-      ],
-      "value": ""
-    }]
-  }, {
-    "id": "9339252a-67c0-4f48-b9c2-a46181c28f03",
-    "name": "6c) New Topic - Author is User",
-    "commands": [{
-      "id": "5b97a148-e7e3-48b3-bd04-3581ffb70743",
-      "comment": "",
-      "command": "open",
-      "target": "/home",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "3674ca6f-b9ce-4bac-bf69-9cbc97daacd3",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1920x1175",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "1ec96ec3-7546-4c1a-b6f2-d92232cbf67f",
-      "comment": "",
-      "command": "storeText",
-      "target": "css=.sc-dkPtRN > div:nth-child(1)",
-      "targets": [],
-      "value": "userEmail"
-    }, {
-      "id": "2733b783-9efa-4d18-9383-be1e89f07386",
-      "comment": "",
-      "command": "executeScript",
-      "target": "return (${userEmail}.toUpperCase().substring(24))",
-      "targets": [],
-      "value": "upperUserEmail"
-    }, {
-      "id": "dedeeda2-a47c-41cc-ab05-c271afa0e0ff",
-      "comment": "",
-      "command": "echo",
-      "target": "${upperUserEmail}",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "d77807c6-7249-49e5-bd03-3d29ff3dfa35",
-      "comment": "Open New Post Modal",
-      "command": "click",
-      "target": "css=.fab-item",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "4dd9203f-009d-4fe2-a3ba-6cd6c2c12d62",
-      "comment": "",
-      "command": "mouseOver",
-      "target": "css=.fab-item",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "ddf8f790-9f59-47b3-b711-b8b851899586",
-      "comment": "",
-      "command": "mouseOut",
-      "target": "css=.fab-item",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "0eddbc05-0594-426b-8704-724d00942a1b",
-      "comment": "",
-      "command": "click",
-      "target": "css=.inputGp:nth-child(2) > input",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "d000fbc8-2474-435d-b457-baab61e964db",
-      "comment": "Input Title",
-      "command": "type",
-      "target": "css=.inputGp:nth-child(2) > input",
-      "targets": [],
-      "value": "testPost!"
-    }, {
-      "id": "01384849-6b98-457d-993f-b49e60d768c7",
-      "comment": "Input Topic",
-      "command": "type",
-      "target": "css=.inputGp:nth-child(4) > input",
-      "targets": [],
-      "value": "new topic here test"
-    }, {
-      "id": "ecbb768b-ccf7-4856-92e2-1a443cc8e390",
-      "comment": "",
-      "command": "storeText",
-      "target": "css=.inputGp:nth-child(4) > input",
-      "targets": [],
-      "value": "textVar"
-    }, {
-      "id": "c89411d6-865e-42ba-b95f-2024311f5295",
-      "comment": "",
-      "command": "click",
-      "target": "css=textarea",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "bc7ab287-17d2-496a-87ec-35670d11c629",
-      "comment": "",
-      "command": "type",
-      "target": "css=textarea",
-      "targets": [],
-      "value": "Blah blah blah!"
-    }, {
-      "id": "bcc0e2ec-24d6-4f38-b564-e5afe1228aa5",
-      "comment": "Submit Post",
-      "command": "click",
-      "target": "css=label:nth-child(1) > buttoninner",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "88713a85-6f72-4602-a127-6abd6504c7b0",
-      "comment": "",
-      "command": "assertText",
-      "target": "css=.sc-bBHxTw:nth-child(1) .sc-llYSUQ .MuiButton-label",
-      "targets": [],
-      "value": "${upperUserEmail}"
     }]
   }],
   "suites": [{
