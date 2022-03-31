@@ -162,8 +162,8 @@ function FullWidthTabs() {
                         >
                             <Tab label="Posts" {...a11yProps(0)} />
                             <Tab label="Liked" {...a11yProps(1)} />
-                            <Tab label="Saved" {...a11yProps(2)} />
-                            <Tab label="Comments" {...a11yProps(3)} />
+                            {/*<Tab label="Saved" {...a11yProps(2)} />*/}
+                            <Tab label="Comments" {...a11yProps(2)} />
                         </Tabs>
                     </AppBar>
                     <TabPanel value={value} index={0} dir={theme.direction}>
@@ -226,12 +226,14 @@ function FullWidthTabs() {
                             })}
                         </TabCard>
                     </TabPanel>
+                    {/*
                     <TabPanel value={value} index={2} dir={theme.direction}>
                         <TabCard>
                             <OutlinedCard/>
                         </TabCard>
                     </TabPanel>
-                    <TabPanel value={value} index={3} dir={theme.direction}>
+                    */}
+                    <TabPanel value={value} index={2} dir={theme.direction}>
                         <TabCard>
                             {postLists1.map((post) => {
                                 return (
@@ -264,6 +266,7 @@ function FullWidthTabs() {
                 </Box>
             );
         } else {
+            // Dark mode
             return (
             <Box sx={{bgcolor: 'rgba(255, 255, 255, 0.1)', borderRadius: '10px'}}>
                 <AppBar position="static" sx={{borderRadius: '10px'}}>
@@ -277,8 +280,8 @@ function FullWidthTabs() {
                     >
                         <Tab label="Posts" {...a11yProps(0)} />
                         <Tab label="Liked" {...a11yProps(1)} />
-                        <Tab label="Saved" {...a11yProps(2)} />
-                        <Tab label="Comments" {...a11yProps(3)} />
+                        {/*<Tab label="Saved" {...a11yProps(2)} />*/}
+                        <Tab label="Comments" {...a11yProps(2)} />
                     </Tabs>
                 </AppBar>
                 <TabPanel value={value} index={0} dir={theme.direction}>
@@ -341,12 +344,12 @@ function FullWidthTabs() {
                         })}
                     </TabCard>
                 </TabPanel>
-                <TabPanel value={value} index={2} dir={theme.direction}>
+                {/*<TabPanel value={value} index={2} dir={theme.direction}>
                     <TabCard>
                         <OutlinedCard/>
                     </TabCard>
-                </TabPanel>
-                <TabPanel value={value} index={3} dir={theme.direction}>
+                </TabPanel>*/}
+                <TabPanel value={value} index={2} dir={theme.direction}>
                     <TabCard>
                         {postLists1.map((post) => {
                             return (
@@ -538,7 +541,7 @@ function ProfileSection() {
 
         if (!themeModeForCheckTheme) {
         return (
-
+            //Light Mode
             <ProfileContainer style={{padding: '80px'}}>
                 <Container fixed>
 
