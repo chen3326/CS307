@@ -20,6 +20,24 @@ export const Nav = styled.nav`
 
 `;
 
+export const NavDark = styled.nav`
+  background: slategrey;
+
+  backdrop-filter: saturate(180%) blur(20px);
+  height: 62px;
+  margin-left: -360px;
+  margin-top: -0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+
+
+`;
+
 export const NavbarContainer = styled.div`
 
 

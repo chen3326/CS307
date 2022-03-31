@@ -19,6 +19,23 @@ export const Side = styled.nav`
 
 `;
 
+export const SideDark = styled.nav`
+  background: slategrey;
+
+  backdrop-filter: saturate(180%) blur(20px);
+  width: 62px;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  position: fixed;
+  top: 0;
+  z-index: 10;
+
+
+`;
+
 export const SidebarContainer = styled.div`
 
 
