@@ -4,6 +4,7 @@ import {
     HeroSLogo, HeroContainer2,HeroH1_2,
 } from './HeroElements';
 import logo from '../../images/Boiler Breakouts-logos.jpeg';
+import logoDark from '../../images/Boiler Breakouts-logos_transparent.png';
 import {auth, database, useAuth} from "../../firebase";
 
 //import {useTheme, ThemeProvider, createTheme} from "@mui/material/styles";
@@ -88,6 +89,7 @@ function HeroSection() {
                     <HeroContainer2 id='home'>
 
                         <HeroContent>
+                            <HeroH1_2> </HeroH1_2>
                             <HeroH1_2>Currently logged in as: {themeEmail} </HeroH1_2>
                             {themeModeForCheckTheme ? (
                                 <HeroH1_2> the choice about darkTheme is true (dark) </HeroH1_2>
@@ -96,7 +98,7 @@ function HeroSection() {
                             )
                             }
 
-                            <HeroSLogo src={logo}/>
+                            <HeroSLogo src={logoDark}/>
 
                         </HeroContent>
 
