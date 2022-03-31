@@ -1,15 +1,14 @@
-import React, {useRef, useState, useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import AppLogo from '../../images/Boiler Breakouts-logos.jpeg';
-import PropTypes from 'prop-types';
-import {auth, database, verificationEmail, useAuth, emailUpdate} from "../../firebase";
+import {auth, database, emailUpdate, useAuth, verificationEmail} from "../../firebase";
 
 //MUX extentions
-import withStyles from '@material-ui/core/styles/withStyles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import {collection} from "firebase/firestore";
+import {collection, onSnapshot, orderBy, query} from "firebase/firestore";
+import {getAuth} from "firebase/auth";
+import {useAuthState} from "react-firebase-hooks/auth";
 
 //main welcome page with login and link to signing in
 //stying margins for ux
@@ -33,7 +32,7 @@ const styles =  {
 //privatized page that will be linked to email sent to user when they forgot their password
 export default function EmailVerification()
 {
-    const [loading, setLoading] = React.useState(false);
+    const [user, loading, error] = useAuthState(auth);
 
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
@@ -45,8 +44,17 @@ export default function EmailVerification()
     const [ogEmail, setOgEmail] = useState("");
     const [newEmail, setNewEmail] = useState("");
     const [confirmNewEmail, setConfirmNewEmail] = useState("");
+    const [emailVerified, setEmailVerified] = useState(false);
     //get collection of users
     const userCollectionRef = collection(database, "users",);
+
+    useEffect(() => {
+        if (user) {
+            setEmailVerified(user.emailVerified);
+        }
+    });
+
+
 
     async function handleEmailChange() {
         try {
@@ -56,9 +64,9 @@ export default function EmailVerification()
                     await verificationEmail(newEmail);
                     console.log("Email Updated");
                     console.log("Verification Email Sent");
-                    setLoading(false);
-                    window.history.back();
-
+                    if (emailVerified) {
+                        window.location.pathname = "/home";
+                    }
                 }
                 else {
                     alert("Please Enter A Valid Email!");
@@ -86,15 +94,16 @@ export default function EmailVerification()
             let cMonth = currentDate.getMonth() + 1;
             let cYear = currentDate.getFullYear();
             let time = currentDate.getHours() + ":" + currentDate.getMinutes() + ":" + currentDate.getSeconds();
-            alert("Email Sent to " + ogEmail + " at " + cMonth + "/" + cDay + "/" + cYear + " " + time);
-            setLoading(false);
+            alert("Email Sent to " + getAuth().currentUser.email + " at " + cMonth + "/" + cDay + "/" + cYear + " " + time);
+            if (emailVerified) {
+                window.location.pathname = "/home";
+            }
         }
         catch {
             alert("Couldn't Send Email")
         }
     }
     async function handleBackClick() {
-        setLoading(true);
         try {
             window.history.back();
             //push inputs to ./users collection
@@ -103,10 +112,8 @@ export default function EmailVerification()
         } catch {
             alert("Error!");
         }
-        setLoading(false);
     }
     async function handleHomeClick() {
-        setLoading(true);
         try {
             window.location.pathname = "/home";
             //push inputs to ./users collection
@@ -115,62 +122,86 @@ export default function EmailVerification()
         } catch {
             alert("Error!");
         }
-        setLoading(false);
     }
     //actual loading of screen
-    return (
-        <Grid container className={"form"}>
-            <Grid item sm />
-            <Grid item sm>
-                <center>
-                    <img src={AppLogo} alt="logo" width='150px'/>
-                </center>
-                <Typography variant="h3" className={"pageTitle"}>
-                    Email Verification
-                </Typography>
-                <Button type="submit" variant = "contained" color="primary" className={"button"} onClick={handleVerificationEmail}>
-                    Send Verification Email
-                </Button>
-                {/* New password */}
-                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    <label>New Email:</label>
-                    <div className="inputGp">
-                        <input
-                            style={{width:'450px', height:'30px', marginTop:'5px',marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
-                            placeholder="New Password"
-                            width=""
-                            type="password"
-                            onChange={(event) => {
-                                setNewEmail(event.target.value);
-                            }}
-                        />
-                    </div>
-                </Typography>
-                {/*confirm password*/}
-                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    <label>Confirm New Email:</label>
-                    <div className="inputGp">
-                        <input
-                            style={{width:'450px', height:'30px', marginTop:'5px',marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
-                            placeholder="Confirm New Password"
-                            width=""
-                            type="password"
-                            onChange={(event) => {
-                                setConfirmNewEmail(event.target.value);
-                            }}
-                        />
-                    </div>
-                </Typography>
-                <Button type="submit" variant = "contained" color="primary" className={"button"} onClick={handleEmailChange}>
-                    Update Email and Send Verification
-                </Button>
-                <Button type="submit" variant = "contained" color="primary" className={"button"} onClick={handleHomeClick}>
-                    Skip
-                </Button>
+    if (loading) {
+        return <div> Loading... </div>;
+    } else if (user) {
+        return (
+            <Grid container className={"form"}>
+                <Grid item sm/>
+                <Grid item sm>
+                    <center>
+                        <img src={AppLogo} alt="logo" width='150px'/>
+                    </center>
+                    <Typography variant="h3" className={"pageTitle"}>
+                        Email Verification
+                    </Typography>
+                    <Button type="submit" variant="contained" color="primary" className={"button"}
+                            onClick={handleVerificationEmail}>
+                        Send Verification Email
+                    </Button>
+                    {/* New password */}
+                    <Typography id="modal-modal-description" sx={{mt: 2}}>
+                        <label>New Email:</label>
+                        <div className="inputGp">
+                            <input
+                                style={{
+                                    width: '450px',
+                                    height: '30px',
+                                    marginTop: '5px',
+                                    marginBottom: '20px',
+                                    border: '2px solid #0D67B5',
+                                    borderRadius: '5px'
+                                }}
+                                placeholder="New Email"
+                                width=""
+                                type="password"
+                                onChange={(event) => {
+                                    setNewEmail(event.target.value);
+                                }}
+                            />
+                        </div>
+                    </Typography>
+                    {/*confirm password*/}
+                    <Typography id="modal-modal-description" sx={{mt: 2}}>
+                        <label>Confirm New Email:</label>
+                        <div className="inputGp">
+                            <input
+                                style={{
+                                    width: '450px',
+                                    height: '30px',
+                                    marginTop: '5px',
+                                    marginBottom: '20px',
+                                    border: '2px solid #0D67B5',
+                                    borderRadius: '5px'
+                                }}
+                                placeholder="Confirm New Email"
+                                width=""
+                                type="password"
+                                onChange={(event) => {
+                                    setConfirmNewEmail(event.target.value);
+                                }}
+                            />
+                        </div>
+                    </Typography>
+                    <Button type="submit" variant="contained" color="primary" className={"button"}
+                            onClick={handleEmailChange}>
+                        Update Email and Send Verification
+                    </Button>
+                    <Button type="submit" variant="contained" color="primary" className={"button"}
+                            onClick={handleHomeClick}>
+                        Skip
+                    </Button>
                 </Grid>
-            <Grid item sm />
-        </Grid>
-    );
+                <Grid item sm/>
+            </Grid>
+        );
+    }else if (error) {
+        return <div>There was an authentication error.</div>;
+    } else {
+        return <div>There was an authentication error.</div>;
+    }
 }
 
 
