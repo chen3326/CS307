@@ -22,12 +22,12 @@ import {
     arrayRemove,
     arrayUnion
 } from "firebase/firestore";
-import {PostDisplayContainer} from "../components/PostDisplaySection/PostDisplayElements";
+import {PostDisplayContainer, PostDisplayContainerDark} from "../components/PostDisplaySection/PostDisplayElements";
 import OnePost from "../components/PostDisplaySection/Post";
 import {useEffect, useState} from "react";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {FollowButton} from "../components/ProfileSection/ProfileElements";
-import {getAuth} from "firebase/auth";
+import {getAuth, onAuthStateChanged} from "firebase/auth";
 
 function Inner_topic() {
     const [user, loading, error] = useAuthState(auth);
@@ -89,21 +89,56 @@ function Inner_topic() {
 
     };
 
+    const [themeModeForCheckTheme, setThemeModeForCheckTheme] = useState(false);
+    const [themeEmail, setThemeEmail] = useState("");
+    const [queriedTheme, setQueriedTheme] = useState(false);
+
+    async function getUserTheme(){
+        const q = query(collection(database, "users"), where("email", "==", themeEmail));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                setThemeModeForCheckTheme(doc.data().author.darkTheme);
+            });
+        });
+    }
+
     if (loading) {
         return <div> Loading... </div>;
     } else if (user) {
-        return (
-            <>
-                <SidebarSection/>
-                <NavSection/>
 
-                <Typography style={{marginTop: "5%", marginLeft: "10%"}}>
-                    <h1>Topic Name: {state}</h1>
-                    <h2>Topic Author: {topicAuthor}</h2>
-                    <div>
-                        {hasFollowed ? (
+        onAuthStateChanged(auth, (user) => {
+            if (user&&!queriedTheme) {
+                setThemeEmail(user.email); //sets user's email to email
+                getUserTheme();
+                setQueriedTheme(true); //stops overwriting var from firebase backend
+            }
+        });
+        if (!themeModeForCheckTheme) {
+            return (
+                <>
+                    <SidebarSection/>
+                    <NavSection/>
 
-                            <FollowButton>
+                    <Typography style={{marginTop: "5%", marginLeft: "10%"}}>
+                        <h1>Topic Name: {state}</h1>
+                        <h2>Topic Author: {topicAuthor}</h2>
+                        <div>
+                            {hasFollowed ? (
+
+                                <FollowButton>
+                                    <Button
+                                        container
+                                        direction="column"
+                                        justifyContent="center"
+                                        alignItems="center"
+                                        // fullWidth={true}
+
+                                        variant="outlined"
+                                        onClick={followTopic}>unfollow Topic</Button>
+                                </FollowButton>
+
+                            ) : (
+
                                 <Button
                                     container
                                     direction="column"
@@ -112,53 +147,111 @@ function Inner_topic() {
                                     // fullWidth={true}
 
                                     variant="outlined"
-                                    onClick={followTopic}>unfollow Topic</Button>
-                            </FollowButton>
+                                    onClick={followTopic}>follow topic</Button>
 
-                        ) : (
+                            )}
+                        </div>
+                    </Typography>
+                    <PostDisplayContainer>
 
-                            <Button
-                                container
-                                direction="column"
-                                justifyContent="center"
-                                alignItems="center"
-                                // fullWidth={true}
+                        {postListsTopic.map((post) => {
+                            return (
 
-                                variant="outlined"
-                                onClick={followTopic}>follow topic</Button>
+                                <OnePost
+                                    postid={post?.id}
+                                    title={post?.title}
+                                    topic={post?.topic}
+                                    topicAuthor={post?.topicAuthor?.email}
+                                    postText={post?.postText}
+                                    authorEmail={post?.author?.email}
+                                    imageUrl={post?.imageUrl}
+                                    imageUrl2={post?.imageUrl2}
+                                    imageUrl3={post?.imageUrl3}
+                                    FileURl={post?.FileURl}
+                                    timestamp={post?.timestamp}
+                                    likes={post?.likes}
 
-                        )}
-                    </div>
-                </Typography>
-                <PostDisplayContainer>
+                                />
+                            )
+                        })}
 
-                    {postListsTopic.map((post) => {
-                        return (
+                    </PostDisplayContainer>
 
-                            <OnePost
-                                postid={post?.id}
-                                title={post?.title}
-                                topic={post?.topic}
-                                topicAuthor={post?.topicAuthor?.email}
-                                postText={post?.postText}
-                                authorEmail={post?.author?.email}
-                                imageUrl={post?.imageUrl}
-                                imageUrl2={post?.imageUrl2}
-                                imageUrl3={post?.imageUrl3}
-                                FileURl={post?.FileURl}
-                                timestamp={post?.timestamp}
-                                likes={post?.likes}
-
-                            />
-                        )
-                    })}
-
-                </PostDisplayContainer>
-
-            </>
+                </>
 
 
-        );
+            );
+        } else {
+            return (
+                <>
+                    <SidebarSection/>
+                    <NavSection/>
+
+                    <Typography style={{paddingTop: "5%", paddingLeft: "10%", background:'#121212'}}>
+                        <h1 style={{color:'rgba(255,255,255,0.85)'}}>Topic Name: {state}</h1>
+                        <h2 style={{color:'rgba(255,255,255,0.85)'}}>Topic Author: {topicAuthor}</h2>
+                        <div style={{paddingBottom:'25px'}}>
+                            {hasFollowed ? (
+
+                                <FollowButton>
+                                    <Button
+                                        container
+                                        direction="column"
+                                        justifyContent="center"
+                                        alignItems="center"
+                                        // fullWidth={true}
+
+                                        variant="outlined"
+                                        style={{color:'lightblue'}}
+                                        onClick={followTopic}>unfollow Topic</Button>
+                                </FollowButton>
+
+                            ) : (
+
+                                <Button
+                                    container
+                                    direction="column"
+                                    justifyContent="center"
+                                    alignItems="center"
+                                    // fullWidth={true}
+
+                                    variant="outlined"
+                                    style={{color:'lightblue'}}
+                                    onClick={followTopic}>follow topic</Button>
+
+                            )}
+                        </div>
+                    </Typography>
+                    <PostDisplayContainerDark style={{paddingBottom:'800px'}}>
+
+                        {postListsTopic.map((post) => {
+                            return (
+
+                                <OnePost
+                                    postid={post?.id}
+                                    title={post?.title}
+                                    topic={post?.topic}
+                                    topicAuthor={post?.topicAuthor?.email}
+                                    postText={post?.postText}
+                                    authorEmail={post?.author?.email}
+                                    imageUrl={post?.imageUrl}
+                                    imageUrl2={post?.imageUrl2}
+                                    imageUrl3={post?.imageUrl3}
+                                    FileURl={post?.FileURl}
+                                    timestamp={post?.timestamp}
+                                    likes={post?.likes}
+
+                                />
+                            )
+                        })}
+
+                    </PostDisplayContainerDark>
+
+                </>
+
+
+            );
+        }
     } else if (error) {
         return <div>There was an authentication error.</div>;
     } else {

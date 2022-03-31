@@ -95,7 +95,7 @@ function SavedPost_display() {
         } else {
             return (
 
-                <PostDisplayContainerDark style={{paddingBottom:'500px'}}>
+                <PostDisplayContainerDark style={{paddingBottom:'1000px'}}>
 
                     {postLists1.map((post) => {
 

@@ -708,7 +708,7 @@ function ProfileSection() {
         )
         } else {
             return (
-                <ProfileContainerBlack style={{padding: '80px'}}>
+                <ProfileContainerBlack style={{padding: '100px'}}>
                     <Container fixed>
 
                         <Grid
@@ -756,7 +756,7 @@ function ProfileSection() {
                                         return (
 
 
-                                            <Button onClick={() => handleProfClick(this_user.id)}>
+                                            <Button onClick={() => handleProfClick(this_user.id)} style={{color:'lightblue'}}>
                                                 {this_user.email}
                                             </Button>
 
@@ -777,6 +777,7 @@ function ProfileSection() {
                                                 topicAuthor: this_topic.topicAuthor,
                                                 // your data array of objects
                                             }}
+                                                  style={{color:'#F0E68C'}}
                                             >
                                                 {this_topic.topicName}
                                             </Link>
@@ -808,6 +809,7 @@ function ProfileSection() {
                                                         // fullWidth={true}
 
                                                         variant="outlined"
+                                                        style={{color:'lightblue'}}
                                                         onClick={followUser}>unfollow</Button>
                                                 </FollowButton>
 
@@ -821,6 +823,7 @@ function ProfileSection() {
                                                     // fullWidth={true}
 
                                                     variant="outlined"
+                                                    style={{color:'lightblue'}}
                                                     onClick={followUser}>follow</Button>
 
                                             )}
