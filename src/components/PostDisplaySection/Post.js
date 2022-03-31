@@ -389,7 +389,7 @@ function OnePost({
                         <Stack direction="row" alignItems="center" spacing={1}>
 
 
-                            <Button onClick={handleProfClick} style={{color:'rgba(255, 255, 255, 0.85)'}}>
+                            <Button onClick={handleProfClick} style={{color:'#FFDAB9'}}>
 
 
                                 {authorEmail}
@@ -401,7 +401,7 @@ function OnePost({
                                 <Link to={{
                                     pathname: "/inner_topic",
                                     state: topic,
-                                    topicAuthor: topicAuthor,
+                                    //topicAuthor: topicAuthor,
                                     // your data array of objects
                                 }}
                                       style={{color: '#F0E68C'}}

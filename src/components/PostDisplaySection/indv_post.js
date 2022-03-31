@@ -495,7 +495,7 @@ function IndvPost_display() {
                                         />
                                         <h3>{authorName}</h3>
 
-                                        <Button onClick={handleProfClick} style={{color:'rgba(250,250,250,0.85)'}}>
+                                        <Button onClick={handleProfClick} style={{color:'#FFDAB9'}}>
 
 
                                             {authorEmail}
