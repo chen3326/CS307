@@ -326,10 +326,10 @@ function IndvPost_display() {
                                 <div>
                                     {hasLiked ? (
                                         <Button onClick={likePost} href=""> <FavoriteIcon
-                                            style={{color: 'red'}}/> {likes.length}
+                                            style={{color: 'red'}}/> <div className={"likeCounter"}>{likes.length}</div>
                                         </Button>
                                     ) : (
-                                        <Button onClick={likePost} href=""> <FavoriteBorderIcon/> {likes.length}
+                                        <Button onClick={likePost} href=""> <FavoriteBorderIcon/> <div className={"likeCounter"}>{likes.length}</div>
                                         </Button>
                                     )}
                                 </div>
@@ -525,10 +525,10 @@ function IndvPost_display() {
                                 <div>
                                     {hasLiked ? (
                                         <Button onClick={likePost} href="" style={{color:'rgba(250,250,250,0.85)'}}> <FavoriteIcon
-                                            style={{color: 'red'}}/> {likes.length}
+                                            style={{color: 'red'}}/> <div className={"likeCounter"}>{likes.length}</div>
                                         </Button>
                                     ) : (
-                                        <Button onClick={likePost} href="" style={{color:'rgba(250,250,250,0.85)'}}> <FavoriteBorderIcon/> {likes.length}
+                                        <Button onClick={likePost} href="" style={{color:'rgba(250,250,250,0.85)'}}> <FavoriteBorderIcon/> <div className={"likeCounter"}>{likes.length}</div>
                                         </Button>
                                     )}
                                 </div>

@@ -260,10 +260,10 @@ function OnePost({
                     {/*like button*/}
                     <div>
                         {hasLiked ? (
-                            <Button onClick={likePost} href=""> <FavoriteIcon style={{color: 'red'}}/> {likes.length}
+                            <Button onClick={likePost} href=""> <FavoriteIcon style={{color: 'red'}}/> <div className={"likeCounter"}>{likes.length}</div>
                             </Button>
                         ) : (
-                            <Button onClick={likePost} href=""> <FavoriteBorderIcon/> {likes.length} </Button>
+                            <Button onClick={likePost} href=""> <FavoriteBorderIcon/> <div className={"likeCounter"}>{likes.length}</div> </Button>
                         )}
                     </div>
                     {/*save button*/}
@@ -417,10 +417,10 @@ function OnePost({
                     {/*like button*/}
                     <div>
                         {hasLiked ? (
-                            <Button onClick={likePost} style={{color:'rgba(255, 255, 255, 0.85)'}} href=""> <FavoriteIcon style={{color: 'red'}}/> {likes.length}
+                            <Button onClick={likePost} style={{color:'rgba(255, 255, 255, 0.85)'}} href=""> <FavoriteIcon style={{color: 'red'}}/> <div className={"likeCounter"}>{likes.length}</div>
                             </Button>
                         ) : (
-                            <Button onClick={likePost} style={{color:'rgba(255, 255, 255, 0.85)'}} href=""> <FavoriteBorderIcon/> {likes.length} </Button>
+                            <Button onClick={likePost} style={{color:'rgba(255, 255, 255, 0.85)'}} href=""> <FavoriteBorderIcon/> <div className={"likeCounter"}>{likes.length}</div> </Button>
                         )}
                     </div>
                     {/*save button*/}
