@@ -94,6 +94,12 @@ function SettingsSection() {
     const [themeModeForCheckTheme, setThemeModeForCheckTheme] = useState(false);
     const [themeEmail, setThemeEmail] = useState("");
     const [queriedTheme, setQueriedTheme] = useState(false);
+    const [emailVerified, setEmailVerified] = useState(false);
+    useEffect(() => {
+        if (user) {
+            setEmailVerified(user.emailVerified);
+        }
+    });
 
     async function getUserTheme(){
         const q = query(collection(database, "users"), where("email", "==", themeEmail));
@@ -589,15 +595,21 @@ function SettingsSection() {
                                                 </Grid>
                                                 <Grid item xs>
                                                     <SaveButton>
-                                                        <Button
-                                                            container
-                                                            direction="column"
-                                                            justifyContent="center"
-                                                            alignItems="center"
-                                                            variant="outlined"
-                                                            onClick={handleEVClick}
-                                                        >Verify Email
-                                                        </Button>
+                                                        {emailVerified ? (
+                                                            <div/>
+                                                        ) : (
+                                                            <Button
+                                                                container
+                                                                direction="column"
+                                                                justifyContent="center"
+                                                                alignItems="center"
+                                                                variant="outlined"
+                                                                onClick={handleEVClick}
+                                                            >Verify Email
+                                                            </Button>
+                                                        )
+                                                        }
+
                                                     </SaveButton>
                                                 </Grid>
                                             </Grid>
