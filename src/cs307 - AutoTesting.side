@@ -215,7 +215,7 @@
     }]
   }, {
     "id": "18e02e57-260b-4e80-a7bb-29423cfd6d79",
-    "name": "Follow/Unfollow Topic",
+    "name": "9a) Follow/Unfollow Topic Toggle",
     "commands": [{
       "id": "24185c14-5cd9-4d46-a34f-b91852b2d6a8",
       "comment": "",
@@ -234,7 +234,7 @@
       "id": "c9a5883b-4548-4649-92cc-a850694e2afe",
       "comment": "",
       "command": "click",
-      "target": "linkText=test topic anonymous",
+      "target": "linkText=new topic here test",
       "targets": [
         ["linkText=test topic anonymous", "linkText"],
         ["css=.sc-bBHxTw:nth-child(4) a", "css:finder"],
@@ -253,18 +253,6 @@
       "targets": [],
       "value": ""
     }, {
-      "id": "e27dd331-c9c7-4bf0-b18e-b390d1e69f7a",
-      "comment": "",
-      "command": "mouseOver",
-      "target": "css=.MuiButton-sizeMedium",
-      "targets": [
-        ["css=.MuiButton-sizeMedium", "css:finder"],
-        ["xpath=(//button[@type='button'])[3]", "xpath:attributes"],
-        ["xpath=//div[@id='root']/p/div/button", "xpath:idRelative"],
-        ["xpath=//div/button", "xpath:position"]
-      ],
-      "value": ""
-    }, {
       "id": "52f02f71-8a01-435c-acb4-f1b2c7c004ad",
       "comment": "",
       "command": "click",
@@ -277,29 +265,61 @@
       ],
       "value": ""
     }, {
-      "id": "101f80e6-be65-40cc-bec8-3bc3217a22dc",
+      "id": "8a7c6b25-1a25-4b76-9a78-7c1e5b7c888b",
       "comment": "",
-      "command": "mouseOver",
-      "target": "css=.MuiButton-sizeMedium",
-      "targets": [
-        ["css=.MuiButton-sizeMedium", "css:finder"],
-        ["xpath=(//button[@type='button'])[3]", "xpath:attributes"],
-        ["xpath=//div[@id='root']/p/div/div/button", "xpath:idRelative"],
-        ["xpath=//div/button", "xpath:position"]
-      ],
+      "command": "pause",
+      "target": "3000",
+      "targets": [],
       "value": ""
     }, {
-      "id": "2bc9d99b-63ef-44d7-a27a-82132743797a",
+      "id": "12a533fb-f21d-46c7-979a-67cd3745190a",
       "comment": "",
-      "command": "click",
+      "command": "storeText",
       "target": "css=.MuiButton-sizeMedium",
-      "targets": [
-        ["css=.MuiButton-sizeMedium", "css:finder"],
-        ["xpath=(//button[@type='button'])[3]", "xpath:attributes"],
-        ["xpath=//div[@id='root']/p/div/div/button", "xpath:idRelative"],
-        ["xpath=//div/button", "xpath:position"]
-      ],
+      "targets": [],
+      "value": "buttonText"
+    }, {
+      "id": "2743865e-33ed-4d60-9df8-47317d3f99bc",
+      "comment": "",
+      "command": "executeScript",
+      "target": "return (${buttonText}.substring(0, ${buttonText}.indexOf(\" \")))",
+      "targets": [],
+      "value": "newButtonText"
+    }, {
+      "id": "9fb871ea-41fd-4072-b073-af5f06ff27f3",
+      "comment": "",
+      "command": "executeScript",
+      "target": "window.location.reload()",
+      "targets": [],
       "value": ""
+    }, {
+      "id": "8a6ea793-c15d-4ab3-8c45-c0df6a2dfce9",
+      "comment": "",
+      "command": "pause",
+      "target": "3000",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "7e706a5a-f055-47a4-815d-96cb160c41eb",
+      "comment": "",
+      "command": "storeText",
+      "target": "css=.MuiButton-sizeMedium",
+      "targets": [],
+      "value": "reloadButtonText"
+    }, {
+      "id": "7c477cf3-efbf-434d-938b-492762f98c5c",
+      "comment": "",
+      "command": "executeScript",
+      "target": "return (${reloadButtonText}.substring(0, ${reloadButtonText}.indexOf(\" \")))",
+      "targets": [],
+      "value": "newReloadButtonText"
+    }, {
+      "id": "3f351a1f-a1c3-4888-905d-af8ce6ba7791",
+      "comment": "",
+      "command": "assert",
+      "target": "newButtonText",
+      "targets": [],
+      "value": "${newReloadButtonText}"
     }]
   }, {
     "id": "58baf5b3-f986-4066-88d0-7bdfd3ff1da7",
@@ -975,6 +995,114 @@
       "target": "css=.sc-bBHxTw:nth-child(1) .sc-llYSUQ .MuiButton-label",
       "targets": [],
       "value": "${upperUserEmail}"
+    }]
+  }, {
+    "id": "37c63b0d-fb6c-4bd2-9339-276626ade107",
+    "name": "9b) Topic Toggle - Follow",
+    "commands": [{
+      "id": "6a97c52e-e661-40dd-8945-279a39737509",
+      "comment": "",
+      "command": "open",
+      "target": "/home",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "c4b3ca45-08fe-4a05-8f29-58c85aa6678e",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x1175",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ede80928-bbad-4f68-89be-210f05605723",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=new topic here test",
+      "targets": [
+        ["linkText=test topic anonymous", "linkText"],
+        ["css=.sc-bBHxTw:nth-child(4) a", "css:finder"],
+        ["xpath=//a[contains(text(),'test topic anonymous')]", "xpath:link"],
+        ["xpath=//div[@id='root']/div[2]/div[4]/div/div/div/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '/inner_topic')])[3]", "xpath:href"],
+        ["xpath=//div[4]/div/div/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'test topic anonymous')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "081e3d13-460e-4779-a417-5807d383461e",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,0)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ae6b19f7-5ec8-474a-8211-a7ba8f80347e",
+      "comment": "",
+      "command": "click",
+      "target": "css=.MuiButton-sizeMedium",
+      "targets": [
+        ["css=.MuiButton-sizeMedium", "css:finder"],
+        ["xpath=(//button[@type='button'])[3]", "xpath:attributes"],
+        ["xpath=//div[@id='root']/p/div/button", "xpath:idRelative"],
+        ["xpath=//div/button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "275a3594-a5a6-4351-9e74-0cdf81b3c300",
+      "comment": "",
+      "command": "pause",
+      "target": "3000",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ef11882a-2d10-4872-b1de-5875bad83c5f",
+      "comment": "",
+      "command": "storeText",
+      "target": "css=.MuiButton-sizeMedium",
+      "targets": [],
+      "value": "buttonText"
+    }, {
+      "id": "dc86768a-d106-4013-9edf-f0d1ec9aa272",
+      "comment": "",
+      "command": "executeScript",
+      "target": "return (${buttonText}.substring(0, ${buttonText}.indexOf(\" \")))",
+      "targets": [],
+      "value": "newButtonText"
+    }, {
+      "id": "3eb5e3cb-ac15-4ea2-957c-667f623a414e",
+      "comment": "",
+      "command": "executeScript",
+      "target": "window.location.reload()",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "13e2af28-678c-42d7-9690-19f6e7b7b70e",
+      "comment": "",
+      "command": "pause",
+      "target": "3000",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "49571b42-ccd5-41c8-a467-38ac6599d0ea",
+      "comment": "",
+      "command": "storeText",
+      "target": "css=.MuiButton-sizeMedium",
+      "targets": [],
+      "value": "reloadButtonText"
+    }, {
+      "id": "b7e5732f-7664-4c6f-9c42-567632735902",
+      "comment": "",
+      "command": "executeScript",
+      "target": "return (${reloadButtonText}.substring(0, ${reloadButtonText}.indexOf(\" \")))",
+      "targets": [],
+      "value": "newReloadButtonText"
+    }, {
+      "id": "e651c98b-65fe-4329-8079-786e7f310d66",
+      "comment": "",
+      "command": "assert",
+      "target": "newButtonText",
+      "targets": [],
+      "value": "${newReloadButtonText}"
     }]
   }],
   "suites": [{
