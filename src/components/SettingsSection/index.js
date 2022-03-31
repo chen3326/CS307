@@ -237,28 +237,62 @@ function SettingsSection() {
 
         querySnapshot.forEach((doc) => {
             // doc.data() is never undefined for query doc snapshots
-            console.log("DELETEDOCUMENTS", colName, doc.id, " => ", doc.data());
+            //console.log("DELETEDOCUMENTS", colName, doc.id, " => ", doc.data());
             if (colName == "posts") {
+                //go into users' docs and delete current post's topic from all followingTopics arrays
+                deleteFollowingTopics(doc.data().topic);
                 //delete nested collections from this post
                 deleteNestedDocuments(colName, doc.id, "comments");
                 deleteNestedDocuments(colName, doc.id, "likes");
                 deleteNestedDocuments(colName, doc.id, "savedBy");
 
-                //todo: go into nested and delete post from users side (following,followingTopics,savedPosts,likedPosts,commentedPosts)
+                //go into nested and delete post from users side (savedPosts,likedPosts,commentedPosts)
                 deleteArrayElement("users", "commentedPosts", doc.id);
                 deleteArrayElement("users", "likedPosts", doc.id);
                 deleteArrayElement("users", "savedPosts", doc.id);
             }
-
-            //deleteDoc(doc.ref);
-
+            deleteDoc(doc.ref);
         });
+    }
+    async function deleteFollowing() {
+        //todo: go into nested and delete post from users side (following)
+
+        const postDeleteRef = collection(database, "users");
+        const userSideq = query(postDeleteRef, where("following", "array-contains",
+            {email: ogEmail, id: auth.currentUser.uid}));
+
+        const querySnapshot = await getDocs(userSideq);
+        querySnapshot.forEach((doc) => {
+            console.log("DELETEFOLLOWING", "following", " => ", doc.data());
+            updateDoc(doc.ref, {
+                following: arrayRemove({email: ogEmail, id: auth.currentUser.uid})
+            });
+        });
+
+    }
+
+    //go into nested and delete post from users side (followingTopics)
+    async function deleteFollowingTopics(topic) {
+        console.log("topic: ",topic);
+
+        const postDeleteRef = collection(database, "users");
+
+        const userSideq = query(postDeleteRef, where("followingTopics", "array-contains",
+            {topicName: topic, topicAuthor: ogEmail, id: auth.currentUser.uid}));
+
+        const querySnapshot = await getDocs(userSideq);
+        querySnapshot.forEach((doc) => {
+            console.log("DELETEFOLLOWING", "followingTopics", " => ", doc.data());
+            updateDoc(doc.ref, {
+                followingTopics: arrayRemove({topicName: topic, topicAuthor: ogEmail, id: auth.currentUser.uid})
+            });
+        });
+
     }
 
     //deletes traces of deleted post from the users collection
     async function deleteArrayElement (refString, arrayName, postid) {
         const postDeleteRef = collection(database, refString);
-
         const userSideq = query(postDeleteRef, where(arrayName, "array-contains", postid));
         const querySnapshot = await getDocs(userSideq);
 
@@ -281,15 +315,15 @@ function SettingsSection() {
             }
         });
     }
-    //deletesdocs from nested collections
+    //deletesdocs from (posts) nested collections
     async function deleteNestedDocuments (colName, docName, colName2) {
         const nestedCollectionRef = collection(database, colName, docName, colName2);
         const q = query(nestedCollectionRef);
         const querySnapshot = await getDocs(q);
 
         querySnapshot.forEach((doc) => {
-            //console.log(colName2, doc.id, " => ", doc.data());
-            //deleteDoc(doc.ref);
+            console.log(colName2, doc.id, " => ", doc.data());
+            deleteDoc(doc.ref);
         });
     }
 
@@ -303,17 +337,11 @@ function SettingsSection() {
 
             /** Delete all docs associated with user*/
 
-
-            deleteDocuments("posts", "author.email",  ogEmail);            // post
+            deleteFollowing();
             deleteDocuments("postTopics", "author.email", ogEmail);            //postTopics
+            deleteDocuments("posts", "author.email",  ogEmail);            // posts
 
-            // users that intereacted this post wont see this post anymore, but will still show null backend
 
-
-            //todo: go into nested and delete post from users side (following,followingTopics,savedPosts,likedPosts,commentedPosts)
-
-            // todo: delete clean up on other user's profiles
-            // todo: Delete all user from all people’s following list
             // todo:Turn all topics created by this user to anonymous - may be longer because all postTopics are their own post authors
 
 

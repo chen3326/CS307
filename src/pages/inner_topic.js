@@ -35,6 +35,8 @@ function Inner_topic() {
 
     const [postListsTopic, setPostListTopic] = useState([]);
     const [topicAuthor, setTopicAuthor] = useState("");
+    const [topicAuthoruid, setTopicAuthoruid] = useState("");
+
     const postsTopicCollectionRef = collection(database, "posts");
     const q = query(postsTopicCollectionRef, where("topic", "==", state), orderBy("timestamp", "asc"), limit(1));
     const backq = query(postsTopicCollectionRef, where("topic", "==", state));
@@ -48,6 +50,7 @@ function Inner_topic() {
         const unsubscribeAuthor = onSnapshot(q, (querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 setTopicAuthor(doc.data().topicAuthor.email);
+                setTopicAuthoruid(doc.data().topicAuthor.id);
             });
         });
         return {unsubscribeTopic, unsubscribeAuthor};
@@ -78,11 +81,11 @@ function Inner_topic() {
         if (hasFollowed) {
 
             await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
-                followingTopics: arrayRemove({topicName: state, topicAuthor: topicAuthor, id: user.uid})
+                followingTopics: arrayRemove({topicName: state, topicAuthor: topicAuthor, id: topicAuthoruid})
             });
         } else {
             await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
-                followingTopics: arrayUnion({topicName: state, topicAuthor: topicAuthor, id: user.uid})
+                followingTopics: arrayUnion({topicName: state, topicAuthor: topicAuthor, id: topicAuthoruid})
             });
 
         }
