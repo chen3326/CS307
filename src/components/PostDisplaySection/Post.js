@@ -48,6 +48,8 @@ function OnePost({
                      imageUrl,
                      imageUrl2,
                      imageUrl3,
+                     timestamp,
+                     likes_unused,
                      FileURl,
                      authorid
 
@@ -373,7 +375,7 @@ function OnePost({
                             )}
                         </Popper>
                     </CardActions>
-
+                    <div align="left">{timestamp.toDate().getDate().toString() + "/" + (timestamp.toDate().getMonth() + 1).toString() + "/" + timestamp.toDate().getFullYear().toString() + " | " + timestamp.toDate().getHours().toString() + ":" + timestamp.toDate().getMinutes().toString()}</div>
                 </PostDisplayContainer>
 
 

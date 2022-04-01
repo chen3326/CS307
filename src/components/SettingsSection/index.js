@@ -101,9 +101,9 @@ function SettingsSection() {
         }
     });
 
-    const [likedPosts, setLikedPosts] = useState([]);
-    const [commentedPosts, setCommentedPosts] = useState([]);
-    const [savedPosts, setSavedPosts] = useState([]);
+    //const [likedPosts, setLikedPosts] = useState([]);
+    //const [commentedPosts, setCommentedPosts] = useState([]);
+   // const [savedPosts, setSavedPosts] = useState([]);
 
     async function getUserTheme(){
         const q = query(collection(database, "users"), where("email", "==", themeEmail));
@@ -251,7 +251,7 @@ function SettingsSection() {
             console.log("DELETE POST", colName, doc.id, " => ", doc.data());
             if (colName == "posts") {
                 //go into users' docs and delete current post's topic from followingTopics
-                deleteFollowingTopics(doc.data().topic);
+                //deleteFollowingTopics(doc.data().topic);
 
                 //delete nested collections from this post (comments, likes, savedBy)
                 deleteNestedDocuments(colName, doc.id, "comments");
@@ -340,75 +340,77 @@ function SettingsSection() {
 
     //colname ex. posts, docname ex. pid, colName2 ex. comments, varName ex. commentAuthorEmail/username
     async function deleteUserInteraction (colName, docName, colName2, varName) {
-
         const nestedCollectionRef = collection(database, colName, docName, colName2);
         const q = query(nestedCollectionRef, where(varName, "==", ogEmail));
 
         const querySnapshot = await getDocs(q);
+
         querySnapshot.forEach((doc) => {
             console.log(colName2, "DELETE USER INTERACTION", docName, " => ", doc.data());
             deleteDoc(doc.ref);
         });
+
     }
     //colname ex. posts, docname ex. pid, colName2 ex. comments, varName ex. commentAuthorEmail/username
     async function getUserInteraction() {
+        var ulikedPosts;
+        var ucommentedPosts;
+        var usavedPosts;
         //go to current user's user doc
         const docRef = doc(database, "users", auth.currentUser.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-            console.log("Document data:", docSnap.data());
+        console.log( auth.currentUser.uid);
+        const docSnap = await getDoc(docRef); //make sure this has data
+        if (docSnap != null) {
+            console.log("Document data:", docSnap.data(), docSnap.data().likedPosts);
             //take all "commentedPosts", "likedPosts", "savedPosts"
-            setLikedPosts(docSnap.data().likedPosts);
-            setCommentedPosts(docSnap.data().commentedPosts);
-            setSavedPosts(docSnap.data().savedPosts);
+            ulikedPosts = docSnap.data().likedPosts;
+            ucommentedPosts = docSnap.data().commentedPosts;
+            usavedPosts = docSnap.data().savedPosts;
 
-            //console.log("likes", likedPosts);
+            console.log("likes", ulikedPosts);
+            console.log("commented", ucommentedPosts);
+            console.log("saves", usavedPosts);
+
             //grab that post id from interaction and delete interaction doc from nested
-            likedPosts.forEach(function (docid) {
+            ulikedPosts.forEach(function (docid) {
                 deleteUserInteraction("posts", docid, "likes", "username");
             });
-            //console.log("commented", commentedPosts);
-            commentedPosts.forEach(function (docid) {
+            ucommentedPosts.forEach(function (docid) {
                 deleteUserInteraction("posts", docid, "comments", "commentAuthorEmail");
             });
-            //console.log("saves", savedPosts);
-            savedPosts.forEach(function (docid) {
+            usavedPosts.forEach(function (docid) {
                 deleteUserInteraction("posts", docid, "savedby", "username");
             });
         } else {
             // doc.data() will be undefined in this case
             console.log("No such document!");
         }
-
-
     }
+
+
     //delete user's account
     async function handelDelete() {
         setLoading(true);
         try {
 
             //verification checks against user's password
-            //await login(ogEmail, password);
+            await login(ogEmail, password);
 
             /** Delete all docs associated with user*/
-            //await getUserInteraction();
+            await getUserInteraction();
 
-
-            //await deleteFollowing();
-           // await deleteDocuments("postTopics", "author.email", ogEmail);            //postTopics
-          //  await deleteDocuments("posts", "author.email",  ogEmail);            // posts
-
-            //todo: delete current user's interactions (nested) from other posts (savedPosts,likedPosts,commentedPosts)
+            await deleteFollowing();
+            await deleteDocuments("postTopics", "author.email", ogEmail);            //postTopics
+            await deleteDocuments("posts", "author.email",  ogEmail);            // posts
 
             // todo:Turn all topics created by this user to anonymous - may be longer because all postTopics are their own post authors
 
-            setLoading(false);
-            console.log("CORRECT PASSWORD");
             /**deletes existance of user - user id doc and their authen**/
-            //deleteDocuments("users", "email", ogEmail);      // users
-             //await deleteU();    //authen
+            deleteDocuments("users", "email", ogEmail);      // users
+            await deleteU();    //authen
 
-             //window.location = "/home"; //go to loading page
+            setLoading(false);
+            window.location = "/home"; //go to loading page
         } catch {
             alert("Incorrect Password");
         }
