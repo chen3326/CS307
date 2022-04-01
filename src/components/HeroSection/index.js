@@ -108,6 +108,12 @@ function HeroSection() {
                                 <HeroH1_2> the choice about darkTheme is false (light) </HeroH1_2>
                             )
                             }
+                            {emailVerified ? (
+                                <HeroH1_2> The current user is Verified </HeroH1_2>
+                            ) : (
+                                <HeroH1_2> The current user is Not Verified </HeroH1_2>
+                            )
+                            }
 
                             <HeroSLogo src={logoDark}/>
 
