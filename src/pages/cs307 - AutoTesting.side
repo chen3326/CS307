@@ -798,7 +798,7 @@
     }]
   }, {
     "id": "7996cc8d-3c29-4c37-bfa0-a4ffc20bc098",
-    "name": "5c) View Saved Posts (1)",
+    "name": "5c) VIew Inner topic",
     "commands": [{
       "id": "16c448fd-162f-4aac-b540-b70ebaac68de",
       "comment": "",
@@ -1707,6 +1707,153 @@
       "target": "css=.sc-bBHxTw:nth-child(1) > .sc-kfPuZi > div:nth-child(3)",
       "targets": [],
       "value": "22/3/2022 | 2:38"
+    }]
+  }, {
+    "id": "3137c3a7-5e91-4c75-8086-afdfd999d87d",
+    "name": "4a) Test click indv post",
+    "commands": [{
+      "id": "76156e84-1d31-4eec-8d3a-d813db24e9a3",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost:3000/home",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4fc9cfcb-b546-4b6b-88b0-8d7e3bbc68db",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1552x832",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "56945e6d-98a3-4246-9c88-8f2b406f1c02",
+      "comment": "",
+      "command": "click",
+      "target": "css=.sc-bBHxTw:nth-child(1) .sc-giYglK",
+      "targets": [
+        ["css=.sc-bBHxTw:nth-child(1) .sc-giYglK", "css:finder"],
+        ["xpath=//div[@id='root']/div[2]/div/div[2]/div/div", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/div/div", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "459aab49-6d68-4dee-ae55-2434ccb71607",
+    "name": "4b) Test indv post button works",
+    "commands": [{
+      "id": "ae0cca6e-c327-40d1-a445-afb30eafb42d",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost:3000/home",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "bd0c915c-9aba-4e0b-a491-c3f73e04f744",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1344x816",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "e6f77755-f048-48bf-96ec-dfdc304567bd",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,82.13333129882812)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "0107d7f7-3f63-4152-b62b-e9d1936c5e4e",
+      "comment": "",
+      "command": "click",
+      "target": "css=.sc-bBHxTw:nth-child(1) .sc-giYglK",
+      "targets": [
+        ["css=.sc-bBHxTw:nth-child(1) .sc-giYglK", "css:finder"],
+        ["xpath=//div[@id='root']/div[2]/div/div[2]/div/div", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/div/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "d58bf6cd-fd7c-46ae-b8aa-eedf2f4212da",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "css=div:nth-child(2) > .MuiButtonBase-root path",
+      "targets": [
+        ["css=div:nth-child(2) > .MuiButtonBase-root path", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "ca481b46-b44a-4772-9ed4-1a63cf6e0136",
+      "comment": "",
+      "command": "click",
+      "target": "css=div:nth-child(2) > .MuiButtonBase-root path",
+      "targets": [
+        ["css=div:nth-child(2) > .MuiButtonBase-root path", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "e772d2f3-3cdd-4b74-b98a-6c0c9bfa9e19",
+      "comment": "",
+      "command": "click",
+      "target": "css=div:nth-child(3) > .MuiButtonBase-root .MuiSvgIcon-root",
+      "targets": [
+        ["css=div:nth-child(3) > .MuiButtonBase-root .MuiSvgIcon-root", "css:finder"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "0cf31397-9484-4864-9eb9-935d474f51fe",
+    "name": "4c) Test indv post come and back",
+    "commands": [{
+      "id": "b526357e-c9d0-4840-9137-ca5f8ea323e8",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost:3000/home",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ec4630ec-671f-469c-bad8-a4307e51408e",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1552x832",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "87341ec7-8d6d-4bc5-bd1b-ed4abd0c203f",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,507.73333740234375)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "bc382389-5dec-4712-b50c-083649879485",
+      "comment": "",
+      "command": "click",
+      "target": "css=.sc-bBHxTw:nth-child(3) .sc-giYglK",
+      "targets": [
+        ["css=.sc-bBHxTw:nth-child(3) .sc-giYglK", "css:finder"],
+        ["xpath=//div[@id='root']/div[2]/div[3]/div[2]/div/div", "xpath:idRelative"],
+        ["xpath=//div[3]/div[2]/div/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "16ac5b56-1176-4e02-b927-aefc3731cc1d",
+      "comment": "",
+      "command": "click",
+      "target": "css=.sc-dJjYzT:nth-child(2) > .sc-dlVxhl",
+      "targets": [
+        ["css=.sc-dJjYzT:nth-child(2) > .sc-dlVxhl", "css:finder"],
+        ["xpath=//div[@id='root']/nav/div/nav/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/home')]", "xpath:href"],
+        ["xpath=//nav/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "2799c13d-b17a-435c-969c-64a4d6c4346e",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,965.3333129882812)",
+      "targets": [],
+      "value": ""
     }]
   }],
   "suites": [{
