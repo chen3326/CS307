@@ -80,63 +80,6 @@
       "value": ""
     }]
   }, {
-    "id": "af6d7d6a-ebc7-4c54-a68d-b16e403fa6a1",
-    "name": "Click Post -> Post Page",
-    "commands": [{
-      "id": "9e090e9a-c04c-4e55-b244-a533b966acdf",
-      "comment": "",
-      "command": "open",
-      "target": "/home",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "1f4c4954-0c8a-4947-a721-11fa482782b9",
-      "comment": "",
-      "command": "setWindowSize",
-      "target": "1920x1175",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "a6211ad7-ea24-4906-8693-ce8a9d9797d8",
-      "comment": "",
-      "command": "storeText",
-      "target": "css=.sc-bBHxTw:nth-child(2) h1",
-      "targets": [],
-      "value": "textVar"
-    }, {
-      "id": "c64d4734-fddf-4eb7-b317-8b78720b22ba",
-      "comment": "",
-      "command": "echo",
-      "target": "${textVar}",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "24f04725-ffff-40fc-8574-e296e9ff4405",
-      "comment": "",
-      "command": "click",
-      "target": "css=.sc-bBHxTw:nth-child(2) .sc-giYglK",
-      "targets": [
-        ["css=.sc-bBHxTw:nth-child(2) .sc-giYglK", "css:finder"],
-        ["xpath=//div[@id='root']/div[2]/div[2]/div[2]/div/div", "xpath:idRelative"],
-        ["xpath=//div[2]/div[2]/div[2]/div/div", "xpath:position"]
-      ],
-      "value": ""
-    }, {
-      "id": "c20b60aa-7447-4b1c-aa72-f43de05ec4ee",
-      "comment": "",
-      "command": "click",
-      "target": "css=.sc-bBHxTw:nth-child(1) h1",
-      "targets": [],
-      "value": ""
-    }, {
-      "id": "f3b08f9f-b55a-49d8-b69c-2ef1165170c1",
-      "comment": "",
-      "command": "assertText",
-      "target": "css=h1",
-      "targets": [],
-      "value": "${textVar}"
-    }]
-  }, {
     "id": "19563718-ff71-4e13-82a0-a6d5e610e7b1",
     "name": "Follow/Unfollow Users",
     "commands": [{
@@ -1853,6 +1796,118 @@
       "command": "runScript",
       "target": "window.scrollTo(0,965.3333129882812)",
       "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "8df64341-8e2f-44eb-83e7-9722a020ee17",
+    "name": "9c) after follow a topic, show topic just followed in profile",
+    "commands": [{
+      "id": "298f3395-e982-4f5c-a6b5-abe2b5f35a67",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost:3000/home",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d0424966-c477-4365-8f17-ab7e9cac71a0",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1552x832",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4817f08a-380a-49ae-9c75-a4a95ffc31fb",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Testing This Post",
+      "targets": [
+        ["linkText=Testing This Post", "linkText"],
+        ["css=.sc-bBHxTw:nth-child(35) a", "css:finder"],
+        ["xpath=//a[contains(text(),'Testing This Post')]", "xpath:link"],
+        ["xpath=//div[@id='root']/div[2]/div[35]/div/div/div/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '/inner_topic')])[32]", "xpath:href"],
+        ["xpath=//div[35]/div/div/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Testing This Post')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "4137d18d-ebf2-4801-b77e-b66da6d14612",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,0)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f4cdd7e7-5298-4e09-8c9d-58351a205b35",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "css=.MuiButton-sizeMedium",
+      "targets": [
+        ["css=.MuiButton-sizeMedium", "css:finder"],
+        ["xpath=(//button[@type='button'])[3]", "xpath:attributes"],
+        ["xpath=//div[@id='root']/p/div/button", "xpath:idRelative"],
+        ["xpath=//div/button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "a8f4038b-2a31-4573-be44-f3392f62e324",
+      "comment": "",
+      "command": "click",
+      "target": "css=.MuiButton-sizeMedium",
+      "targets": [
+        ["css=.MuiButton-sizeMedium", "css:finder"],
+        ["xpath=(//button[@type='button'])[3]", "xpath:attributes"],
+        ["xpath=//div[@id='root']/p/div/button", "xpath:idRelative"],
+        ["xpath=//div/button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "3014d48a-1ba0-43c5-bd88-69845f3db4b4",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "css=.sc-iqseJM:nth-child(4) .MuiButton-label",
+      "targets": [
+        ["css=.sc-iqseJM:nth-child(4) .MuiButton-label", "css:finder"],
+        ["xpath=//div[@id='root']/nav[2]/div/nav[2]/button/span", "xpath:idRelative"],
+        ["xpath=//nav[2]/button/span", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "5e195721-67b5-4774-bcb7-2f11d8112169",
+      "comment": "",
+      "command": "click",
+      "target": "css=.sc-iqseJM:nth-child(4) .MuiButton-label",
+      "targets": [
+        ["css=.sc-iqseJM:nth-child(4) .MuiButton-label", "css:finder"],
+        ["xpath=//div[@id='root']/nav[2]/div/nav[2]/button/span", "xpath:idRelative"],
+        ["xpath=//nav[2]/button/span", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "ac8d9315-b813-40c5-a24a-93c60c01e628",
+      "comment": "",
+      "command": "mouseOut",
+      "target": "css=.sc-iqseJM:nth-child(4) .MuiButton-label",
+      "targets": [
+        ["css=.sc-iqseJM:nth-child(4) .MuiButton-label", "css:finder"],
+        ["xpath=//div[@id='root']/nav[2]/div/nav[2]/button/span", "xpath:idRelative"],
+        ["xpath=//nav[2]/button/span", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "f8db8dee-e016-4216-8d31-47ef43b50a8c",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "linkText=Testing This Post",
+      "targets": [
+        ["linkText=Testing This Post", "linkText"],
+        ["css=a:nth-child(6)", "css:finder"],
+        ["xpath=//a[contains(text(),'Testing This Post')]", "xpath:link"],
+        ["xpath=//div[@id='root']/div/div/div/div[2]/div/a[3]", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '/inner_topic')])[3]", "xpath:href"],
+        ["xpath=//a[3]", "xpath:position"],
+        ["xpath=//a[contains(.,'Testing This Post')]", "xpath:innerText"]
+      ],
       "value": ""
     }]
   }],
