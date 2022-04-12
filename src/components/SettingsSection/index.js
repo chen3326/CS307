@@ -1,8 +1,10 @@
 import * as React from 'react';
+import { useRef } from 'react'
+import emailjs from '@emailjs/browser';
 import {
     Button, Container, Switch,
     InputLabel, Select,
-    FormControl, TextField, MenuItem, FormControlLabel, FormGroup
+    FormControl, TextField, MenuItem, FormControlLabel, FormGroup, Popper, Fade, Paper, CardActions
 } from "@mui/material";
 import Grid from '@mui/material/Grid';
 import Stack from "@mui/material/Stack";
@@ -416,6 +418,28 @@ function SettingsSection() {
         }
         setLoading(false);
     }
+    const [openWindow, setOpenWindow] = React.useState(false);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [placement, setPlacement] = React.useState();
+    const handleClickWindow = (newPlacement) => (event) => {
+        setAnchorEl(event.currentTarget);
+        setOpenWindow((prev) => placement !== newPlacement || !prev);
+        setPlacement(newPlacement);
+    };
+
+    const form = useRef();
+
+    const sendEmail = (e) => {
+        e.preventDefault();
+
+        emailjs.sendForm('service_cs307-24-22Sprin', 'template_cs307team242022', form.current, 'oM3GlMk42XHPtF18O')
+            .then((result) => {
+                console.log(result.text);
+            }, (error) => {
+                console.log(error.text);
+            });
+        window.location.pathname = "/home";
+    };
 
     //creates loading page and controls display
     const [user, buffering, error] = useAuthState(auth);
@@ -782,7 +806,53 @@ function SettingsSection() {
                                             </Grid>
 
                                         </Grid>
+
+                                            <Stack>
+
+                                                <CardActions>
+                                                    <Button variant={"contained"} style={{maxWidth:'200px', background:'#8B74BD' }} onClick={handleClickWindow('top-start')}
+                                                    >Give feedback</Button>
+                                                    <Popper open={openWindow} anchorEl={anchorEl} placement={placement} transition>
+                                                        {({TransitionProps}) => (
+                                                            <Fade {...TransitionProps} timeout={350}>
+
+                                                                <Paper>
+                                                                    <label style={{marginLeft:'15px', marginRight:'15px'}}>
+                                                                        Give Feedback to us here (Feedback will be assumed to be anonymous)
+                                                                    </label>
+                                                                    <form ref={form} onSubmit={sendEmail}>
+                                                                        <textarea
+                                                                            style={{
+                                                                                width: '400px',
+                                                                                height: '80px',
+                                                                                marginTop: '10px',
+                                                                                marginBottom: '15px',
+                                                                                marginLeft:'15px',
+                                                                                marginRight:'15px',
+                                                                                border: '2px solid #0D67B5',
+                                                                                borderRadius: '5px'
+                                                                                }}
+                                                                            placeholder=" Feedback..."
+                                                                            name= "message"
+                                                                            className='form-control'
+                                                                        />
+                                                                        <input
+                                                                            style={{ marginBottom:'10px'}}
+                                                                            type="submit"
+                                                                            value="Submit"
+                                                                            className='form-control'
+                                                                        />
+                                                                    </form>
+                                                                </Paper>
+
+                                                            </Fade>
+                                                        )}
+                                                    </Popper>
+                                                </CardActions>
+                                            </Stack>
+
                                     </UserSettings>
+
 
                                     {/*BUTTONS*/}
                                     <Stack direction="row" spacing={30} alignItems="center">
@@ -832,6 +902,7 @@ function SettingsSection() {
                                                 </DialogActions>
                                             </Dialog>
                                         </div>
+
                                     </Stack>
                                 </Grid>
                             </Grid>
