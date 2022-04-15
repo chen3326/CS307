@@ -1,4 +1,4 @@
-import OtherInteraction from "../components/ProfileSection/OtherPplInteraction";
+import OtherInteraction from "../components/PostDisplaySection/OtherPplInteraction";
 import SidebarSection from "../components/SidebarSection";
 import NavSection from "../components/NavbarSection";
 
