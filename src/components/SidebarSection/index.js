@@ -12,7 +12,7 @@ import {
 
 import HomeIcon from '@mui/icons-material/Home';
 import SavedIcon from '@mui/icons-material/BookmarkAdded';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ContactsIcon from '@mui/icons-material/Contacts';import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import CommentIcon from '@mui/icons-material/Comment';
 import {collection, onSnapshot, query, where} from "firebase/firestore";
 import {auth, database} from "../../firebase";
@@ -69,6 +69,9 @@ function Sidebar(){
                             </SideBtn>
                             <SideBtn>
                                 <SideBtnLink href="/saved"> <SavedIcon/></SideBtnLink>
+                            </SideBtn>
+                            <SideBtn>
+                                <SideBtnLink href="/interactions"> <ContactsIcon/></SideBtnLink>
                             </SideBtn>
 
                         </SidebarContainer>

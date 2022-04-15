@@ -49,7 +49,6 @@ import {getAuth, onAuthStateChanged} from "firebase/auth";
 function TabPanel(props) {
     const {children, value, index, ...other} = props;
 
-
     return (
         <div
             role="tabpanel"
@@ -435,6 +434,13 @@ function OutlinedCard() {
 
 function ProfileSection() {
 
+    const [email, setEmail] = useState(""); //email for user auth
+    const [nickName, setnickName] = useState("");
+    const [major, setMajor] = useState("");
+    const [age, setAge] = useState(0)
+    const [year, setYear] = useState(0);
+    const [bio, setBio] = useState("");
+    const [profilePic, setProfilePic] = useState("");
 
     const [user, loading, error] = useAuthState(auth);
     const {profile_uid} = useParams();
@@ -453,6 +459,12 @@ function ProfileSection() {
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 setThemeModeForCheckTheme(doc.data().author.darkTheme);
+                setnickName(doc.data().author.nickName);
+                setBio(doc.data().author.bio);
+                setAge(doc.data().author.age);
+                setMajor(doc.data().author.major)
+                setYear(doc.data().author.year);
+                setProfilePic(doc.data().author.profilePic);
             });
         });
     }
@@ -558,7 +570,8 @@ function ProfileSection() {
                             alignItems="center"
                             item xs={4}
                         >
-                            <ProfilePic src={pic}/>
+                            <ProfilePic src={profilePic}/>
+
 
                         </Grid>
 
@@ -707,6 +720,7 @@ function ProfileSection() {
             </ProfileContainer>
         )
         } else {
+            //DARK MODE
             return (
                 <ProfileContainerBlack style={{padding: '100px'}}>
                     <Container fixed>
@@ -727,7 +741,7 @@ function ProfileSection() {
                                 alignItems="center"
                                 item xs={4}
                             >
-                                <ProfilePic src={pic}/>
+                                <ProfilePic src={profilePic}/>
 
                             </Grid>
 
