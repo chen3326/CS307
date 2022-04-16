@@ -23,7 +23,7 @@ import {
     deleteDoc,
     updateDoc,
     arrayUnion,
-    arrayRemove, query, where, getDoc,
+    arrayRemove, query, where, getDoc, orderBy,
 
 } from "firebase/firestore";
 import {auth, database} from "../../firebase";
@@ -62,12 +62,13 @@ function ActivityCard({
     const [uid, setUid] = useState("");
     const [commentList, setCommentList] = useState([]);
     const commentsCollectionRef = collection(database, 'posts', postid, 'comments',)
-    const [likes, setLikes] = useState([]);
-    const [saved, setSaved] = useState([]);
-    const [hasLiked, setHasLiked] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false);
-    const [commentProfilePic, setCommentProfilePic] = useState("");
-    const [commentName, setCommentName] = useState("");
+
+    const [likesList, setLikesList] = useState([]);
+    const likesCollectionRef = collection(database, 'posts', postid, 'likes',)
+
+    const [accountName, setAccountName] = useState("");
+    const [accountProfilePic, setAccountProfilePic] = useState("");
+    const [accountuid, setAccountuid] = useState("");
 
     const [themeModeForCheckTheme, setThemeModeForCheckTheme] = useState(false);
     const [themeEmail, setThemeEmail] = useState("");
@@ -82,20 +83,6 @@ function ActivityCard({
         });
     }
 
-    async function getCommentData(uid){
-        console.log(uid);
-
-        const ref = doc(database, "users", uid);
-        const udocSnap = await getDoc(ref);
-
-        if (udocSnap.exists()) {
-            setCommentProfilePic(udocSnap.data().author.profilePic);
-            setCommentName(udocSnap.data().author.nickName);
-        } else {
-            console.log("comment pull error");
-        }
-    }
-
     //get comments
     useEffect(() => {
         const getComments = async () => {
@@ -105,6 +92,28 @@ function ActivityCard({
         getComments();
     });
 
+    //get all likes on post
+    useEffect(() => {
+        const getLikes = async () => {
+            const data = await getDocs(likesCollectionRef);
+            setLikesList(data.docs.map((doc) => ({...doc.data(), id: doc.id})));
+        };
+        getLikes();
+    });
+
+    //get account from user's likes and sets profile, name, and like to profile
+    async function getAccount(likesEmail) {
+        const q = query(collection(database, "users"), where("email", "==", likesEmail));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                setAccountName(doc.data().author.nickName);
+                setAccountProfilePic(doc.data().author.profilePic);
+                setAccountuid(doc.data().id);
+            });
+        });
+    }
+
+    //DISPLAY AND LOADING
     const [user, buffering, error] = useAuthState(auth);
     if (buffering) {
         return (
@@ -140,33 +149,31 @@ function ActivityCard({
                     <PostDisplayContainer>
                         <div>Account here!!</div>
                         <NewLine>
-                            {commentList.map((account) => {
-                                //console.log(comment.commentAuthorId);
-                                //getCommentData(comment.commentAuthorId);
+                            {likesList.map((account) => {
+                                getAccount(account.username);
+
                                 return (
                                     <NewLine>
+
                                         <Stack direction="row" alignItems="center" spacing={1}>
                                             {/*author email and profile*/}
                                             <Avatar
                                                 sx={{width: 30, height: 30}}
-                                                alt={account.commentAuthorEmail}
-                                                src={commentProfilePic}
+                                                alt={account.username}
+                                                src={accountProfilePic}
                                             />
 
                                             <Stack direction="column" spacing={1}>
-                                                <h3>{commentName}</h3>
                                                 <Link
                                                     to={{
-                                                        pathname: "/profile",
-                                                        state: account.commentAuthorEmail
+                                                        pathname: `/profile/${accountuid}`,
+                                                        state: account.username
                                                         // your data array of objects
                                                     }}
                                                 >
-                                                    {account.commentAuthorEmail}
+                                                    {accountName}
                                                 </Link>
-
                                             </Stack>
-
                                         </Stack>
                                     </NewLine>
                                 )
