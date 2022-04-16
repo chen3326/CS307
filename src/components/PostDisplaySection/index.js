@@ -80,6 +80,7 @@ function PostDisplaySection() {
                                 timestamp={post?.timestamp}
                                 likes={post?.likes}
                                 authorid={post?.author?.id}
+                                allowComments={post?.allowComments}
                             />
                         )
                     })}

@@ -55,6 +55,11 @@ function MakePost(){
 
 
     const [invisible, setInvisible] = React.useState(false);
+    const [allowComments, setAllowComments] = React.useState(true);
+    const AllowCommentsSet = () =>{
+        setAllowComments(!allowComments);
+    }
+
     const AnonymousSet = () => {
         setInvisible(!invisible);
     };
@@ -86,6 +91,7 @@ function MakePost(){
             imageUrl3:imageUrl3,
             FileURl:FileURl,
             timestamp:serverTimestamp(),
+            allowComments:allowComments
 
 
         });
@@ -407,6 +413,7 @@ function MakePost(){
                             </div>
                         </Stack>
 
+
                         <label> Post: (Limit 500 Characters)</label>
                         <div className="inputGp" >
 
@@ -488,6 +495,18 @@ function MakePost(){
                                 </Stack>
                             )
                             }
+
+                        </div>
+                    </Stack>
+
+                    <Stack spacing={1} direction="row">
+                        <div>
+
+                            <FormControlLabel
+                                sx={{ color: 'primary' }}
+                                control={<Switch checked={allowComments} onChange={AllowCommentsSet} />}
+                                label="allow comments"
+                            />
 
                         </div>
                     </Stack>
