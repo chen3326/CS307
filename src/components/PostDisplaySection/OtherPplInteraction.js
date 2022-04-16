@@ -152,13 +152,13 @@ function OtherInteraction() {
                                     </Tabs>
                                 </AppBar>
                                 <TabPanel value={value} index={0} dir={theme.direction}>
-                                    <div>saves</div>
                                     <TabCard>
                                         {postLists1.map((post) => {
                                             return (
                                                 <div>
                                                     {post.author.id === profile_uid ? (
                                                         <ActivityCard
+                                                            tabType={"likes"}
                                                             postid={post?.id}
                                                             title={post?.title}
                                                             topic={post?.topic}
@@ -183,7 +183,35 @@ function OtherInteraction() {
                                     </TabCard>
                                 </TabPanel>
                                 <TabPanel value={value} index={1} dir={theme.direction}>
-                                    <div>likes</div>
+                                    <TabCard>
+                                        {postLists1.map((post) => {
+                                            return (
+                                                <div>
+                                                    {post.author.id === profile_uid ? (
+                                                        <ActivityCard
+                                                            tabType={"savedby"}
+                                                            postid={post?.id}
+                                                            title={post?.title}
+                                                            topic={post?.topic}
+                                                            topicAuthor={post?.topicAuthor?.email}
+                                                            postText={post?.postText}
+                                                            authorEmail={post?.author?.email}
+                                                            imageUrl={post?.imageUrl}
+                                                            imageUrl2={post?.imageUrl2}
+                                                            imageUrl3={post?.imageUrl3}
+                                                            FileURl={post?.FileURl}
+                                                            timestamp={post?.timestamp}
+                                                            likes={post?.likes}
+                                                            authorid={post?.author?.id}
+                                                        />
+                                                    ) : (
+                                                        <div/>
+
+                                                    )}
+                                                </div>
+                                            )
+                                        })}
+                                    </TabCard>
                                 </TabPanel>
                                 <TabPanel value={value} index={2} dir={theme.direction}>
                                     <div>comments</div>

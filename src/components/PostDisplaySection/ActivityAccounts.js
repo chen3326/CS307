@@ -18,12 +18,7 @@ import {
     collection,
     doc,
     getDocs,
-    onSnapshot,
-    setDoc,
-    deleteDoc,
-    updateDoc,
-    arrayUnion,
-    arrayRemove, query, where, getDoc, orderBy,
+    onSnapshot,query, where, getDoc, orderBy,
 
 } from "firebase/firestore";
 import {auth, database} from "../../firebase";
@@ -33,10 +28,9 @@ import Avatar from '@mui/material/Avatar';
 
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {useAuthState} from "react-firebase-hooks/auth";
-import {HeroContainer, HeroContainer2, HeroContent, HeroH1_2, HeroSLogo} from "../HeroSection/HeroElements";
-import logo from "../../images/Boiler Breakouts-logos.jpeg";
 
 function ActivityCard({
+                     tabType,
                      postid,
                      title,
                      topic,
@@ -64,7 +58,7 @@ function ActivityCard({
     const commentsCollectionRef = collection(database, 'posts', postid, 'comments',)
 
     const [likesList, setLikesList] = useState([]);
-    const likesCollectionRef = collection(database, 'posts', postid, 'likes',)
+    const likesCollectionRef = collection(database, 'posts', postid, tabType,)
 
     const [accountName, setAccountName] = useState("");
     const [accountProfilePic, setAccountProfilePic] = useState("");
@@ -92,7 +86,7 @@ function ActivityCard({
         getComments();
     });
 
-    //get all likes on post
+    //get all tabTypes (like or save) on post
     useEffect(() => {
         const getLikes = async () => {
             const data = await getDocs(likesCollectionRef);
@@ -102,6 +96,7 @@ function ActivityCard({
     });
 
     //get account from user's likes and sets profile, name, and like to profile
+    //todo: find a way to have setLikeList have the users profile instead
     async function getAccount(likesEmail) {
         const q = query(collection(database, "users"), where("email", "==", likesEmail));
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -147,10 +142,10 @@ function ActivityCard({
                     </PostHeader>
 
                     <PostDisplayContainer>
-                        <div>Account here!!</div>
+                        <div>{tabType}</div>
                         <NewLine>
                             {likesList.map((account) => {
-                                getAccount(account.username);
+                                getAccount(account.username); //gets display for accounts
 
                                 return (
                                     <NewLine>
