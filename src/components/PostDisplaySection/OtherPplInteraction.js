@@ -34,7 +34,7 @@ import {PostDisplayContainer} from "./PostDisplayElements";
 import ActivityCard from "./ActivityAccounts";
 
 
-
+//prop code from material ui
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -54,13 +54,11 @@ function TabPanel(props) {
         </div>
     );
 }
-
 TabPanel.propTypes = {
     children: PropTypes.node,
     index: PropTypes.number.isRequired,
     value: PropTypes.number.isRequired,
 };
-
 function a11yProps(index) {
     return {
         id: `simple-tab-${index}`,
@@ -68,7 +66,7 @@ function a11yProps(index) {
     };
 }
 
-//shows all other users' interactions with the current user's posts (likes, saves, ?comments)
+//shows all other users' interactions with the current user's posts (likes, saves, ?comments) all on one page
 function OtherInteraction() {
     const [user, loading, error] = useAuthState(auth);
     const [queried, setQueried] = useState(false); //lock
@@ -95,22 +93,21 @@ function OtherInteraction() {
         });
     }
 
+    //get all posts by this user in order by time
     useEffect(() => {
         onSnapshot(query(postsCollectionRef, orderBy('timestamp', 'desc')), snapshot => {
             setPostList1(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})));
         })
     });
 
-    //DISPLAY
+    //DISPLAY and LOADING
     if (loading) {
-        return <div> Loading... </div>;
+        return <div> Loading... </div>; //preloading
     } else if (user) {
         onAuthStateChanged(auth, (user) => {
             onAuthStateChanged(auth, (user) => {
                 if (user&&!queried) {
                     setProfile_uid(auth.currentUser.uid);
-                    console.log(profile_uid);
-
                     setThemeEmail(user.email);
                     getUserTheme();
                     setQueriedTheme(true);
@@ -130,11 +127,12 @@ function OtherInteraction() {
                         spacing={2}
                     >
 
-                       <h1>Activity</h1>
+                        <h1>Activity</h1>
                         <div>
                             Here you can see all of the interaction on your posts from others all on one page!
                         </div>
 
+                        {/*display tab pannels of likes, saves, and ?comments*/}
                         <PostDisplayContainer>
                             <Box sx={{bgcolor: 'orange', borderRadius: '10px', width: 700}}>
                                 <AppBar position="static" sx={{borderRadius: '10px'}}>
@@ -151,6 +149,7 @@ function OtherInteraction() {
                                         <Tab label="Comments" {...a11yProps(2)} />
                                     </Tabs>
                                 </AppBar>
+                                {/*LIKES*/}
                                 <TabPanel value={value} index={0} dir={theme.direction}>
                                     <TabCard>
                                         {postLists1.map((post) => {
@@ -182,6 +181,8 @@ function OtherInteraction() {
                                         })}
                                     </TabCard>
                                 </TabPanel>
+
+                                {/*SAVES*/}
                                 <TabPanel value={value} index={1} dir={theme.direction}>
                                     <TabCard>
                                         {postLists1.map((post) => {
@@ -213,13 +214,13 @@ function OtherInteraction() {
                                         })}
                                     </TabCard>
                                 </TabPanel>
+
+                                {/*COMMENTS*/}
                                 <TabPanel value={value} index={2} dir={theme.direction}>
                                     <div>comments</div>
                                 </TabPanel>
                             </Box>
                         </PostDisplayContainer>
-
-
                     </Grid>
                 </Container>
             </ProfileContainer>

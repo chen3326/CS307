@@ -29,6 +29,7 @@ import Avatar from '@mui/material/Avatar';
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {useAuthState} from "react-firebase-hooks/auth";
 
+//formating display to show all of the accounts that like/follow this post
 function ActivityCard({
                      tabType,
                      postid,
@@ -57,13 +58,17 @@ function ActivityCard({
     const [commentList, setCommentList] = useState([]);
     const commentsCollectionRef = collection(database, 'posts', postid, 'comments',)
 
+    //tag var (likes, saved)
     const [likesList, setLikesList] = useState([]);
     const likesCollectionRef = collection(database, 'posts', postid, tabType,)
 
+    //account var
     const [accountName, setAccountName] = useState("");
     const [accountProfilePic, setAccountProfilePic] = useState("");
     const [accountuid, setAccountuid] = useState("");
+    const accountList = [];
 
+    //darkmode var
     const [themeModeForCheckTheme, setThemeModeForCheckTheme] = useState(false);
     const [themeEmail, setThemeEmail] = useState("");
     const [queriedTheme, setQueriedTheme] = useState(false);
@@ -77,40 +82,45 @@ function ActivityCard({
         });
     }
 
-    //get comments
-    useEffect(() => {
-        const getComments = async () => {
-            const data = await getDocs(commentsCollectionRef);
-            setCommentList(data.docs.map((doc) => ({...doc.data(), id: doc.id})));
-        };
-        getComments();
-    });
-
-    //get all tabTypes (like or save) on post
+    //get all tabTypes (like or save) on post from the posts collection
     useEffect(() => {
         const getLikes = async () => {
             const data = await getDocs(likesCollectionRef);
             setLikesList(data.docs.map((doc) => ({...doc.data(), id: doc.id})));
+
+            /*
+            likesList.map((account) => {
+                getAccount(account.uid); //gets display for each account
+                console.log("out", accountList);
+            })
+
+             */
+
         };
         getLikes();
     });
 
     //get account from user's likes and sets profile, name, and like to profile
-    //todo: find a way to have setLikeList have the users profile instead
-    async function getAccount(likesEmail) {
-        const q = query(collection(database, "users"), where("email", "==", likesEmail));
-        const unsubscribe = onSnapshot(q, (querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                setAccountName(doc.data().author.nickName);
-                setAccountProfilePic(doc.data().author.profilePic);
-                setAccountuid(doc.data().id);
-            });
-        });
+    //todo: if have time, find a way to deal w async loading to allow for automatic
+    // change if user changed something in settings ie. their name
+    async function getAccount(accountuid, callback) {
+        //finds profile doc from users and matches based on uid
+        const docRef = doc(database, "users", accountuid);
+        const data = await getDoc(docRef);
+
+        //console.log("accountlist:", accountList);
+        //console.log("account:", data.data());
+
+        accountList.push(data.data()); //pushes account from users doc to array
+        //accountList.push("hello");
+
+        console.log("in", accountList);
     }
 
     //DISPLAY AND LOADING
     const [user, buffering, error] = useAuthState(auth);
     if (buffering) {
+        //preloading
         return (
             <h1 style={{
                 display: 'flex',
@@ -122,17 +132,18 @@ function ActivityCard({
         );
     } else if (user) {
         //get current user's email and settings data
+        console.log("START AGAIN");
         onAuthStateChanged(auth, (user) => {
             if (user&&!queriedTheme) {
                 setThemeEmail(user.email); //sets user's email to email
-                getUserTheme();
+                getUserTheme(); //check for darkmode
                 setQueriedTheme(true); //stops overwriting var from firebase backend
             }
         });
-
+        //todo: darkmode
         if (!themeModeForCheckTheme) {
+            {/*DISPLAY CARDS*/}
             return (
-
                 <Post>
                     <PostHeader>
                         <PostHeaderTitle>
@@ -142,37 +153,37 @@ function ActivityCard({
                     </PostHeader>
 
                     <PostDisplayContainer>
-                        <div>{tabType}</div>
+                        {/*<div>{tabType}</div>*/}
                         <NewLine>
-                            {likesList.map((account) => {
-                                getAccount(account.username); //gets display for accounts
+                            {
+                                likesList.map((doc) => {
+                                    {/*profile pictures and names(linked to profile)*/}
+                                    return (
+                                        <NewLine>
+                                            <Stack direction="row" alignItems="center" spacing={2}>
+                                                {/*author email and profile*/}
+                                                <Avatar
+                                                    sx={{width: 50, height: 50}}
+                                                    alt={doc.nickName}
+                                                    src={doc.profilePic}
+                                                />
 
-                                return (
-                                    <NewLine>
-
-                                        <Stack direction="row" alignItems="center" spacing={1}>
-                                            {/*author email and profile*/}
-                                            <Avatar
-                                                sx={{width: 30, height: 30}}
-                                                alt={account.username}
-                                                src={accountProfilePic}
-                                            />
-
-                                            <Stack direction="column" spacing={1}>
-                                                <Link
-                                                    to={{
-                                                        pathname: `/profile/${accountuid}`,
-                                                        state: account.username
-                                                        // your data array of objects
-                                                    }}
-                                                >
-                                                    {accountName}
-                                                </Link>
+                                                <Stack direction="column" spacing={1}>
+                                                    <Link
+                                                        to={{
+                                                            pathname: `/profile/${doc.id}`,
+                                                            state: doc.nickName
+                                                            // your data array of objects
+                                                        }}
+                                                    >
+                                                        {doc.nickName}
+                                                    </Link>
+                                                </Stack>
                                             </Stack>
-                                        </Stack>
-                                    </NewLine>
-                                )
-                            })}
+                                        </NewLine>
+                                    )
+                                })
+                            }
                         </NewLine>
                     </PostDisplayContainer>
                 </Post>

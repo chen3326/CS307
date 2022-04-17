@@ -27,7 +27,7 @@ import {addDoc, setDoc, collection, doc, arrayUnion, arrayRemove,} from "firebas
 import Grid from "@mui/material/Grid";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
 import imageCompression from "browser-image-compression";
-import {getAuth} from "firebase/auth";
+import {getAuth, updateProfile} from "firebase/auth";
 
 
 //stying margins for ux
@@ -112,8 +112,9 @@ function SignUpUser() {
                 major: major,
                 year: year,
                 bio: bio,
-                profilePic:profilePic,
+                profilePic: profilePic,
                 privateUser: false,
+                darkTheme: false,
             },
             following:arrayUnion(),
             followingTopics:arrayUnion(),
@@ -121,6 +122,12 @@ function SignUpUser() {
             likedPosts:arrayUnion(),
             commentedPosts: arrayUnion(),
         });
+
+        //set up current user variables for faster pull when creating posts
+        await updateProfile(auth.currentUser, {
+            displayName: nickName, photoURL: profilePic
+        });
+
         window.location.pathname = "/email_verification"; //redirects now logged in user to email verification page
     };
 

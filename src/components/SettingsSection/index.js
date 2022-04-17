@@ -27,7 +27,7 @@ import {
 } from "firebase/firestore";
 import {useAuth, database, storage, auth, deleteU, login} from "../../firebase";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
-import {getAuth, onAuthStateChanged, updateEmail} from "firebase/auth";
+import {getAuth, onAuthStateChanged, updateEmail, updateProfile} from "firebase/auth";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {useEffect, useState} from "react";
 
@@ -139,7 +139,7 @@ function SettingsSection() {
     //add user to database in ./users
     const editUser = async () => {
         //set doc overwrites the original doc,thus updating it
-        await updateDoc(doc(database,"users",getAuth().currentUser.uid),{
+        await updateDoc(doc(database,"users", auth.currentUser.uid),{
             id: auth.currentUser.uid,
             email: email,
             author: {
@@ -148,13 +148,22 @@ function SettingsSection() {
                 major: major,
                 year: year,
                 bio: bio,
-                profilePic:profilePic,
+                profilePic: profilePic,
                 privateUser: privateUser,
                 darkTheme: darkTheme,
             },
         });
+
+
+        //update current user settings for pulling info easier when creating posts
+        await updateProfile(auth.currentUser, {
+            displayName: nickName, photoURL: profilePic
+        });
+
         await handleProfClick()//redirects now logged-in user to homepage
+
     };
+
     async function handleProfClick() {
         window.location = `/profile/${user.uid}`;
     }

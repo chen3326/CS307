@@ -138,9 +138,10 @@ function OnePost({
             });
         } else {
             await setDoc(doc(database, "posts", postid, "likes", getAuth().currentUser.uid), {
+                uid: getAuth().currentUser.uid,
                 username: getAuth().currentUser.email,
-
-
+                nickName: getAuth().currentUser.displayName,
+                profilePic: getAuth().currentUser.photoURL,
             });
 
             await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
@@ -160,9 +161,10 @@ function OnePost({
                 savedPosts: arrayUnion(postid)
             });
             await setDoc(doc(database, "posts", postid, "savedby", getAuth().currentUser.uid), {
+                uid: getAuth().currentUser.uid,
                 username: getAuth().currentUser.email,
-
-
+                nickName: getAuth().currentUser.displayName,
+                profilePic: getAuth().currentUser.photoURL,
             });
         }
     };
