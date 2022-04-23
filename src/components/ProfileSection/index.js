@@ -441,7 +441,7 @@ function ProfileSection() {
     const [year, setYear] = useState(0);
     const [bio, setBio] = useState("");
     const [profilePic, setProfilePic] = useState("");
-
+    const [privateProfile, setPrivateProfile] = useState(false);
     const [user, loading, error] = useAuthState(auth);
     const {profile_uid} = useParams();
     const [hasFollowed, setHasFollowed] = useState(false);
@@ -465,9 +465,23 @@ function ProfileSection() {
                 setMajor(doc.data().author.major)
                 setYear(doc.data().author.year);
                 setProfilePic(doc.data().author.profilePic);
+                setPrivateProfile(doc.data().author.privateUser)
             });
         });
     }
+
+    async function getprivatemode(){
+        //compare email to other users in collection
+        const q = query(collection(database, "users"), where("email", "==", profileUser));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+             setPrivateProfile(doc.data().author.privateUser)
+            });
+        });
+    }
+
+
+
 
     async function handleProfClick(id) {
         window.location = `/profile/${id}`;
@@ -540,281 +554,299 @@ function ProfileSection() {
     if (loading) {
         return <div> Loading... </div>;
     } else if (user) {
-        onAuthStateChanged(auth, (user) => {
-            if (user&&!queriedTheme) {
-                setThemeEmail(user.email); //sets user's email to email
-                getUserTheme();
-                setQueriedTheme(true); //stops overwriting var from firebase backend
-            }
-        });
-
-        if (!themeModeForCheckTheme) {
-        return (
-            //Light Mode
-            <ProfileContainer style={{padding: '80px'}}>
-                <Container fixed>
-
-                    <Grid
-                        container
-                        direction="row"
-                        justifyContent="center"
-                        alignItems="flex-start"
-                        spacing={2}
-                    >
-
-                        <Grid
-                            // LHS Column
-                            container
-                            direction="column"
-                            justifyContent="flex-start"
-                            alignItems="center"
-                            item xs={4}
-                        >
-                            <ProfilePic src={profilePic}/>
+        getprivatemode()
+        if (user.email===profileUser || !privateProfile ){
 
 
-                        </Grid>
+            onAuthStateChanged(auth, (user) => {
+                if (user&&!queriedTheme) {
+                    setThemeEmail(user.email); //sets user's email to email
+                    getUserTheme();
+                    setQueriedTheme(true); //stops overwriting var from firebase backend
+                }
+            });
 
-                        <Grid
-                            // RHS Column
-                            container
-                            direction="column"
-                            justifyContent="flex-start"
-                            alignItems="stretch"
-                            item xs={8}
-
-                        >
+            if (!themeModeForCheckTheme) {
+                return (
+                    //Light Mode
+                    <ProfileContainer style={{padding: '80px'}}>
+                        <Container fixed>
 
                             <Grid
-                                // Name and Follow Button
                                 container
-                                direction="column"
-                                justifyContent="flex-start"
+                                direction="row"
+                                justifyContent="center"
                                 alignItems="flex-start"
+                                spacing={2}
                             >
-                                <UserName>{profileUser}</UserName>
-
-
-                                {profile_following.map((this_user) => {
-
-                                    return (
-
-
-                                        <Button onClick={() => handleProfClick(this_user.id)}>
-                                            {this_user.email}
-                                        </Button>
-
-
-                                    )
-
-
-                                })}
-
-                                {topics_following.map((this_topic) => {
-
-                                    return (
-
-
-                                        <Link to={{
-                                            pathname: "/inner_topic",
-                                            state: this_topic.topicName,
-                                            topicAuthor: this_topic.topicAuthor,
-                                            // your data array of objects
-                                        }}
-                                        >
-                                            {this_topic.topicName}
-                                        </Link>
-
-
-                                    )
-
-
-                                })}
-
 
                                 <Grid
-                                    // Follow Button container
+                                    // LHS Column
                                     container
                                     direction="column"
                                     justifyContent="flex-start"
-                                    alignItems="flex-start"
-                                >
-
-                                    <div>
-                                        {hasFollowed ? (
-
-                                            <FollowButton>
-                                                <Button
-                                                    container
-                                                    direction="column"
-                                                    justifyContent="center"
-                                                    alignItems="center"
-                                                    // fullWidth={true}
-
-                                                    variant="outlined"
-                                                    onClick={followUser}>unfollow</Button>
-                                            </FollowButton>
-
-                                        ) : (
-
-                                            <Button
-                                                container
-                                                direction="column"
-                                                justifyContent="center"
-                                                alignItems="center"
-                                                // fullWidth={true}
-
-                                                variant="outlined"
-                                                onClick={followUser}>follow</Button>
-
-                                        )}
-                                    </div>
-
-                                </Grid>
-                            </Grid>
-
-
-                            <UserStats>
-                                <Grid
-                                    // User Stats
-                                    container
-                                    direction="row"
                                     alignItems="center"
-                                    justifyContent="center"
-                                    spacing={2}
+                                    item xs={4}
                                 >
-                                    <Grid
-                                        container
-                                        direction="column"
-                                        alignItems="center"
-                                        justifyContent="center"
-                                        item xs={4}
-                                    >
+                                    <ProfilePic src={profilePic}/>
 
-                                    </Grid>
-                                    <Grid container
-                                          direction="column"
-                                          alignItems="center"
-                                          justifyContent="center"
-                                          item xs={4}
-                                    >
 
-                                    </Grid>
-                                    <Grid container
-                                          direction="column"
-                                          alignItems="center"
-                                          justifyContent="center"
-                                          item xs={4}
-                                    >
-
-                                    </Grid>
                                 </Grid>
-                            </UserStats>
-
-
-                            <FullWidthTabs/>
-
-                        </Grid>
-                    </Grid>
-                </Container>
-            </ProfileContainer>
-        )
-        } else {
-            //DARK MODE
-            return (
-                <ProfileContainerBlack style={{padding: '100px'}}>
-                    <Container fixed>
-
-                        <Grid
-                            container
-                            direction="row"
-                            justifyContent="center"
-                            alignItems="flex-start"
-                            spacing={2}
-                        >
-
-                            <Grid
-                                // LHS Column
-                                container
-                                direction="column"
-                                justifyContent="flex-start"
-                                alignItems="center"
-                                item xs={4}
-                            >
-                                <ProfilePic src={profilePic}/>
-
-                            </Grid>
-
-                            <Grid
-                                // RHS Column
-                                container
-                                direction="column"
-                                justifyContent="flex-start"
-                                alignItems="stretch"
-                                item xs={8}
-
-                            >
 
                                 <Grid
-                                    // Name and Follow Button
+                                    // RHS Column
                                     container
                                     direction="column"
                                     justifyContent="flex-start"
-                                    alignItems="flex-start"
+                                    alignItems="stretch"
+                                    item xs={8}
+
                                 >
-                                    <UserNameBlack>{profileUser}</UserNameBlack>
-
-
-                                    {profile_following.map((this_user) => {
-
-                                        return (
-
-
-                                            <Button onClick={() => handleProfClick(this_user.id)} style={{color:'lightblue'}}>
-                                                {this_user.email}
-                                            </Button>
-
-
-                                        )
-
-
-                                    })}
-
-                                    {topics_following.map((this_topic) => {
-
-                                        return (
-
-
-                                            <Link to={{
-                                                pathname: "/inner_topic",
-                                                state: this_topic.topicName,
-                                                topicAuthor: this_topic.topicAuthor,
-                                                // your data array of objects
-                                            }}
-                                                  style={{color:'#F0E68C'}}
-                                            >
-                                                {this_topic.topicName}
-                                            </Link>
-
-
-                                        )
-
-
-                                    })}
-
 
                                     <Grid
-                                        // Follow Button container
+                                        // Name and Follow Button
                                         container
                                         direction="column"
                                         justifyContent="flex-start"
                                         alignItems="flex-start"
                                     >
+                                        <UserName>{profileUser}</UserName>
 
-                                        <div>
-                                            {hasFollowed ? (
 
-                                                <FollowButton>
+                                        {profile_following.map((this_user) => {
+
+                                            return (
+
+
+                                                <Button onClick={() => handleProfClick(this_user.id)}>
+                                                    {this_user.email}
+                                                </Button>
+
+
+                                            )
+
+
+                                        })}
+
+                                        {topics_following.map((this_topic) => {
+
+                                            return (
+
+
+                                                <Link to={{
+                                                    pathname: "/inner_topic",
+                                                    state: this_topic.topicName,
+                                                    topicAuthor: this_topic.topicAuthor,
+                                                    // your data array of objects
+                                                }}
+                                                >
+                                                    {this_topic.topicName}
+                                                </Link>
+
+
+                                            )
+
+
+                                        })}
+
+
+                                        <Grid
+                                            // Follow Button container
+                                            container
+                                            direction="column"
+                                            justifyContent="flex-start"
+                                            alignItems="flex-start"
+                                        >
+
+                                            <div>
+                                                {hasFollowed ? (
+
+                                                    <FollowButton>
+                                                        <Button
+                                                            container
+                                                            direction="column"
+                                                            justifyContent="center"
+                                                            alignItems="center"
+                                                            // fullWidth={true}
+
+                                                            variant="outlined"
+                                                            onClick={followUser}>unfollow</Button>
+                                                    </FollowButton>
+
+                                                ) : (
+
+                                                    <Button
+                                                        container
+                                                        direction="column"
+                                                        justifyContent="center"
+                                                        alignItems="center"
+                                                        // fullWidth={true}
+
+                                                        variant="outlined"
+                                                        onClick={followUser}>follow</Button>
+
+                                                )}
+                                            </div>
+
+                                        </Grid>
+                                    </Grid>
+
+
+                                    <UserStats>
+                                        <Grid
+                                            // User Stats
+                                            container
+                                            direction="row"
+                                            alignItems="center"
+                                            justifyContent="center"
+                                            spacing={2}
+                                        >
+                                            <Grid
+                                                container
+                                                direction="column"
+                                                alignItems="center"
+                                                justifyContent="center"
+                                                item xs={4}
+                                            >
+
+                                            </Grid>
+                                            <Grid container
+                                                  direction="column"
+                                                  alignItems="center"
+                                                  justifyContent="center"
+                                                  item xs={4}
+                                            >
+
+                                            </Grid>
+                                            <Grid container
+                                                  direction="column"
+                                                  alignItems="center"
+                                                  justifyContent="center"
+                                                  item xs={4}
+                                            >
+
+                                            </Grid>
+                                        </Grid>
+                                    </UserStats>
+
+
+                                    <FullWidthTabs/>
+
+                                </Grid>
+                            </Grid>
+                        </Container>
+                    </ProfileContainer>
+                )
+            } else {
+                //DARK MODE
+                return (
+                    <ProfileContainerBlack style={{padding: '100px'}}>
+                        <Container fixed>
+
+                            <Grid
+                                container
+                                direction="row"
+                                justifyContent="center"
+                                alignItems="flex-start"
+                                spacing={2}
+                            >
+
+                                <Grid
+                                    // LHS Column
+                                    container
+                                    direction="column"
+                                    justifyContent="flex-start"
+                                    alignItems="center"
+                                    item xs={4}
+                                >
+                                    <ProfilePic src={profilePic}/>
+
+                                </Grid>
+
+                                <Grid
+                                    // RHS Column
+                                    container
+                                    direction="column"
+                                    justifyContent="flex-start"
+                                    alignItems="stretch"
+                                    item xs={8}
+
+                                >
+
+                                    <Grid
+                                        // Name and Follow Button
+                                        container
+                                        direction="column"
+                                        justifyContent="flex-start"
+                                        alignItems="flex-start"
+                                    >
+                                        <UserNameBlack>{profileUser}</UserNameBlack>
+
+
+                                        {profile_following.map((this_user) => {
+
+                                            return (
+
+
+                                                <Button onClick={() => handleProfClick(this_user.id)} style={{color:'lightblue'}}>
+                                                    {this_user.email}
+                                                </Button>
+
+
+                                            )
+
+
+                                        })}
+
+                                        {topics_following.map((this_topic) => {
+
+                                            return (
+
+
+                                                <Link to={{
+                                                    pathname: "/inner_topic",
+                                                    state: this_topic.topicName,
+                                                    topicAuthor: this_topic.topicAuthor,
+                                                    // your data array of objects
+                                                }}
+                                                      style={{color:'#F0E68C'}}
+                                                >
+                                                    {this_topic.topicName}
+                                                </Link>
+
+
+                                            )
+
+
+                                        })}
+
+
+                                        <Grid
+                                            // Follow Button container
+                                            container
+                                            direction="column"
+                                            justifyContent="flex-start"
+                                            alignItems="flex-start"
+                                        >
+
+                                            <div>
+                                                {hasFollowed ? (
+
+                                                    <FollowButton>
+                                                        <Button
+                                                            container
+                                                            direction="column"
+                                                            justifyContent="center"
+                                                            alignItems="center"
+                                                            // fullWidth={true}
+
+                                                            variant="outlined"
+                                                            style={{color:'lightblue'}}
+                                                            onClick={followUser}>unfollow</Button>
+                                                    </FollowButton>
+
+                                                ) : (
+
                                                     <Button
                                                         container
                                                         direction="column"
@@ -824,75 +856,70 @@ function ProfileSection() {
 
                                                         variant="outlined"
                                                         style={{color:'lightblue'}}
-                                                        onClick={followUser}>unfollow</Button>
-                                                </FollowButton>
+                                                        onClick={followUser}>follow</Button>
 
-                                            ) : (
+                                                )}
+                                            </div>
 
-                                                <Button
-                                                    container
-                                                    direction="column"
-                                                    justifyContent="center"
-                                                    alignItems="center"
-                                                    // fullWidth={true}
-
-                                                    variant="outlined"
-                                                    style={{color:'lightblue'}}
-                                                    onClick={followUser}>follow</Button>
-
-                                            )}
-                                        </div>
-
+                                        </Grid>
                                     </Grid>
-                                </Grid>
 
 
-                                <UserStats>
-                                    <Grid
-                                        // User Stats
-                                        container
-                                        direction="row"
-                                        alignItems="center"
-                                        justifyContent="center"
-                                        spacing={2}
-                                    >
+                                    <UserStats>
                                         <Grid
+                                            // User Stats
                                             container
-                                            direction="column"
+                                            direction="row"
                                             alignItems="center"
                                             justifyContent="center"
-                                            item xs={4}
+                                            spacing={2}
                                         >
+                                            <Grid
+                                                container
+                                                direction="column"
+                                                alignItems="center"
+                                                justifyContent="center"
+                                                item xs={4}
+                                            >
 
+                                            </Grid>
+                                            <Grid container
+                                                  direction="column"
+                                                  alignItems="center"
+                                                  justifyContent="center"
+                                                  item xs={4}
+                                            >
+
+                                            </Grid>
+                                            <Grid container
+                                                  direction="column"
+                                                  alignItems="center"
+                                                  justifyContent="center"
+                                                  item xs={4}
+                                            >
+
+                                            </Grid>
                                         </Grid>
-                                        <Grid container
-                                              direction="column"
-                                              alignItems="center"
-                                              justifyContent="center"
-                                              item xs={4}
-                                        >
-
-                                        </Grid>
-                                        <Grid container
-                                              direction="column"
-                                              alignItems="center"
-                                              justifyContent="center"
-                                              item xs={4}
-                                        >
-
-                                        </Grid>
-                                    </Grid>
-                                </UserStats>
+                                    </UserStats>
 
 
-                                <FullWidthTabs/>
+                                    <FullWidthTabs/>
 
+                                </Grid>
                             </Grid>
-                        </Grid>
-                    </Container>
-                </ProfileContainerBlack>
-            )
+                        </Container>
+                    </ProfileContainerBlack>
+                )
+            }
+
+
+        }else {
+
+            return (<div> This is a private profile</div>)
         }
+
+
+
 
 
     } else if (error) {
