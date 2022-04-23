@@ -1,13 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {auth, database} from "../../firebase";
-import {collection, onSnapshot, query, orderBy, where} from "firebase/firestore";
+import {collection, onSnapshot, query, orderBy, where, doc} from "firebase/firestore";
 import {PostDisplayContainer, PostDisplayContainerDark} from "./PostDisplayElements";
 import OnePost from "./Post";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {onAuthStateChanged} from "firebase/auth";
+import Button from "@material-ui/core/Button";
+import SavedIcon from "@mui/icons-material/BookmarkAdded";
 
 
 function TimelineSection() {
+    const [user, buffering, error] = useAuthState(auth);
     const [postLists, setPostList] = useState([]);
     const postsCollectionRef = collection(database, "posts");
     useEffect(() => {
@@ -16,6 +19,8 @@ function TimelineSection() {
         })
         return unsubscribe;
     });
+
+    const [usersfollowinglist, setusersfollowinglist] = useState("");
 
     const [themeModeForCheckTheme, setThemeModeForCheckTheme] = useState(false);
     const [themeEmail, setThemeEmail] = useState("");
@@ -30,7 +35,15 @@ function TimelineSection() {
         });
     }
 
-    const [user, buffering, error] = useAuthState(auth);
+    useEffect(() => {
+        if (user) {
+            onSnapshot(doc(database, "users", user.uid), (snapshot) =>
+
+                setusersfollowinglist(JSON.stringify(snapshot.data().following)),
+            )
+        }
+    }, [user]);
+
 
     if (buffering) {
         return (
@@ -52,34 +65,38 @@ function TimelineSection() {
             }
         });
 
+
         //DISPLAY
         if (!themeModeForCheckTheme) {
             return (
 
                 <PostDisplayContainer>
 
+
                     {postLists.map((post) => {
-                        return (
+
+                        if (usersfollowinglist.includes(post.author.id)) {
+                            return (
+                                <OnePost
+                                    postid={post?.id}
+                                    title={post?.title}
+                                    topic={post?.topic}
+                                    topicAuthor={post?.topicAuthor?.email}
+                                    postText={post?.postText}
+                                    authorEmail={post?.author?.email}
+                                    imageUrl={post?.imageUrl}
+                                    imageUrl2={post?.imageUrl2}
+                                    imageUrl3={post?.imageUrl3}
+                                    FileURl={post?.FileURl}
+                                    timestamp={post?.timestamp}
+                                    likes={post?.likes}
+                                    authorid={post?.author?.id}
+                                    allowComments={post?.allowComments}
+                                />
+                            )
+                        }
 
 
-
-                            <OnePost
-                                postid={post?.id}
-                                title={post?.title}
-                                topic={post?.topic}
-                                topicAuthor={post?.topicAuthor?.email}
-                                postText={post?.postText}
-                                authorEmail={post?.author?.email}
-                                imageUrl={post?.imageUrl}
-                                imageUrl2={post?.imageUrl2}
-                                imageUrl3={post?.imageUrl3}
-                                FileURl={post?.FileURl}
-                                timestamp={post?.timestamp}
-                                likes={post?.likes}
-                                authorid={post?.author?.id}
-                                allowComments={post?.allowComments}
-                            />
-                        )
                     })}
 
                 </PostDisplayContainer>
@@ -89,24 +106,26 @@ function TimelineSection() {
                 <PostDisplayContainerDark>
 
                     {postLists.map((post) => {
-                        return (
-
-                            <OnePost
-                                postid={post?.id}
-                                title={post?.title}
-                                topic={post?.topic}
-                                topicAuthor={post?.topicAuthor?.email}
-                                postText={post?.postText}
-                                authorEmail={post?.author?.email}
-                                imageUrl={post?.imageUrl}
-                                imageUrl2={post?.imageUrl2}
-                                imageUrl3={post?.imageUrl3}
-                                FileURl={post?.FileURl}
-                                timestamp={post?.timestamp}
-                                likes={post?.likes}
-                                authorid={post?.author?.id}
-                            />
-                        )
+                        if (usersfollowinglist.includes(post.author.id)) {
+                            return (
+                                <OnePost
+                                    postid={post?.id}
+                                    title={post?.title}
+                                    topic={post?.topic}
+                                    topicAuthor={post?.topicAuthor?.email}
+                                    postText={post?.postText}
+                                    authorEmail={post?.author?.email}
+                                    imageUrl={post?.imageUrl}
+                                    imageUrl2={post?.imageUrl2}
+                                    imageUrl3={post?.imageUrl3}
+                                    FileURl={post?.FileURl}
+                                    timestamp={post?.timestamp}
+                                    likes={post?.likes}
+                                    authorid={post?.author?.id}
+                                    allowComments={post?.allowComments}
+                                />
+                            )
+                        }
                     })}
 
                 </PostDisplayContainerDark>
