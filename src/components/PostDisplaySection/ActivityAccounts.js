@@ -86,6 +86,9 @@ function ActivityCard({
             const data = await getDocs(likesCollectionRef);
             setLikesList(data.docs.map((doc) => ({...doc.data(), id: doc.id})));
 
+            const data2 = await getDocs(commentsCollectionRef);
+            setCommentList(data2.docs.map((doc2) => ({...doc2.data(), id: doc2.id})));
+
         };
         getLikes();
     });
@@ -116,51 +119,110 @@ function ActivityCard({
         //todo: darkmode
         if (!themeModeForCheckTheme) {
             {/*DISPLAY CARDS*/}
-            return (
-                <Post>
-                    <PostHeader>
-                        <PostHeaderTitle>
-                            <h1> {title}</h1>
-                            <div align="left">{timestamp.toDate().getDate().toString() + "/" + (timestamp.toDate().getMonth() + 1).toString() + "/" + timestamp.toDate().getFullYear().toString() + " | " + timestamp.toDate().getHours().toString() + ":" + timestamp.toDate().getMinutes().toString()}</div>
-                        </PostHeaderTitle>
-                    </PostHeader>
+            if (tabType !== "comments") {
 
-                    <PostDisplayContainer>
-                        {/*<div>{tabType}</div>*/}
-                        <NewLine>
-                            {
-                                likesList.map((doc) => {
-                                    {/*profile pictures and names(linked to profile)*/}
-                                    return (
-                                        <NewLine>
-                                            <Stack direction="row" alignItems="center" spacing={2}>
-                                                {/*author email and profile*/}
-                                                <Avatar
-                                                    sx={{width: 50, height: 50}}
-                                                    alt={doc.nickName}
-                                                    src={doc.profilePic}
-                                                />
+                return (
+                    <Post>
+                        <PostHeader>
+                            <PostHeaderTitle>
+                                <h1> {title}</h1>
+                                <div
+                                    align="left">{timestamp.toDate().getDate().toString() + "/" + (timestamp.toDate().getMonth() + 1).toString() + "/" + timestamp.toDate().getFullYear().toString() + " | " + timestamp.toDate().getHours().toString() + ":" + timestamp.toDate().getMinutes().toString()}</div>
+                            </PostHeaderTitle>
+                        </PostHeader>
 
-                                                <Stack direction="column" spacing={1}>
-                                                    <Link
-                                                        to={{
-                                                            pathname: `/profile/${doc.id}`,
-                                                            state: doc.nickName
-                                                            // your data array of objects
-                                                        }}
-                                                    >
-                                                        {doc.nickName}
-                                                    </Link>
+                        <PostDisplayContainer>
+                            {/*<div>{tabType}</div>*/}
+
+                            <NewLine>
+                                {
+                                    likesList.map((doc) => {
+                                        {/*profile pictures and names(linked to profile)*/
+                                        }
+                                        return (
+                                            <NewLine>
+                                                <Stack direction="row" alignItems="center" spacing={2}>
+                                                    {/*author email and profile*/}
+                                                    <Avatar
+                                                        sx={{width: 50, height: 50}}
+                                                        alt={doc.nickName}
+                                                        src={doc.profilePic}
+                                                    />
+
+                                                    <Stack direction="column" spacing={1}>
+                                                        <Link
+                                                            to={{
+                                                                pathname: `/profile/${doc.id}`,
+                                                                state: doc.nickName
+                                                                // your data array of objects
+                                                            }}
+                                                        >
+                                                            {doc.nickName}
+                                                        </Link>
+                                                    </Stack>
                                                 </Stack>
-                                            </Stack>
-                                        </NewLine>
-                                    )
-                                })
-                            }
-                        </NewLine>
-                    </PostDisplayContainer>
-                </Post>
-            );
+                                            </NewLine>
+                                        )
+                                    })
+                                }
+
+                            </NewLine>
+                        </PostDisplayContainer>
+                    </Post>
+                );
+
+
+            } else {
+
+                return (
+                    <Post>
+                        <PostHeader>
+                            <PostHeaderTitle>
+                                <h1> {title}</h1>
+                                <div
+                                    align="left">{timestamp.toDate().getDate().toString() + "/" + (timestamp.toDate().getMonth() + 1).toString() + "/" + timestamp.toDate().getFullYear().toString() + " | " + timestamp.toDate().getHours().toString() + ":" + timestamp.toDate().getMinutes().toString()}</div>
+                            </PostHeaderTitle>
+                        </PostHeader>
+
+                        <PostDisplayContainer>
+                            {/*<div>{tabType}</div>*/}
+
+                            <NewLine>
+                                {
+                                    commentList.map((doc2) => {
+                                        return (
+                                            <NewLine>
+                                                <Stack direction="row" alignItems="center" spacing={2}>
+                                                    {/*author email and profile*/}
+                                                    <Avatar
+                                                        sx={{width: 50, height: 50}}
+                                                        alt={doc2.display.nickName}
+                                                        src={doc2.display.profilePic}
+                                                    />
+
+                                                    <Stack direction="column" spacing={1}>
+                                                        <Link
+                                                            to={{
+                                                                pathname: `/profile/${doc2.commentAuthorId}`,
+                                                                state: doc2.display.nickName
+                                                                // your data array of objects
+                                                            }}
+                                                        >
+                                                            {doc2.display.nickName}
+                                                        </Link>
+                                                        <div>{doc2.commentText}</div>
+                                                    </Stack>
+                                                </Stack>
+                                            </NewLine>
+                                        )
+                                    })
+                                }
+
+                            </NewLine>
+                        </PostDisplayContainer>
+                    </Post>
+                );
+            }
         } else {
             //PostDark
             return (

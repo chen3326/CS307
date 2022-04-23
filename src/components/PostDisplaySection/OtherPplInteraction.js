@@ -223,7 +223,38 @@ function OtherInteraction() {
 
                                 {/*COMMENTS*/}
                                 <TabPanel value={value} index={2} dir={theme.direction}>
-                                    <div>comments</div>
+                                    <TabCard>
+                                        {postLists1.map((post) => {
+                                            return (
+                                                <div>
+                                                    {post.author.id === profile_uid ? (
+                                                        <ActivityCard
+                                                            tabType={"comments"}
+                                                            postid={post?.id}
+                                                            title={post?.title}
+                                                            topic={post?.topic}
+                                                            topicAuthor={post?.topicAuthor?.email}
+                                                            postText={post?.postText}
+                                                            authorEmail={post?.author?.email}
+                                                            authorNickName={post?.author?.display?.nickName}
+                                                            authorProfilePic={post?.author?.display?.profilePic}
+                                                            imageUrl={post?.imageUrl}
+                                                            imageUrl2={post?.imageUrl2}
+                                                            imageUrl3={post?.imageUrl3}
+                                                            FileURl={post?.FileURl}
+                                                            timestamp={post?.timestamp}
+                                                            likes={post?.likes}
+                                                            authorid={post?.author?.id}
+                                                            allowComments={post?.allowComments}
+                                                        />
+                                                    ) : (
+                                                        <div/>
+
+                                                    )}
+                                                </div>
+                                            )
+                                        })}
+                                    </TabCard>
                                 </TabPanel>
                             </Box>
                         </PostDisplayContainer>
