@@ -45,7 +45,7 @@ import {Link, useParams} from "react-router-dom";
 
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 
-
+//props code from material ui
 function TabPanel(props) {
     const {children, value, index, ...other} = props;
 
@@ -65,7 +65,6 @@ function TabPanel(props) {
         </div>
     );
 }
-
 TabPanel.propTypes = {
     children: PropTypes.node,
     index: PropTypes.number.isRequired,
@@ -79,6 +78,7 @@ function a11yProps(index) {
     };
 }
 
+//tab display for showing user's posts and interactions
 function FullWidthTabs() {
     const [user, loading, error] = useAuthState(auth);
     const theme = useTheme();
@@ -175,6 +175,8 @@ function FullWidthTabs() {
                                                 topicAuthor={post?.topicAuthor?.email}
                                                 postText={post?.postText}
                                                 authorEmail={post?.author?.email}
+                                                authorNickName={post?.author?.display?.nickName}
+                                                authorProfilePic={post?.author?.display?.profilePic}
                                                 imageUrl={post?.imageUrl}
                                                 imageUrl2={post?.imageUrl2}
                                                 imageUrl3={post?.imageUrl3}
@@ -205,6 +207,8 @@ function FullWidthTabs() {
                                                 topicAuthor={post?.topicAuthor?.email}
                                                 postText={post?.postText}
                                                 authorEmail={post?.author?.email}
+                                                authorNickName={post?.author?.display?.nickName}
+                                                authorProfilePic={post?.author?.display?.profilePic}
                                                 imageUrl={post?.imageUrl}
                                                 imageUrl2={post?.imageUrl2}
                                                 imageUrl3={post?.imageUrl3}
@@ -212,6 +216,7 @@ function FullWidthTabs() {
                                                 timestamp={post?.timestamp}
                                                 likes={post?.likes}
                                                 authorid={post?.author?.id}
+                                                allowComments={post?.allowComments}
                                             />
                                         ) : (
                                             <div/>
@@ -222,13 +227,6 @@ function FullWidthTabs() {
                             })}
                         </TabCard>
                     </TabPanel>
-                    {/*
-                    <TabPanel value={value} index={2} dir={theme.direction}>
-                        <TabCard>
-                            <OutlinedCard/>
-                        </TabCard>
-                    </TabPanel>
-                    */}
                     <TabPanel value={value} index={2} dir={theme.direction}>
                         <TabCard>
                             {postLists1.map((post) => {
@@ -242,6 +240,8 @@ function FullWidthTabs() {
                                                 topicAuthor={post?.topicAuthor?.email}
                                                 postText={post?.postText}
                                                 authorEmail={post?.author?.email}
+                                                authorNickName={post?.author?.display?.nickName}
+                                                authorProfilePic={post?.author?.display?.profilePic}
                                                 imageUrl={post?.imageUrl}
                                                 imageUrl2={post?.imageUrl2}
                                                 imageUrl3={post?.imageUrl3}
@@ -249,6 +249,7 @@ function FullWidthTabs() {
                                                 timestamp={post?.timestamp}
                                                 likes={post?.likes}
                                                 authorid={post?.author?.id}
+                                                allowComments={post?.allowComments}
                                             />
                                         ) : (
                                             <div/>

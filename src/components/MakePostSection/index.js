@@ -83,7 +83,15 @@ function MakePost(){
             title:title,
             topic:topic,
             postText:postText,
-            author: { email: invisible?"anonymous@unknown.com":auth.currentUser.email, id: auth.currentUser.uid },
+            author: {
+                email: invisible?"anonymous@unknown.com"
+                    :
+                    auth.currentUser.email, id: auth.currentUser.uid,
+                    display: {
+                        nickName: auth.currentUser.displayName,
+                        profilePic: auth.currentUser.photoURL,
+                    }
+            },
             topicAuthor: { email: invisibleTopic?"anonymous@unknown.com":auth.currentUser.email, id: auth.currentUser.uid },
             realAuthor: {realEmail: auth.currentUser.email},
             imageUrl:imageUrl,

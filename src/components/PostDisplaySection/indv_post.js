@@ -28,9 +28,7 @@ import {
     PostTextContainer,
 } from "./PostDisplayElements";
 
-import OnePost from "./Post";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
-import {useDocument} from "react-firebase-hooks/firestore";
 import {Link, useParams} from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import Avatar from '@mui/material/Avatar';
@@ -81,7 +79,8 @@ function IndvPost_display() {
             setImageUrl3(docSnap.data().imageUrl3);
             setFileURl(docSnap.data().FileURl);
             setTimestamp(docSnap.data().timestamp);
-            await getAuthorData(docSnap.data().author.id);
+            setAuthorProfilePic(docSnap.data().author.display.profilePic);
+            setAuthorName(docSnap.data().author.display.nickName);
         } else {
             // doc.data() will be undefined in this case
             console.log("No such document!");
@@ -107,87 +106,65 @@ function IndvPost_display() {
     const commentsCollectionRef = collection(database, 'posts', postid, 'comments',)
     const [likes, setLikes] = useState([]);
     const [saved, setSaved] = useState([]);
-    const [commented, setCommented] = useState([]);
     const [hasLiked, setHasLiked] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
-    const [hasCommented, setHasCommented] = useState(false);
-
-    //get a user's profile pic based on their user id
-    async function getAuthorData(uid){
-        console.log(uid);
-
-        const ref = doc(database, "users", uid);
-        const udocSnap = await getDoc(ref);
-
-        if (udocSnap.exists()) {
-            console.log("user data:", udocSnap.data());
-            setAuthorProfilePic(udocSnap.data().author.profilePic);
-            setAuthorName(udocSnap.data().author.nickName);
-        } else {
-            console.log("profile pull error");
-        }
-    }
 
     // adds comment to user's comments section
 
     const createComment = async () => {
-
         await addDoc(commentsCollectionRef, {
             commentText: commentText,
             commentAuthorId: auth.currentUser.uid,
-            commentAuthorEmail: auth.currentUser.email
+            commentAuthorEmail: auth.currentUser.email,
+            display: {
+                nickName: auth.currentUser.displayName,
+                profilePic: auth.currentUser.photoURL,
+            }
         });
         await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
-                commentedPosts: arrayUnion(postid)
+            commentedPosts: arrayUnion(postid)
         });
         window.location.pathname = "/home";
-        //window.location.pathname = "/home";
+
     };
 
-    async function getCommentData(uid){
-        console.log(uid);
-
-        const ref = doc(database, "users", uid);
-        const udocSnap = await getDoc(ref);
-
-        if (udocSnap.exists()) {
-            setCommentProfilePic(udocSnap.data().author.profilePic);
-            setCommentName(udocSnap.data().author.nickName);
-        } else {
-            console.log("comment pull error");
-        }
-    }
 
     useEffect(
         () =>
             onSnapshot(collection(database, "posts", postid, "likes"), (snapshot) =>
+
                 setLikes(snapshot.docs)
             ),
+
         [database, postid]
     );
 
     useEffect(
         () =>
+
             setHasLiked(
                 likes.findIndex((like) => like.id === getAuth().currentUser.uid) !== -1
             ),
+
         [likes]
     );
-
     useEffect(
         () =>
             onSnapshot(collection(database, "posts", postid, "savedby"), (snapshot) =>
 
                 setSaved(snapshot.docs)
             ),
+
         [database, postid]
     );
 
     useEffect(
         () =>
+
             setHasSaved(
                 saved.findIndex((save) => save.id === getAuth().currentUser.uid) !== -1
             ),
+
         [saved]
     );
 
@@ -200,9 +177,10 @@ function IndvPost_display() {
             });
         } else {
             await setDoc(doc(database, "posts", postid, "likes", getAuth().currentUser.uid), {
+                uid: getAuth().currentUser.uid,
                 username: getAuth().currentUser.email,
-
-
+                nickName: getAuth().currentUser.displayName,
+                profilePic: getAuth().currentUser.photoURL,
             });
 
             await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
@@ -222,7 +200,10 @@ function IndvPost_display() {
                 savedPosts: arrayUnion(postid)
             });
             await setDoc(doc(database, "posts", postid, "savedby", getAuth().currentUser.uid), {
+                uid: getAuth().currentUser.uid,
                 username: getAuth().currentUser.email,
+                nickName: getAuth().currentUser.displayName,
+                profilePic: getAuth().currentUser.photoURL,
             });
         }
     };
@@ -296,12 +277,9 @@ function IndvPost_display() {
                                             alt={authorEmail}
                                             src={authorProfilePic}
                                         />
-                                        <h3>{authorName}</h3>
 
                                         <Button onClick={handleProfClick}>
-
-
-                                            {authorEmail}
+                                            {authorName}
                                         </Button>
 
                                         <div>|</div>
@@ -449,20 +427,20 @@ function IndvPost_display() {
                                                     {/*author email and profile*/}
                                                     <Avatar
                                                         sx={{width: 30, height: 30}}
-                                                        alt={comment.commentAuthorEmail}
-                                                        src={commentProfilePic}
+                                                        alt={comment.display.nickName}
+                                                        src={comment.display.profilePic}
                                                     />
 
                                                     <Stack direction="column" spacing={1}>
                                                         <h3>{commentName}</h3>
                                                         <Link
                                                             to={{
-                                                                pathname: "/profile",
-                                                                state: comment.commentAuthorEmail
+                                                                pathname: `/profile/${comment.commentAuthorId}`,
+                                                                state: comment.display.nickName
                                                                 // your data array of objects
                                                             }}
                                                         >
-                                                            {comment.commentAuthorEmail}
+                                                            {comment.display.nickName}
                                                         </Link>
 
                                                         {comment.commentText}

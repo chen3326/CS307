@@ -24,10 +24,9 @@ function Home() {
 
     const setdisplaymode = async () => {
         setAllposts(!allposts)
-
-
     };
 
+    //todo: caro find what weird bug displaying posts correctly
     return (
         <>
             <SidebarSection/>
@@ -54,7 +53,6 @@ function Home() {
             ) : (
                 <TimelineSection/>
             )}
-
 
             <MakePost/>
 

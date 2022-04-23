@@ -37,6 +37,7 @@ import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {HeroContainer, HeroContainer2, HeroContent, HeroH1_2, HeroSLogo} from "../HeroSection/HeroElements";
 import logo from "../../images/Boiler Breakouts-logos.jpeg";
+import Avatar from "@mui/material/Avatar";
 
 function OnePost({
                      postid,
@@ -45,6 +46,8 @@ function OnePost({
                      topicAuthor,
                      postText,
                      authorEmail,
+                     authorNickName,
+                     authorProfilePic,
                      imageUrl,
                      imageUrl2,
                      imageUrl3,
@@ -80,7 +83,11 @@ function OnePost({
         await addDoc(commentsCollectionRef, {
             commentText: commentText,
             commentAuthorId: auth.currentUser.uid,
-            commentAuthorEmail: auth.currentUser.email
+            commentAuthorEmail: auth.currentUser.email,
+            display: {
+                nickName: auth.currentUser.displayName,
+                profilePic: auth.currentUser.photoURL,
+            }
         });
         await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
             commentedPosts: arrayUnion(postid)
@@ -238,11 +245,15 @@ function OnePost({
 
                             <Stack direction="row" alignItems="center" spacing={1}>
 
+                                {/*author email and profile*/}
+                                <Avatar
+                                    sx={{width: 30, height: 30}}
+                                    alt={authorEmail}
+                                    src={authorProfilePic}
+                                />
 
                                 <Button onClick={handleProfClick}>
-
-
-                                    {authorEmail}
+                                    {authorNickName}
                                 </Button>
 
                                 <div>|</div>
@@ -259,7 +270,6 @@ function OnePost({
                                     </Link>
                                 }
                             </Stack>
-                            {/*todo: time section makes white screen out for second loading*/}
 
 
                         </PostHeaderTitle>
@@ -430,7 +440,6 @@ function OnePost({
                                     </Link>
                                 }
                             </Stack>
-                            {/*todo: time section makes white screen out for second loading*/}
 
 
                         </PostHeaderTitle>

@@ -31,20 +31,23 @@ import {useAuthState} from "react-firebase-hooks/auth";
 
 //formating display to show all of the accounts that like/follow this post
 function ActivityCard({
-                     tabType,
-                     postid,
-                     title,
-                     topic,
-                     topicAuthor,
-                     postText,
-                     authorEmail,
-                     imageUrl,
-                     imageUrl2,
-                     imageUrl3,
-                     timestamp,
-                     likes_unused,
-                     FileURl,
-                     authorid
+                          tabType,
+                          postid,
+                          title,
+                          topic,
+                          topicAuthor,
+                          postText,
+                          authorEmail,
+                          authorNickName,
+                          authorProfilePic,
+                          imageUrl,
+                          imageUrl2,
+                          imageUrl3,
+                          timestamp,
+                          likes_unused,
+                          FileURl,
+                          authorid,
+                          allowComments
                  }) {
     const [open, setOpen] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -62,11 +65,6 @@ function ActivityCard({
     const [likesList, setLikesList] = useState([]);
     const likesCollectionRef = collection(database, 'posts', postid, tabType,)
 
-    //account var
-    const [accountName, setAccountName] = useState("");
-    const [accountProfilePic, setAccountProfilePic] = useState("");
-    const [accountuid, setAccountuid] = useState("");
-    const accountList = [];
 
     //darkmode var
     const [themeModeForCheckTheme, setThemeModeForCheckTheme] = useState(false);
@@ -88,34 +86,9 @@ function ActivityCard({
             const data = await getDocs(likesCollectionRef);
             setLikesList(data.docs.map((doc) => ({...doc.data(), id: doc.id})));
 
-            /*
-            likesList.map((account) => {
-                getAccount(account.uid); //gets display for each account
-                console.log("out", accountList);
-            })
-
-             */
-
         };
         getLikes();
     });
-
-    //get account from user's likes and sets profile, name, and like to profile
-    //todo: if have time, find a way to deal w async loading to allow for automatic
-    // change if user changed something in settings ie. their name
-    async function getAccount(accountuid, callback) {
-        //finds profile doc from users and matches based on uid
-        const docRef = doc(database, "users", accountuid);
-        const data = await getDoc(docRef);
-
-        //console.log("accountlist:", accountList);
-        //console.log("account:", data.data());
-
-        accountList.push(data.data()); //pushes account from users doc to array
-        //accountList.push("hello");
-
-        console.log("in", accountList);
-    }
 
     //DISPLAY AND LOADING
     const [user, buffering, error] = useAuthState(auth);
