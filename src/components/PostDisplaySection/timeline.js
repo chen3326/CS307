@@ -21,6 +21,7 @@ function TimelineSection() {
     });
 
     const [usersfollowinglist, setusersfollowinglist] = useState("");
+    const [usersfollowingTopiclist, setusersfollowingTopiclist] = useState("");
 
     const [themeModeForCheckTheme, setThemeModeForCheckTheme] = useState(false);
     const [themeEmail, setThemeEmail] = useState("");
@@ -40,6 +41,12 @@ function TimelineSection() {
             onSnapshot(doc(database, "users", user.uid), (snapshot) =>
 
                 setusersfollowinglist(JSON.stringify(snapshot.data().following)),
+            )
+        }
+        if (user) {
+            onSnapshot(doc(database, "users", user.uid), (snapshot) =>
+
+                setusersfollowingTopiclist(JSON.stringify(snapshot.data().followingTopics)),
             )
         }
     }, [user]);
@@ -95,7 +102,26 @@ function TimelineSection() {
                                 />
                             )
                         }
-
+                        if (usersfollowingTopiclist.includes(post.topic) && post.topic !== "") {
+                            return (
+                                <OnePost
+                                    postid={post?.id}
+                                    title={post?.title}
+                                    topic={post?.topic}
+                                    topicAuthor={post?.topicAuthor?.email}
+                                    postText={post?.postText}
+                                    authorEmail={post?.author?.email}
+                                    imageUrl={post?.imageUrl}
+                                    imageUrl2={post?.imageUrl2}
+                                    imageUrl3={post?.imageUrl3}
+                                    FileURl={post?.FileURl}
+                                    timestamp={post?.timestamp}
+                                    likes={post?.likes}
+                                    authorid={post?.author?.id}
+                                    allowComments={post?.allowComments}
+                                />
+                            )
+                        }
 
                     })}
 
@@ -107,6 +133,27 @@ function TimelineSection() {
 
                     {postLists.map((post) => {
                         if (usersfollowinglist.includes(post.author.id)) {
+                            return (
+                                <OnePost
+                                    postid={post?.id}
+                                    title={post?.title}
+                                    topic={post?.topic}
+                                    topicAuthor={post?.topicAuthor?.email}
+                                    postText={post?.postText}
+                                    authorEmail={post?.author?.email}
+                                    imageUrl={post?.imageUrl}
+                                    imageUrl2={post?.imageUrl2}
+                                    imageUrl3={post?.imageUrl3}
+                                    FileURl={post?.FileURl}
+                                    timestamp={post?.timestamp}
+                                    likes={post?.likes}
+                                    authorid={post?.author?.id}
+                                    allowComments={post?.allowComments}
+                                />
+                            )
+                        }
+
+                        if (usersfollowingTopiclist.includes(post.topic) && post.topic !== "") {
                             return (
                                 <OnePost
                                     postid={post?.id}
