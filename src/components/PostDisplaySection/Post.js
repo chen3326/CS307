@@ -56,8 +56,6 @@ function OnePost({
                      FileURl,
                      authorid,
                      allowComments
-
-
                  }) {
     const [open, setOpen] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);

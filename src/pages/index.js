@@ -26,7 +26,7 @@ function Home() {
         setAllposts(!allposts)
     };
 
-    //todo: caro find what weird bug displaying posts correctly
+    //todo: bug with allowing comments when they should not be allowed
     return (
         <>
             <SidebarSection/>
