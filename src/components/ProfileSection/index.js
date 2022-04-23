@@ -44,6 +44,8 @@ import {useEffect, useState} from "react";
 import {Link, useParams} from "react-router-dom";
 
 import {getAuth, onAuthStateChanged} from "firebase/auth";
+import Avatar from "@mui/material/Avatar";
+import Stack from "@mui/material/Stack";
 
 //props code from material ui
 function TabPanel(props) {
@@ -492,7 +494,6 @@ function ProfileSection() {
     useEffect(() => {
         if (user) {
             onSnapshot(doc(database, "users", profile_uid), (snapshot) =>
-
                 setTopics_following(snapshot.data().followingTopics),
             )
         }
@@ -545,9 +546,15 @@ function ProfileSection() {
 
     useEffect(() => {
         if (user) {
-            onSnapshot(doc(database, "users", profile_uid), (snapshot) =>
-                setProfileUser(snapshot.data().email)
-            )
+            onSnapshot(doc(database, "users", profile_uid), (snapshot) => {
+                setProfileUser(snapshot.data().email);
+                setnickName(snapshot.data().author.nickName);
+                setBio(snapshot.data().author.bio);
+                setAge(snapshot.data().author.age);
+                setMajor(snapshot.data().author.major);
+                setYear(snapshot.data().author.year);
+                setProfilePic(snapshot.data().author.profilePic);
+                })
         }
     }, [user, profileUser]);
 
@@ -589,8 +596,18 @@ function ProfileSection() {
                                     alignItems="center"
                                     item xs={4}
                                 >
-                                    <ProfilePic src={profilePic}/>
+                                    {/*profile section*/}
+                                    <Stack direction="column"
+                                           justifyContent="center"
+                                           alignItems="flex-start"
+                                           spacing={2}>
+                                        <ProfilePic src={profilePic}/>
+                                        <div>Bio: {bio}</div>
+                                        <div>Age: {age}</div>
+                                        <div>Year: {year}</div>
+                                        <div>Major: {major}</div>
 
+                                    </Stack>
 
                                 </Grid>
 
@@ -611,7 +628,7 @@ function ProfileSection() {
                                         justifyContent="flex-start"
                                         alignItems="flex-start"
                                     >
-                                        <UserName>{profileUser}</UserName>
+                                        <UserName>{nickName}</UserName>
 
 
                                         {profile_following.map((this_user) => {
