@@ -1,16 +1,13 @@
 import React, {useEffect, useState} from 'react';
-
-
 import {auth, database} from "../../firebase";
 import {collection, onSnapshot, query, orderBy, where} from "firebase/firestore";
 import {PostDisplayContainer, PostDisplayContainerDark} from "./PostDisplayElements";
-
 import OnePost from "./Post";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {onAuthStateChanged} from "firebase/auth";
 
 
-function PostDisplaySection() {
+function TimelineSection() {
     const [postLists, setPostList] = useState([]);
     const postsCollectionRef = collection(database, "posts");
     useEffect(() => {
@@ -63,6 +60,8 @@ function PostDisplaySection() {
 
                     {postLists.map((post) => {
                         return (
+
+
 
                             <OnePost
                                 postid={post?.id}
@@ -125,4 +124,4 @@ function PostDisplaySection() {
 
 }
 
-export default PostDisplaySection;
+export default TimelineSection;
