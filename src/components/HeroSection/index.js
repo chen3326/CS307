@@ -8,9 +8,14 @@ import logoDark from '../../images/Boiler Breakouts-logos_transparent.png';
 import {auth, database, useAuth} from "../../firebase";
 
 //import {useTheme, ThemeProvider, createTheme} from "@mui/material/styles";
-import {collection, onSnapshot, query, where} from "firebase/firestore";
+import {collection, onSnapshot, orderBy, query, where} from "firebase/firestore";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {useAuthState} from "react-firebase-hooks/auth";
+import OnePost from "../PostDisplaySection/Post";
+import {
+    Link
+} from "react-router-dom";
+import {NewLine} from "../PostDisplaySection/PostDisplayElements";
 
 
 
@@ -26,7 +31,20 @@ function HeroSection() {
     const [themeModeForCheckTheme, setThemeModeForCheckTheme] = useState(false);
     const [themeEmail, setThemeEmail] = useState("");
     const [queriedTheme, setQueriedTheme] = useState(false);
+    const [postLists1, setPostList1] = useState([]);
+    const postsCollectionRef = collection(database, "posts");
+    const topics = [];
 
+    useEffect(() => {
+        onSnapshot(query(postsCollectionRef, orderBy('timestamp', 'desc')), snapshot => {
+            setPostList1(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})));
+        })
+    });
+    postLists1.map((post) => {
+        if (!topics.includes(post.topic) && post.topic !== "") {
+            topics.push([post.topic, post.topicAuthor])
+        }
+    })
     async function getUserTheme(){
         const q = query(collection(database, "users"), where("email", "==", themeEmail));
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -68,6 +86,7 @@ function HeroSection() {
             return (
 
                 //<ThemeProvider theme={darkThemeApp}>
+                <div>
                     <HeroContainer id='home'>
 
                             <HeroContent>
@@ -86,19 +105,35 @@ function HeroSection() {
                                 }
 
                                 <HeroSLogo src={logo}/>
-
                             </HeroContent>
-
-
-
                     </HeroContainer>
+                    <div align={"center"}>
+                        <h1 align={"Center"}> Topics On Boiler Breakout: </h1>
+                        {topics.map((topic) => {
+                            return (
+                                <div>
+                                    <NewLine>
+                                        <Link to={{
+                                            pathname: "/inner_topic",
+                                            state: topic[0],
+                                            topicAuthor: topic[1],
+                                            // your data array of objects
+                                        }}
+                                        >
+                                            {topic[0]}
+                                        </Link>
+                                    </NewLine>
+                                </div>
+                            )
+                        })}
+                    </div>
+                </div>
                 //</ThemeProvider>
             );
         } else {
             return (
-                //<ThemeProvider theme={darkThemeApp}>
+                <div>
                     <HeroContainer2 id='home'>
-
                         <HeroContent>
                             <HeroH1_2> </HeroH1_2>
                             <HeroH1_2>Currently logged in as: {themeEmail} </HeroH1_2>
@@ -120,7 +155,27 @@ function HeroSection() {
                         </HeroContent>
 
                     </HeroContainer2>
-                //</ThemeProvider>
+                    <div align={"center"}>
+                        <HeroH1_2> Topics On Boiler Breakout: </HeroH1_2>
+                        {topics.map((topic) => {
+                            return (
+                                <div>
+                                    <NewLine>
+                                        <Link to={{
+                                            pathname: "/inner_topic",
+                                            state: topic[0],
+                                            topicAuthor: topic[1],
+                                            // your data array of objects
+                                        }}
+                                        >
+                                            {topic[0]}
+                                        </Link>
+                                    </NewLine>
+                                </div>
+                            )
+                        })}
+                    </div>
+                </div>
             )
         }
 

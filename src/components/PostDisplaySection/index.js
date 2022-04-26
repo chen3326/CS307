@@ -111,11 +111,9 @@ function PostDisplaySection() {
                             />
                         )
                     })}
-
                 </PostDisplayContainerDark>
             )
         }
-
     } else if (error) {
         alert("There was an authentication error.")
         window.location.pathname = "/"
