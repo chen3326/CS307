@@ -24,6 +24,7 @@
     "react-firebase-hooks": "^5.0.3",
     "react-floating-action-button": "^1.0.5",
     "react-floating-button": "^1.1.1",
+    "react-geocode": "^0.2.3",
     "react-icons": "^4.3.1",
     "react-image-file-resizer": "^0.4.7",
     "react-router-dom": "^5.2.0",

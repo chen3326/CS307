@@ -1,7 +1,7 @@
 import CreatePostIcon from '@mui/icons-material/Create';
 import { Container, Button, Link } from 'react-floating-action-button'
 import buttonInner from '@mui/material/Button';
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, Component} from "react";
 import { styled } from '@mui/material/styles';
 import {addDoc, collection, serverTimestamp} from "firebase/firestore";
 import {auth, database, storage} from "../../firebase.js";
@@ -15,7 +15,9 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import imageCompression from "browser-image-compression";
-import Alert from '@mui/material/Alert'; //will be used in anonymous
+import Alert from '@mui/material/Alert';
+import Geocode from "react-geocode";
+import {UserStats} from "../ProfileSection/ProfileElements"; //will be used in anonymous
 
 
 const style = {
@@ -82,6 +84,7 @@ function MakePost(){
 
             title:title,
             topic:topic,
+            location: position,
             postText:postText,
             author: {
                 email: invisible?"anonymous@unknown.com"
@@ -252,7 +255,15 @@ function MakePost(){
             }
         );
     };
+    const [position, setPosition] = useState("");
+    async function onLocationButtonClick() {
 
+        await navigator.geolocation.getCurrentPosition(
+            position => setPosition(position.coords.latitude + ", " + position.coords.longitude),
+            err => console.log(err)
+        );
+        console.log(this.state.latitude)
+    }
 
     async function doUpload(event) {
 
@@ -517,6 +528,9 @@ function MakePost(){
                             />
 
                         </div>
+                    </Stack>
+                    <Stack spacing={1} direction="row">
+                        <Button onClick={onLocationButtonClick} style={{color:'#0D67B5'}}> Add Location </Button>
                     </Stack>
 
                     <Stack  spacing={2} direction="row">

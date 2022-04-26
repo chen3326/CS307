@@ -42,6 +42,7 @@ import Avatar from "@mui/material/Avatar";
 function OnePost({
                      postid,
                      title,
+                     location,
                      topic,
                      topicAuthor,
                      postText,
@@ -240,6 +241,7 @@ function OnePost({
                     <PostHeader>
                         <PostHeaderTitle>
                             <h1> {title}</h1>
+                            <h7> {location!== "" && location}</h7>
 
                             <Stack direction="row" alignItems="center" spacing={1}>
 

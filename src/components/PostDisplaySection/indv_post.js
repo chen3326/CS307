@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useAuthState} from 'react-firebase-hooks/auth';
 
 
-import {auth, database} from "../../firebase";
+import {auth, database, storage} from "../../firebase";
 import {
     collection,
     onSnapshot,
@@ -40,6 +40,8 @@ import ImageListItem from "@mui/material/ImageListItem";
 import {CardActions, Fade, Paper, Popper} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
+import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
+import imageCompression from "browser-image-compression";
 
 function IndvPost_display() {
     const { postid } = useParams(); //get post id from App.js
@@ -57,6 +59,7 @@ function IndvPost_display() {
     const [FileURl, setFileURl] = useState("");
     const [timestamp, setTimestamp] = useState("");
     const [authorProfilePic, setAuthorProfilePic] = useState("");
+    const [location, setLocation] = useState("");
 
     const [queried, setQueried] = useState(false);
 
@@ -69,6 +72,7 @@ function IndvPost_display() {
             setPostExists(true);
 
             setTitle(docSnap.data().title);
+            setLocation(docSnap.data().location);
             setTopic(docSnap.data().topic);
             setPostText(docSnap.data().postText);
             setAuthorid(docSnap.data().author.id)
@@ -98,6 +102,7 @@ function IndvPost_display() {
         setPlacement(newPlacement);
     };
     const [commentText, setCommentText] = useState("");
+    const [commentImage, setCommentImage] = useState("");
     const [commentProfilePic, setCommentProfilePic] = useState("");
     const [commentName, setCommentName] = useState("");
 
@@ -114,6 +119,7 @@ function IndvPost_display() {
     const createComment = async () => {
         await addDoc(commentsCollectionRef, {
             commentText: commentText,
+            commentImage: commentImage,
             commentAuthorId: auth.currentUser.uid,
             commentAuthorEmail: auth.currentUser.email,
             display: {
@@ -215,6 +221,56 @@ function IndvPost_display() {
     async function handleProfClick() {
         window.location = `/profile/${authorid}`;
     }
+    const [progress, setProgress] = useState(0);
+    const uploadFiles = (file) => {
+        //
+        if (!file) return;
+        const storageRef = ref(storage, `files/${file.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, file);
+
+        uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+                const prog = Math.round(
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                );
+                setProgress(prog);
+                //const imageaftersize = ( snapshot.totalBytes);
+                //setaftersize(imageaftersize);
+
+            },
+            (error) => console.log(error),
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    setCommentImage(downloadURL);
+                });
+            }
+        );
+    };
+
+    const [beforesize, setbeforesize] = useState(0);
+    const [aftersize, setaftersize] = useState(0);
+
+    async function doUpload(event) {
+
+        const inputFile = event.target.files[0];
+        setbeforesize(`${(inputFile.size / 1024 / 1024).toFixed(2)} MB`);
+
+        const maxSet = {
+            useWebWorker: true,
+        }
+        try {
+
+            const afterCompressedFile = await imageCompression(inputFile, maxSet);
+
+            setaftersize(`${(afterCompressedFile.size / 1024 / 1024).toFixed(2)} MB`);
+
+            await uploadFiles(afterCompressedFile);
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
 
     //get comments
     useEffect(() => {
@@ -269,7 +325,7 @@ function IndvPost_display() {
                             <PostHeader>
                                 <PostHeaderTitle>
                                     <h1> {title}</h1>
-
+                                    <h7> {location!== "" && location}</h7>
                                     <Stack direction="row" alignItems="center" spacing={1}>
                                         {/*author email and profile*/}
                                         <Avatar
@@ -403,6 +459,12 @@ function IndvPost_display() {
                                                             />
                                                         </div>
                                                         <Stack spacing={1} direction="row">
+                                                            <form onChange={event => doUpload(event)}>
+                                                                <input type="file" className="input" />
+
+                                                            </form>
+                                                        </Stack>
+                                                        <Stack spacing={1} direction="row">
                                                             <label>
                                                                 <Button onClick={createComment}
                                                                         style={{color: '#0D67B5'}}>SUBMIT</Button>
@@ -445,7 +507,18 @@ function IndvPost_display() {
 
                                                         {comment.commentText}
                                                     </Stack>
+                                                    <Stack direction="row" spacing={1}>
+                                                        <ImageListItem>
+                                                            {comment.commentImage !== "" &&
+                                                                <img
+                                                                    src={`${comment.commentImage}?w=164&h=164&fit=crop&auto=format`}
+                                                                    srcSet={`${comment.commentImage}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
 
+                                                                    loading="lazy"
+                                                                />
+                                                            }
+                                                        </ImageListItem>
+                                                    </Stack>
                                                 </Stack>
                                             </NewLine>
                                         )
@@ -581,7 +654,7 @@ function IndvPost_display() {
                                                         Create A Comment here
                                                     </Typography>
                                                     <Typography sx={{p: 2}}>
-                                                        click the 'Reply' button again to close
+                                                        click the 'Add Comment' button again to close
                                                         <div className="inputGp">
 
                                                             <textarea
@@ -601,6 +674,11 @@ function IndvPost_display() {
                                                                 }}
                                                             />
                                                         </div>
+                                                        <Stack spacing={1} direction="row">
+                                                            <form onChange={event => doUpload(event)}>
+                                                                <input type="file" className="input" />
+                                                            </form>
+                                                        </Stack>
                                                         <Stack spacing={1} direction="row">
                                                             <label>
                                                                 <Button onClick={createComment}
@@ -644,6 +722,18 @@ function IndvPost_display() {
                                                         </Link>
 
                                                         {comment.commentText}
+                                                    </Stack>
+                                                    <Stack direction="row" spacing={1}>
+                                                        <ImageListItem>
+                                                            {comment.commentImage !== "" &&
+                                                                <img
+                                                                    src={`${comment.commentImage}?w=164&h=164&fit=crop&auto=format`}
+                                                                    srcSet={`${comment.commentImage}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+
+                                                                    loading="lazy"
+                                                                />
+                                                            }
+                                                        </ImageListItem>
                                                     </Stack>
 
                                                 </Stack>
