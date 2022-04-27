@@ -447,7 +447,8 @@ function SettingsSection() {
             }, (error) => {
                 console.log(error.text);
             });
-        window.location.pathname = "/home";
+
+        window.location.pathname = "/settings";
     };
 
     //creates loading page and controls display
