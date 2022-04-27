@@ -506,13 +506,14 @@ function IndvPost_display() {
                                                         {comment.commentText}
                                                     </Stack>
                                                     <Stack direction="row" spacing={1}>
-                                                        <ImageListItem>
+                                                        <ImageListItem sx={{ width: 150, height: 150 }}>
                                                             {comment.commentImage !== "" && comment.commentImage !== null &&
                                                                 <img
                                                                     src={`${comment.commentImage}?w=164&h=164&fit=crop&auto=format`}
                                                                     srcSet={`${comment.commentImage}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-
                                                                     loading="lazy"
+                                                                    height="100"
+                                                                    width="100"
                                                                  alt="No Image To Display"/>
                                                             }
                                                         </ImageListItem>
