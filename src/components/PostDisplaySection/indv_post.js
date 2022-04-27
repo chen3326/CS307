@@ -277,7 +277,6 @@ function IndvPost_display() {
         const getComments = async () => {
             const data = await getDocs(commentsCollectionRef);
             setCommentList(data.docs.map((doc) => ({...doc.data(), id: doc.id})));
-
         };
         getComments();
     });
@@ -461,8 +460,10 @@ function IndvPost_display() {
                                                         <Stack spacing={1} direction="row">
                                                             <form onChange={event => doUpload(event)}>
                                                                 <input type="file" className="input" />
-
                                                             </form>
+                                                        </Stack>
+                                                        <Stack spacing={1} direction="row">
+                                                            <h5>Uploading done {progress}%</h5>
                                                         </Stack>
                                                         <Stack spacing={1} direction="row">
                                                             <label>
@@ -502,18 +503,17 @@ function IndvPost_display() {
                                                         >
                                                             {comment.display.nickName}
                                                         </Link>
-
                                                         {comment.commentText}
                                                     </Stack>
                                                     <Stack direction="row" spacing={1}>
                                                         <ImageListItem>
-                                                            {comment.commentImage !== "" &&
+                                                            {comment.commentImage !== "" && comment.commentImage !== null &&
                                                                 <img
                                                                     src={`${comment.commentImage}?w=164&h=164&fit=crop&auto=format`}
                                                                     srcSet={`${comment.commentImage}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
 
                                                                     loading="lazy"
-                                                                />
+                                                                 alt="No Image To Display"/>
                                                             }
                                                         </ImageListItem>
                                                     </Stack>

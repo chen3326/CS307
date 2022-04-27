@@ -87,6 +87,7 @@ function TimelineSection() {
                                 <OnePost
                                     postid={post?.id}
                                     title={post?.title}
+                                    location = {post?.location}
                                     topic={post?.topic}
                                     topicAuthor={post?.topicAuthor?.email}
                                     postText={post?.postText}
