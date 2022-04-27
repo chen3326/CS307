@@ -160,6 +160,7 @@ function OtherInteraction() {
                                                             tabType={"likes"}
                                                             postid={post?.id}
                                                             title={post?.title}
+                                                            location = {post?.location}
                                                             topic={post?.topic}
                                                             topicAuthor={post?.topicAuthor?.email}
                                                             postText={post?.postText}
@@ -196,6 +197,7 @@ function OtherInteraction() {
                                                             tabType={"savedby"}
                                                             postid={post?.id}
                                                             title={post?.title}
+                                                            location = {post?.location}
                                                             topic={post?.topic}
                                                             topicAuthor={post?.topicAuthor?.email}
                                                             postText={post?.postText}
@@ -232,6 +234,7 @@ function OtherInteraction() {
                                                             tabType={"comments"}
                                                             postid={post?.id}
                                                             title={post?.title}
+                                                            location = {post?.location}
                                                             topic={post?.topic}
                                                             topicAuthor={post?.topicAuthor?.email}
                                                             postText={post?.postText}

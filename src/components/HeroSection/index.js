@@ -34,6 +34,7 @@ function HeroSection() {
     const [postLists1, setPostList1] = useState([]);
     const postsCollectionRef = collection(database, "posts");
     const topics = [];
+    const justTopics = [];
 
     useEffect(() => {
         onSnapshot(query(postsCollectionRef, orderBy('timestamp', 'desc')), snapshot => {
@@ -41,8 +42,9 @@ function HeroSection() {
         })
     });
     postLists1.map((post) => {
-        if (!topics.includes(post.topic) && post.topic !== "") {
-            topics.push([post.topic, post.topicAuthor])
+        if (!justTopics.includes(post.topic) && post.topic !== "") {
+            topics.push([post.topic, post.topicAuthor]);
+            justTopics.push(post.topic);
         }
     })
     async function getUserTheme(){

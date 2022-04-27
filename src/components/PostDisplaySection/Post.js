@@ -26,7 +26,7 @@ import {
     arrayRemove, query, where,
 
 } from "firebase/firestore";
-import {auth, database} from "../../firebase";
+import {auth, database, storage} from "../../firebase";
 import SavedIcon from '@mui/icons-material/BookmarkAdded';
 
 
@@ -40,10 +40,13 @@ import logo from "../../images/Boiler Breakouts-logos.jpeg";
 import Avatar from "@mui/material/Avatar";
 import { styled } from '@mui/material/styles';
 import Badge from '@mui/material/Badge';
+import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
+import imageCompression from "browser-image-compression";
 
 function OnePost({
                      postid,
                      title,
+                     location,
                      topic,
                      topicAuthor,
                      postText,
@@ -76,12 +79,14 @@ function OnePost({
     const [saved, setSaved] = useState([]);
     const [hasLiked, setHasLiked] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
+    const [commentImage, setCommentImage] = useState("");
 
 
     const createComment = async () => {
 
         await addDoc(commentsCollectionRef, {
             commentText: commentText,
+            commentImage: commentImage,
             commentAuthorId: auth.currentUser.uid,
             commentAuthorEmail: auth.currentUser.email,
             display: {
@@ -127,6 +132,57 @@ function OnePost({
             ),
         [saved]
     );
+
+    const [progress, setProgress] = useState(0);
+    const uploadFiles = (file) => {
+        //
+        if (!file) return;
+        const storageRef = ref(storage, `files/${file.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, file);
+
+        uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+                const prog = Math.round(
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                );
+                setProgress(prog);
+                //const imageaftersize = ( snapshot.totalBytes);
+                //setaftersize(imageaftersize);
+
+            },
+            (error) => console.log(error),
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    setCommentImage(downloadURL);
+                });
+            }
+        );
+    };
+
+    const [beforesize, setbeforesize] = useState(0);
+    const [aftersize, setaftersize] = useState(0);
+
+    async function doUpload(event) {
+
+        const inputFile = event.target.files[0];
+        setbeforesize(`${(inputFile.size / 1024 / 1024).toFixed(2)} MB`);
+
+        const maxSet = {
+            useWebWorker: true,
+        }
+        try {
+
+            const afterCompressedFile = await imageCompression(inputFile, maxSet);
+
+            setaftersize(`${(afterCompressedFile.size / 1024 / 1024).toFixed(2)} MB`);
+
+            await uploadFiles(afterCompressedFile);
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
 
 
     const likePost = async () => {
@@ -316,7 +372,8 @@ function OnePost({
                 <Post>
                     <PostHeader>
                         <PostHeaderTitle>
-                            <h1> {title} </h1>
+                            <h1> {title}</h1>
+                            <h7> {location!== "" && location}</h7>
 
                             <Stack direction="row" alignItems="center" spacing={1}>
 
@@ -479,6 +536,14 @@ function OnePost({
                                                                 }}
                                                             />
                                                     </div>
+                                                    <Stack spacing={1} direction="row">
+                                                        <form onChange={event => doUpload(event)}>
+                                                            <input type="file" className="input" />
+                                                        </form>
+                                                    </Stack>
+                                                    <Stack spacing={1} direction="row">
+                                                        <h5>Uploading done {progress}%</h5>
+                                                    </Stack>
                                                     <Stack spacing={1} direction="row">
                                                         <label>
                                                             <Button onClick={createComment}
