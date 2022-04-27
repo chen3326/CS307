@@ -38,6 +38,8 @@ import {useAuthState} from "react-firebase-hooks/auth";
 import {HeroContainer, HeroContainer2, HeroContent, HeroH1_2, HeroSLogo} from "../HeroSection/HeroElements";
 import logo from "../../images/Boiler Breakouts-logos.jpeg";
 import Avatar from "@mui/material/Avatar";
+import { styled } from '@mui/material/styles';
+import Badge from '@mui/material/Badge';
 
 function OnePost({
                      postid,
@@ -94,43 +96,35 @@ function OnePost({
 
     };
 
-
     useEffect(
         () =>
             onSnapshot(collection(database, "posts", postid, "likes"), (snapshot) =>
-
                 setLikes(snapshot.docs)
             ),
-
         [database, postid]
     );
 
     useEffect(
         () =>
-
             setHasLiked(
                 likes.findIndex((like) => like.id === getAuth().currentUser.uid) !== -1
             ),
-
         [likes]
     );
+
     useEffect(
         () =>
             onSnapshot(collection(database, "posts", postid, "savedby"), (snapshot) =>
-
                 setSaved(snapshot.docs)
             ),
-
         [database, postid]
     );
 
     useEffect(
         () =>
-
             setHasSaved(
                 saved.findIndex((save) => save.id === getAuth().currentUser.uid) !== -1
             ),
-
         [saved]
     );
 
@@ -189,6 +183,31 @@ function OnePost({
         }
     }
 
+    // async function getUserStatus(){
+    //     //compare email to other users in collection
+    //     const q = query(collection(database, "users"), where("email", "==", authorEmail));
+    //     const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    //         querySnapshot.forEach((doc) => {
+    //             setUserOnlineStatus(doc.data().loggedIn)
+    //         });
+    //     });
+    // }
+
+    useEffect(() => {
+        if (user) {
+            onSnapshot(doc(database, "users", authorid), (snapshot) => {
+                setUserOnlineStatus(snapshot.data().loggedIn);
+            })
+            // getUserStatus();
+        }
+    }, [authorid]);
+
+
+    // useEffect(() => {
+    //     setUserOnlineStatus(true)
+    // }, [userOnlineStatus]);
+
+
     //directs user to post's page with more information ie. comments
     async function handleIndvClick() {
         window.location = `/home/${postid}`;
@@ -201,6 +220,7 @@ function OnePost({
     const [themeModeForCheckTheme, setThemeModeForCheckTheme] = useState(false);
     const [themeEmail, setThemeEmail] = useState("");
     const [queriedTheme, setQueriedTheme] = useState(false);
+    const [userOnlineStatus, setUserOnlineStatus] = useState(false);
 
     async function getUserTheme() {
         const q = query(collection(database, "users"), where("email", "==", themeEmail));
@@ -209,6 +229,61 @@ function OnePost({
                 setThemeModeForCheckTheme(doc.data().author.darkTheme);
             });
         });
+    }
+
+    const StyledBadge = styled(Badge)(({ theme }) => ({
+        "& .MuiBadge-badge": {
+            backgroundColor: "#44b700",
+            color: "#44b700",
+            width: 12,
+            height: 12,
+            borderRadius: "50%",
+            boxShadow: `0 0 0 2px ${theme.palette.background.paper}`
+        }
+    }));
+
+    function StatusBadgeOnline() {
+        return (
+            <StyledBadge
+                overlap="circular"
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                variant="dot"
+                sx={{
+                    "& .MuiBadge-badge": {
+                        backgroundColor: "#44b700",
+                        color: "#44b700",
+                    }
+                }}
+            >
+                <Avatar
+                    sx={{width: 30, height: 30}}
+                    alt={authorEmail}
+                    src={authorProfilePic}
+                />
+            </StyledBadge>
+        );
+    }
+
+    const StatusBadgeOffline = () => {
+        return (
+            <StyledBadge
+                overlap="circular"
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                variant="dot"
+                sx={{
+                    "& .MuiBadge-badge": {
+                    backgroundColor: '#8f8f8f',
+                    color: '#8f8f8f',
+                    }
+                }}
+            >
+                <Avatar
+                    sx={{width: 30, height: 30}}
+                    alt={authorEmail}
+                    src={authorProfilePic}
+                />
+            </StyledBadge>
+        );
     }
 
     const [user, buffering, error] = useAuthState(auth);
@@ -233,22 +308,42 @@ function OnePost({
             }
         });
 
+        // getUserStatus()
+
         if (!themeModeForCheckTheme) {
             return (
 
                 <Post>
                     <PostHeader>
                         <PostHeaderTitle>
-                            <h1> {title}</h1>
+                            <h1> {title} </h1>
 
                             <Stack direction="row" alignItems="center" spacing={1}>
 
-                                {/*author email and profile*/}
-                                <Avatar
-                                    sx={{width: 30, height: 30}}
-                                    alt={authorEmail}
-                                    src={authorProfilePic}
-                                />
+                                {/*<StyledBadge*/}
+                                {/*    overlap="circular"*/}
+                                {/*    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}*/}
+                                {/*    variant="dot"*/}
+                                {/*    sx={{*/}
+                                {/*        "& .MuiBadge-badge": {*/}
+                                {/*            backgroundColor: "#44b700",*/}
+                                {/*            color: "#44b700",*/}
+                                {/*        }*/}
+                                {/*    }}*/}
+                                {/*>*/}
+                                {/*    <Avatar*/}
+                                {/*        sx={{width: 30, height: 30}}*/}
+                                {/*        alt={authorEmail}*/}
+                                {/*        src={authorProfilePic}*/}
+                                {/*    />*/}
+                                {/*</StyledBadge>*/}
+
+                                {userOnlineStatus ? (
+                                    <StatusBadgeOnline />
+                                ) : (
+                                    <StatusBadgeOffline />
+                                    )
+                                }
 
                                 <Button onClick={handleProfClick}>
                                     {authorNickName}
@@ -416,10 +511,7 @@ function OnePost({
 
                             <Stack direction="row" alignItems="center" spacing={1}>
 
-
                                 <Button onClick={handleProfClick} style={{color: '#FFDAB9'}}>
-
-
                                     {authorEmail}
                                 </Button>
 

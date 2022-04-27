@@ -7,13 +7,15 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import {login, logout, signup, useAuth} from "../../firebase";
-import React, {useRef, useState} from "react";
+import {auth, database, login, logout, signup, useAuth} from "../../firebase";
+import React, {useEffect, useRef, useState} from "react";
 import {Container} from "@material-ui/core";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import buttonInner from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
+import {arrayUnion, collection, doc, onSnapshot, query, setDoc, updateDoc, where} from "firebase/firestore";
+import {getAuth} from "firebase/auth";
 
 
 //main welcome page with login and link to signing in
@@ -41,6 +43,17 @@ export default function Login() {
     const currentUser = useAuth();
     const emailRef = useRef();
     const passwordRef = useRef();
+    const [userOnline, setUserOnline] = useState(false);
+
+    // useEffect(() => {
+    //     setUserOnline(true)
+    // }, [userOnline]);
+    //
+    // const updateOnlineStatus = async () => {
+    //     await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
+    //         loggedIn: userOnline,
+    //     });
+    // }
 
     //moves user to sign up page to create a user
     async function handleSignup() {
@@ -58,6 +71,9 @@ export default function Login() {
         try {
             await login(emailRef.current.value, passwordRef.current.value);
             setLoading(false);
+            await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
+                loggedIn: true,
+            });
             window.location = "/home";
 
         } catch {
@@ -70,21 +86,22 @@ export default function Login() {
         setLoading(true);
 
         try {
-
             await login("anonymous@unkown.com", "secret1234");
             setLoading(false);
             window.location = "/home";
-
         } catch {
             alert("Error!");
         }
-
         setLoading(false);
     }
 
     async function handleLogout() {
         setLoading(true);
         try {
+            setUserOnline(false);
+            await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
+                loggedIn: false,
+            });
             await logout();
         } catch {
             alert("Error!");

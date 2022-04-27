@@ -23,7 +23,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 
 import React, {useRef, useState, useEffect} from "react";
 
-import {addDoc, setDoc, collection, doc, arrayUnion, arrayRemove,} from "firebase/firestore";
+import {addDoc, setDoc, collection, doc, arrayUnion, arrayRemove, updateDoc,} from "firebase/firestore";
 import Grid from "@mui/material/Grid";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
 import imageCompression from "browser-image-compression";
@@ -93,10 +93,8 @@ function SignUpUser() {
     const [topic3, setTopic3] = useState("");
     const [topic4, setTopic4] = useState("");
     const [topic5, setTopic5] = useState("");
-
-
-
-
+    // Keep track of loggedIn status
+    // const [userOnline, setUserOnline] = useState(false);
 
     //add user to database in ./users
     const createUser = async () => {
@@ -106,6 +104,7 @@ function SignUpUser() {
         await setDoc(doc(database,"users",getAuth().currentUser.uid),{
             id: auth.currentUser.uid,
             email: email,
+            loggedIn: true,
             author: {
                 nickName: nickName,
                 age: age,
