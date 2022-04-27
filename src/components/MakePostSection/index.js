@@ -16,9 +16,7 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import imageCompression from "browser-image-compression";
 import Alert from '@mui/material/Alert';
-import Geocode from "react-geocode";
 import {UserStats} from "../ProfileSection/ProfileElements"; //will be used in anonymous
-
 
 const style = {
     position: 'absolute',
@@ -39,6 +37,8 @@ const style = {
 const Input = styled('input')({
     display: "none",
 });
+
+
 
 function MakePost(){
     const [title, setTitle] = useState("");
@@ -264,6 +264,8 @@ function MakePost(){
         );
         console.log(this.state.latitude)
     }
+
+
 
     async function doUpload(event) {
 
@@ -493,7 +495,7 @@ function MakePost(){
 
 
 
-                    <Stack spacing={1} direction="row">
+                    <Stack spacing={3} direction="row">
                         <div>
                             <Badge color="primary" invisible={!invisible} variant="dot" >
                                 <AdminPanelSettingsIcon/>
@@ -514,24 +516,17 @@ function MakePost(){
                                 </Stack>
                             )
                             }
-
-                        </div>
-                    </Stack>
-
-                    <Stack spacing={1} direction="row">
-                        <div>
-
                             <FormControlLabel
                                 sx={{ color: 'primary' }}
                                 control={<Switch checked={allowComments} onChange={AllowCommentsSet} />}
                                 label="allow comments"
                             />
-
+                            <buttonInner onClick={onLocationButtonClick} style={{color:'#0D67B5'}}> Add Location </buttonInner>
+                            <div> {position !== "" && position}</div>
                         </div>
                     </Stack>
-                    <Stack spacing={1} direction="row">
-                        <Button onClick={onLocationButtonClick} style={{color:'#0D67B5'}}> Add Location </Button>
-                    </Stack>
+
+
 
                     <Stack  spacing={2} direction="row">
 
