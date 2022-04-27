@@ -469,8 +469,6 @@ function IndvPost_display() {
                                                                 <Button onClick={createComment}
                                                                         style={{color: '#0D67B5'}}>SUBMIT</Button>
                                                             </label>
-
-
                                                         </Stack>
                                                     </Typography>
                                                 </Paper>
