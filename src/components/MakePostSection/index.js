@@ -23,12 +23,13 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 530,
+    width: '90%',
+    height :'95%',
     bgcolor: 'background.paper',
     border: '2px solid darkblue',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: 5,
+    boxShadow: 6,
+    p: 3,
+    borderRadius: 1,
     variant: 'contained',
 };
 
@@ -359,10 +360,10 @@ function MakePost(){
     }
 
     return (
-        <Container styles={{color: 'darkblue', marginRight: '-60px', marginBottom: '-15px'}}>
+        <Container styles={{color: 'darkblue', marginRight: '15%', marginBottom: '15%'}}>
             <Button
                 tooltip="Click to make a new post"
-                styles={{backgroundColor: 'darkblue' , color : 'white', width: '73px', height: '73px'}}
+                styles={{backgroundColor: 'darkblue' , color : 'white', width: '7vw', height: '7vw'}}
                 onClick={handleOpen}//() => window.location.pathname = "/makePost" }
             >
                 <CreatePostIcon fontSize='large'/>
@@ -384,7 +385,7 @@ function MakePost(){
                         <div className="inputGp">
 
                             <input
-                                style={{width:'450px', height:'30px', marginTop:'5px',marginBottom:'10px', border: '2px solid #0D67B5', borderRadius:'5px'}}
+                                style={{width:'90%', height:'30px', marginTop:'5px',marginBottom:'10px', border: '2px solid #0D67B5', borderRadius:'5px'}}
                                 placeholder=" Title..."
                                 width=""
                                 onChange={(event) => {
@@ -399,7 +400,7 @@ function MakePost(){
                         <div className="inputGp">
 
                             <input
-                                style={{width:'450px', height:'30px', border: '2px solid #0D67B5', borderRadius:'5px'}}
+                                style={{width:'90%', height:'30px', border: '2px solid #0D67B5', borderRadius:'5px'}}
                                 placeholder=" Topic..."
                                 width=""
                                 maxLength="35"
@@ -439,7 +440,7 @@ function MakePost(){
                         <div className="inputGp" >
 
                             <textarea
-                                style={{width:'450px', height:'200px', marginTop:'5px', marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
+                                style={{width:'90%', height:'200px', marginTop:'5px', marginBottom:'20px', border: '2px solid #0D67B5', borderRadius:'5px'}}
                                 placeholder=" Post..."
                                 maxLength="500"
                                 onInput={checkunderlimit}
