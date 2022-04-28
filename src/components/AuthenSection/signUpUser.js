@@ -111,6 +111,8 @@ function SignUpUser() {
             },
             following:arrayUnion(),
             followingTopics:arrayUnion(),
+            blockingUsers:arrayUnion(),
+            blockingTopics:arrayUnion(),
             savedPosts: arrayUnion(),
             likedPosts:arrayUnion(),
             commentedPosts: arrayUnion(),
