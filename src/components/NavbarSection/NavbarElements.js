@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 export const Nav = styled.nav`
   background: #0D67B5;
-
   backdrop-filter: saturate(180%) blur(20px);
   height: 62px;
   margin-left: -360px;
@@ -16,8 +15,6 @@ export const Nav = styled.nav`
   position: sticky;
   top: 0;
   z-index: 10;
-
-
 `;
 
 export const NavDark = styled.nav`
@@ -39,8 +36,6 @@ export const NavDark = styled.nav`
 `;
 
 export const NavbarContainer = styled.div`
-
-
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -52,20 +47,16 @@ export const NavbarContainer = styled.div`
 `;
 
 export const NavLogo = styled(LinkR)`
-
-
   color: #fff;
-  justify-self: flex-start;
+  //justify-self: flex-start;
   cursor: pointer;
   font-size: 1.5rem;
   display: flex;
-  align-items: start;
-  margin-left: 24px;
+  //align-items: start;
+  //margin-left: 24px;
   font-weight: bold;
   text-decoration: none;
 `;
-
-
 
 export const NavMenu = styled.ul`
   display: flex;
@@ -146,3 +137,23 @@ export const NavBtnLinkR = styled(LinkR)`
   }
   
 `;
+
+// export const AppBar = styled.nav`
+//   //background: #0D67B5;
+//
+//   background: yellow;
+//
+//   backdrop-filter: saturate(180%) blur(20px);
+//   height: 62px;
+//   margin-left: -360px;
+//   margin-top: -0px;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   font-size: 1rem;
+//   position: sticky;
+//   top: 0;
+//   z-index: 10;
+//
+//
+// `;
