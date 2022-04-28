@@ -539,11 +539,11 @@ function ProfileSection() {
         if (hasFollowed) {
 
             await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
-                following: arrayRemove({email: profileUser, id: profile_uid})
+                following: arrayRemove({nickName: nickName, id: profile_uid})
             });
         } else {
             await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
-                following: arrayUnion({email: profileUser, id: profile_uid})
+                following: arrayUnion({nickName: nickName, id: profile_uid})
             });
 
         }
@@ -643,7 +643,7 @@ function ProfileSection() {
 
 
                                                 <Button onClick={() => handleProfClick(this_user.id)}>
-                                                    {this_user.email}
+                                                    {this_user.nickName}
                                                 </Button>
 
 
@@ -813,7 +813,7 @@ function ProfileSection() {
 
 
                                                 <Button onClick={() => handleProfClick(this_user.id)} style={{color:'lightblue'}}>
-                                                    {this_user.email}
+                                                    {this_user.nickName}
                                                 </Button>
 
 
