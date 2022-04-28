@@ -20,8 +20,12 @@ function TimelineSection() {
         return unsubscribe;
     });
 
-    const [usersfollowinglist, setusersfollowinglist] = useState("");
-    const [usersfollowingTopiclist, setusersfollowingTopiclist] = useState("");
+    const [usersFollowingList, setUsersFollowingList] = useState("");
+    const [usersFollowingTopicList, setUsersFollowingTopicList] = useState("");
+
+    // TODO: blocking implementation
+    const [usersBlockingList, setUsersBlockingList] = useState("");
+    const [usersBlockingTopicList, setUsersBlockingTopicList] = useState("");
 
     const [themeModeForCheckTheme, setThemeModeForCheckTheme] = useState(false);
     const [themeEmail, setThemeEmail] = useState("");
@@ -39,14 +43,22 @@ function TimelineSection() {
     useEffect(() => {
         if (user) {
             onSnapshot(doc(database, "users", user.uid), (snapshot) =>
-
-                setusersfollowinglist(JSON.stringify(snapshot.data().following)),
+                setUsersFollowingList(JSON.stringify(snapshot.data().following)),
             )
         }
         if (user) {
             onSnapshot(doc(database, "users", user.uid), (snapshot) =>
-
-                setusersfollowingTopiclist(JSON.stringify(snapshot.data().followingTopics)),
+                setUsersFollowingTopicList(JSON.stringify(snapshot.data().followingTopics)),
+            )
+        }
+        if (user) {
+            onSnapshot(doc(database, "users", user.uid), (snapshot) =>
+                setUsersBlockingList(JSON.stringify(snapshot.data().blockingUsers)),
+            )
+        }
+        if (user) {
+            onSnapshot(doc(database, "users", user.uid), (snapshot) =>
+                setUsersBlockingTopicList(JSON.stringify(snapshot.data().blockingTopics)),
             )
         }
     }, [user]);
@@ -76,114 +88,114 @@ function TimelineSection() {
         //DISPLAY
         if (!themeModeForCheckTheme) {
             return (
-
                 <PostDisplayContainer>
-
-
                     {postLists.map((post) => {
-
-                        if (usersfollowinglist.includes(post.author.id)) {
-                            return (
-                                <OnePost
-                                    postid={post?.id}
-                                    title={post?.title}
-                                    location = {post?.location}
-                                    topic={post?.topic}
-                                    topicAuthor={post?.topicAuthor?.email}
-                                    postText={post?.postText}
-                                    authorEmail={post?.author?.email}
-                                    authorNickName={post?.author?.display?.nickName}
-                                    authorProfilePic={post?.author?.display?.profilePic}
-                                    imageUrl={post?.imageUrl}
-                                    imageUrl2={post?.imageUrl2}
-                                    imageUrl3={post?.imageUrl3}
-                                    FileURl={post?.FileURl}
-                                    timestamp={post?.timestamp}
-                                    likes={post?.likes}
-                                    authorid={post?.author?.id}
-                                    allowComments={post?.allowComments}
-                                />
-                            )
+                        if (usersFollowingList.includes(post.author.id)) {
+                            if (!usersBlockingTopicList.includes(post.topic) && post.topic !== "") {
+                                return (
+                                    <OnePost
+                                        postid={post?.id}
+                                        title={post?.title}
+                                        location={post?.location}
+                                        topic={post?.topic}
+                                        topicAuthor={post?.topicAuthor?.email}
+                                        postText={post?.postText}
+                                        authorEmail={post?.author?.email}
+                                        authorNickName={post?.author?.display?.nickName}
+                                        authorProfilePic={post?.author?.display?.profilePic}
+                                        imageUrl={post?.imageUrl}
+                                        imageUrl2={post?.imageUrl2}
+                                        imageUrl3={post?.imageUrl3}
+                                        FileURl={post?.FileURl}
+                                        timestamp={post?.timestamp}
+                                        likes={post?.likes}
+                                        authorid={post?.author?.id}
+                                        allowComments={post?.allowComments}
+                                    />
+                                )
+                            }
                         }
-                        if (usersfollowingTopiclist.includes(post.topic) && post.topic !== "") {
-                            return (
-                                <OnePost
-                                    postid={post?.id}
-                                    title={post?.title}
-                                    topic={post?.topic}
-                                    topicAuthor={post?.topicAuthor?.email}
-                                    postText={post?.postText}
-                                    authorEmail={post?.author?.email}
-                                    authorNickName={post?.author?.display?.nickName}
-                                    authorProfilePic={post?.author?.display?.profilePic}
-                                    imageUrl={post?.imageUrl}
-                                    imageUrl2={post?.imageUrl2}
-                                    imageUrl3={post?.imageUrl3}
-                                    FileURl={post?.FileURl}
-                                    timestamp={post?.timestamp}
-                                    likes={post?.likes}
-                                    authorid={post?.author?.id}
-                                    allowComments={post?.allowComments}
-                                />
-                            )
+                        if (usersFollowingTopicList.includes(post.topic) && post.topic !== "") {
+                            if (!usersBlockingList.includes(post.author.id)) {
+                                return (
+                                    <OnePost
+                                        postid={post?.id}
+                                        title={post?.title}
+                                        topic={post?.topic}
+                                        topicAuthor={post?.topicAuthor?.email}
+                                        postText={post?.postText}
+                                        authorEmail={post?.author?.email}
+                                        authorNickName={post?.author?.display?.nickName}
+                                        authorProfilePic={post?.author?.display?.profilePic}
+                                        imageUrl={post?.imageUrl}
+                                        imageUrl2={post?.imageUrl2}
+                                        imageUrl3={post?.imageUrl3}
+                                        FileURl={post?.FileURl}
+                                        timestamp={post?.timestamp}
+                                        likes={post?.likes}
+                                        authorid={post?.author?.id}
+                                        allowComments={post?.allowComments}
+                                    />
+                                )
+                            }
                         }
-
                     })}
-
                 </PostDisplayContainer>
             );
         } else {
             return (
                 <PostDisplayContainerDark>
-
                     {postLists.map((post) => {
-                        if (usersfollowinglist.includes(post.author.id)) {
-                            return (
-                                <OnePost
-                                    postid={post?.id}
-                                    title={post?.title}
-                                    topic={post?.topic}
-                                    topicAuthor={post?.topicAuthor?.email}
-                                    postText={post?.postText}
-                                    authorEmail={post?.author?.email}
-                                    authorNickName={post?.author?.display?.nickName}
-                                    authorProfilePic={post?.author?.display?.profilePic}
-                                    imageUrl={post?.imageUrl}
-                                    imageUrl2={post?.imageUrl2}
-                                    imageUrl3={post?.imageUrl3}
-                                    FileURl={post?.FileURl}
-                                    timestamp={post?.timestamp}
-                                    likes={post?.likes}
-                                    authorid={post?.author?.id}
-                                    allowComments={post?.allowComments}
-                                />
-                            )
+                        if (usersFollowingList.includes(post.author.id)) {
+                            if (!usersBlockingTopicList.includes(post.topic) && post.topic !== "") {
+                                return (
+                                    <OnePost
+                                        postid={post?.id}
+                                        title={post?.title}
+                                        location={post?.location}
+                                        topic={post?.topic}
+                                        topicAuthor={post?.topicAuthor?.email}
+                                        postText={post?.postText}
+                                        authorEmail={post?.author?.email}
+                                        authorNickName={post?.author?.display?.nickName}
+                                        authorProfilePic={post?.author?.display?.profilePic}
+                                        imageUrl={post?.imageUrl}
+                                        imageUrl2={post?.imageUrl2}
+                                        imageUrl3={post?.imageUrl3}
+                                        FileURl={post?.FileURl}
+                                        timestamp={post?.timestamp}
+                                        likes={post?.likes}
+                                        authorid={post?.author?.id}
+                                        allowComments={post?.allowComments}
+                                    />
+                                )
+                            }
                         }
-
-                        if (usersfollowingTopiclist.includes(post.topic) && post.topic !== "") {
-                            return (
-                                <OnePost
-                                    postid={post?.id}
-                                    title={post?.title}
-                                    topic={post?.topic}
-                                    topicAuthor={post?.topicAuthor?.email}
-                                    postText={post?.postText}
-                                    authorEmail={post?.author?.email}
-                                    authorNickName={post?.author?.display?.nickName}
-                                    authorProfilePic={post?.author?.display?.profilePic}
-                                    imageUrl={post?.imageUrl}
-                                    imageUrl2={post?.imageUrl2}
-                                    imageUrl3={post?.imageUrl3}
-                                    FileURl={post?.FileURl}
-                                    timestamp={post?.timestamp}
-                                    likes={post?.likes}
-                                    authorid={post?.author?.id}
-                                    allowComments={post?.allowComments}
-                                />
-                            )
+                        if (usersFollowingTopicList.includes(post.topic) && post.topic !== "") {
+                            if (!usersBlockingList.includes(post.author.id)) {
+                                return (
+                                    <OnePost
+                                        postid={post?.id}
+                                        title={post?.title}
+                                        topic={post?.topic}
+                                        topicAuthor={post?.topicAuthor?.email}
+                                        postText={post?.postText}
+                                        authorEmail={post?.author?.email}
+                                        authorNickName={post?.author?.display?.nickName}
+                                        authorProfilePic={post?.author?.display?.profilePic}
+                                        imageUrl={post?.imageUrl}
+                                        imageUrl2={post?.imageUrl2}
+                                        imageUrl3={post?.imageUrl3}
+                                        FileURl={post?.FileURl}
+                                        timestamp={post?.timestamp}
+                                        likes={post?.likes}
+                                        authorid={post?.author?.id}
+                                        allowComments={post?.allowComments}
+                                    />
+                                )
+                            }
                         }
                     })}
-
                 </PostDisplayContainerDark>
             )
         }

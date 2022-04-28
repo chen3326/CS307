@@ -459,10 +459,14 @@ function ProfileSection() {
     const [user, loading, error] = useAuthState(auth);
     const {profile_uid} = useParams();
     const [hasFollowed, setHasFollowed] = useState(false);
+    const [hasBlocked, setHasBlocked] = useState(false);
     const [profileUser, setProfileUser] = useState("");
     const [profile_following, setProfile_following] = useState([]);
+    const [profile_blocking, setProfile_blocking] = useState([]);
     const [topics_following, setTopics_following] = useState([]);
     const [me_following, setMe_following] = useState([]);
+    const [topics_blocking, setTopics_blocking] = useState([]);
+    const [me_blocking, setMe_blocking] = useState([]);
 
     const [themeModeForCheckTheme, setThemeModeForCheckTheme] = useState(false);
     const [themeEmail, setThemeEmail] = useState("");
@@ -474,13 +478,14 @@ function ProfileSection() {
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 setThemeModeForCheckTheme(doc.data().author.darkTheme);
-                setnickName(doc.data().author.nickName);
-                setBio(doc.data().author.bio);
-                setAge(doc.data().author.age);
-                setMajor(doc.data().author.major)
-                setYear(doc.data().author.year);
-                setProfilePic(doc.data().author.profilePic);
-                setPrivateProfile(doc.data().author.privateUser);
+                // TODO: Do we really need this stuff? It might cause errors on this page...
+                // setnickName(doc.data().author.nickName);
+                // setBio(doc.data().author.bio);
+                // setAge(doc.data().author.age);
+                // setMajor(doc.data().author.major)
+                // setYear(doc.data().author.year);
+                // setProfilePic(doc.data().author.profilePic);
+                // setPrivateProfile(doc.data().author.privateUser);
                 // setUserOnlineStatus(doc.data().loggedIn);
             });
         });
@@ -496,22 +501,19 @@ function ProfileSection() {
         });
     }
 
-    async function getUserStatus(){
-        //compare email to other users in collection
-        const q = query(collection(database, "users"), where("email", "==", profileUser));
-        const unsubscribe = onSnapshot(q, (querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                setUserOnlineStatus(doc.data().loggedIn)
-            });
-        });
-    }
-
-
+    // async function getUserStatus(){
+    //     //compare email to other users in collection
+    //     const q = query(collection(database, "users"), where("email", "==", profileUser));
+    //     const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    //         querySnapshot.forEach((doc) => {
+    //             setUserOnlineStatus(doc.data().loggedIn)
+    //         });
+    //     });
+    // }
 
     async function handleProfClick(id) {
         window.location = `/profile/${id}`;
     }
-
 
     useEffect(() => {
         if (user) {
@@ -521,11 +523,18 @@ function ProfileSection() {
         }
     }, [user]);
 
-
     useEffect(() => {
         if (user) {
             onSnapshot(doc(database, "users", profile_uid), (snapshot) =>
+                setTopics_blocking(snapshot.data().blockingTopics),
+            )
+        }
+    }, [user]);
 
+    // TODO: what is the difference between these two?
+    useEffect(() => {
+        if (user) {
+            onSnapshot(doc(database, "users", profile_uid), (snapshot) =>
                 setProfile_following(snapshot.data().following),
             )
         }
@@ -533,13 +542,28 @@ function ProfileSection() {
 
     useEffect(() => {
         if (user) {
-            onSnapshot(doc(database, "users", user.uid), (snapshot) =>
+            onSnapshot(doc(database, "users", profile_uid), (snapshot) =>
+                setProfile_blocking(snapshot.data().blockingUsers),
+            )
+        }
+    }, [user]);
 
+    // TODO: what is the difference between these two?
+    useEffect(() => {
+        if (user) {
+            onSnapshot(doc(database, "users", user.uid), (snapshot) =>
                 setMe_following(snapshot.data().following),
             )
         }
     }, [user]);
 
+    useEffect(() => {
+        if (user) {
+            onSnapshot(doc(database, "users", user.uid), (snapshot) =>
+                setMe_blocking(snapshot.data().blockingUsers),
+            )
+        }
+    }, [user]);
 
     useEffect(() => {
         if (user) {
@@ -548,6 +572,14 @@ function ProfileSection() {
             )
         }
     }, [user, me_following, profileUser]);
+
+    useEffect(() => {
+        if (user) {
+            setHasBlocked(
+                JSON.stringify(me_blocking).includes(profile_uid)
+            )
+        }
+    }, [user, me_blocking, profileUser]);
 
 
     const followUser = async () => {
@@ -561,6 +593,19 @@ function ProfileSection() {
             });
         }
     };
+
+    const blockUser = async () => {
+        if (hasBlocked) {
+            await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
+                blockingUsers: arrayRemove({nickName: nickName, id: profile_uid})
+            });
+        } else {
+            await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
+                blockingUsers: arrayUnion({nickName: nickName, id: profile_uid})
+            });
+        }
+    };
+
 
     const StyledBadge = styled(Badge)(() => ({
         "& .MuiBadge-badge": {
@@ -622,21 +667,21 @@ function ProfileSection() {
         }
     }, [user, profileUser]);
 
-    useEffect(() => {
-        if (user) {
-            onSnapshot(doc(database, "users", profile_uid), (snapshot) => {
-                setUserOnlineStatus(snapshot.data().loggedIn);
-            })
-            getUserStatus();
-        }
-    }, [profileUser]);
+    // useEffect(() => {
+    //     if (user) {
+    //         onSnapshot(doc(database, "users", profile_uid), (snapshot) => {
+    //             setUserOnlineStatus(snapshot.data().loggedIn);
+    //         })
+    //         getUserStatus();
+    //     }
+    // }, [profileUser]);
 
 
     if (loading) {
         return <div> Loading... </div>;
     } else if (user) {
         getprivatemode()
-        getUserStatus()
+        // getUserStatus()
         if (user.email===profileUser || !privateProfile ){
 
 
@@ -734,7 +779,8 @@ function ProfileSection() {
                                             )
                                             }
                                         </NameStatusIconContainer>
-
+                                        <div>Following Users</div>
+                                        {/*TODO: Add list of people/topics that we're blocking too...*/}
                                         {profile_following.map((this_user) => {
                                             return (
                                                 <Button onClick={() => handleProfClick(this_user.id)}>
@@ -743,7 +789,32 @@ function ProfileSection() {
                                             )
                                         })}
 
+                                        <div>Following Topics</div>
                                         {topics_following.map((this_topic) => {
+                                            return (
+                                                <Link to={{
+                                                    pathname: "/inner_topic",
+                                                    state: this_topic.topicName,
+                                                    topicAuthor: this_topic.topicAuthor,
+                                                    // your data array of objects
+                                                }}
+                                                >
+                                                    {this_topic.topicName}
+                                                </Link>
+                                            )
+                                        })}
+
+                                        <div>Blocking Users</div>
+                                        {profile_blocking.map((this_user) => {
+                                            return (
+                                                <Button onClick={() => handleProfClick(this_user.id)}>
+                                                    {this_user.nickName}
+                                                </Button>
+                                            )
+                                        })}
+
+                                        <div>Blocking Topics</div>
+                                        {topics_blocking.map((this_topic) => {
                                             return (
                                                 <Link to={{
                                                     pathname: "/inner_topic",
@@ -792,6 +863,32 @@ function ProfileSection() {
                                                         // fullWidth={true}
                                                         variant="outlined"
                                                         onClick={followUser}>follow</Button>
+                                                )}
+                                            </div>
+
+                                            {/*TODO: (WIP) Blocking implementation*/}
+                                            <div>
+                                                {hasBlocked ? (
+                                                    <FollowButton>
+                                                        <Button
+                                                            container
+                                                            direction="column"
+                                                            justifyContent="center"
+                                                            alignItems="center"
+                                                            // fullWidth={true}
+                                                            variant="outlined"
+                                                            onClick={blockUser}>unblock</Button>
+                                                    </FollowButton>
+
+                                                ) : (
+                                                    <Button
+                                                        container
+                                                        direction="column"
+                                                        justifyContent="center"
+                                                        alignItems="center"
+                                                        // fullWidth={true}
+                                                        variant="outlined"
+                                                        onClick={blockUser}>block</Button>
                                                 )}
                                             </div>
                                         </Grid>
@@ -927,8 +1024,6 @@ function ProfileSection() {
 
                                         {profile_following.map((this_user) => {
                                             return (
-
-
                                                 <Button onClick={() => handleProfClick(this_user.id)} style={{color:'lightblue'}}>
                                                     {this_user.nickName}
                                                 </Button>
@@ -966,7 +1061,6 @@ function ProfileSection() {
                                         >
                                             <div>
                                                 {hasFollowed ? (
-
                                                     <FollowButton>
                                                         <Button
                                                             container
@@ -979,9 +1073,8 @@ function ProfileSection() {
                                                             style={{color:'lightblue'}}
                                                             onClick={followUser}>unfollow</Button>
                                                     </FollowButton>
-
                                                 ) : (
-
+                                                    // TODO: add <followButton> later
                                                     <Button
                                                         container
                                                         direction="column"
@@ -992,7 +1085,35 @@ function ProfileSection() {
                                                         variant="outlined"
                                                         style={{color:'lightblue'}}
                                                         onClick={followUser}>follow</Button>
+                                                )}
+                                            </div>
+                                            {/*TODO: Blocking implementation*/}
+                                            <div>
+                                                {hasBlocked ? (
+                                                    <FollowButton>
+                                                        <Button
+                                                            container
+                                                            direction="column"
+                                                            justifyContent="center"
+                                                            alignItems="center"
+                                                            // fullWidth={true}
 
+                                                            variant="outlined"
+                                                            style={{color:'lightblue'}}
+                                                            onClick={blockUser}>unblock</Button>
+                                                    </FollowButton>
+                                                ) : (
+                                                    // TODO: add <followButton> later
+                                                    <Button
+                                                        container
+                                                        direction="column"
+                                                        justifyContent="center"
+                                                        alignItems="center"
+                                                        // fullWidth={true}
+
+                                                        variant="outlined"
+                                                        style={{color:'lightblue'}}
+                                                        onClick={blockUser}>block</Button>
                                                 )}
                                             </div>
 

@@ -38,10 +38,16 @@ function Inner_topic() {
     const [topicAuthoruid, setTopicAuthoruid] = useState("");
 
     const postsTopicCollectionRef = collection(database, "posts");
-    const q = query(postsTopicCollectionRef, where("topic", "==", state), orderBy("timestamp", "asc"), limit(1));
+    const q = query(postsTopicCollectionRef, where("topic", "==", state), limit(1));
+    // const q = query(postsTopicCollectionRef, where("topic", "==", state), orderBy("timestamp", "asc"), limit(1));
     const backq = query(postsTopicCollectionRef, where("topic", "==", state));
+
     const [me_following, setMe_following] = useState([]);
     const [hasFollowed, setHasFollowed] = useState(false);
+    // TODO: blocking implementation
+    const [me_Blocking, setMe_Blocking] = useState([]);
+    const [hasBlocked, setHasBlocked] = useState(false);
+
     useEffect(() => {
         const unsubscribeTopic = onSnapshot(backq, snapshot => {
 
@@ -60,7 +66,6 @@ function Inner_topic() {
     useEffect(() => {
         if (user) {
             setHasFollowed(
-
                 JSON.stringify(me_following).includes(JSON.stringify(state))
             )
         }
@@ -69,17 +74,29 @@ function Inner_topic() {
     useEffect(() => {
         if (user) {
             onSnapshot(doc(database, "users", user.uid), (snapshot) =>
-
                 setMe_following(snapshot.data().followingTopics),
             )
         }
     }, [user]);
 
+    useEffect(() => {
+        if (user) {
+            setHasBlocked(
+                JSON.stringify(me_Blocking).includes(JSON.stringify(state))
+            )
+        }
+    }, [user, me_Blocking]);
+
+    useEffect(() => {
+        if (user) {
+            onSnapshot(doc(database, "users", user.uid), (snapshot) =>
+                setMe_Blocking(snapshot.data().blockingTopics),
+            )
+        }
+    }, [user]);
 
     const followTopic = async () => {
-
         if (hasFollowed) {
-
             await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
                 followingTopics: arrayRemove({topicName: state, topicAuthor: topicAuthor, id: topicAuthoruid})
             });
@@ -87,9 +104,19 @@ function Inner_topic() {
             await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
                 followingTopics: arrayUnion({topicName: state, topicAuthor: topicAuthor, id: topicAuthoruid})
             });
-
         }
+    };
 
+    const blockTopic = async () => {
+        if (hasBlocked) {
+            await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
+                blockingTopics: arrayRemove({topicName: state, topicAuthor: topicAuthor, id: topicAuthoruid})
+            });
+        } else {
+            await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
+                blockingTopics: arrayUnion({topicName: state, topicAuthor: topicAuthor, id: topicAuthoruid})
+            });
+        }
     };
 
     const [themeModeForCheckTheme, setThemeModeForCheckTheme] = useState(false);
@@ -127,7 +154,40 @@ function Inner_topic() {
                         <h2>Topic Author: {topicAuthor}</h2>
                         <div>
                             {hasFollowed ? (
-
+                                <FollowButton>
+                                    <Button
+                                        sx={{
+                                            direction: "column",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            '@media screen and (max-width: 768px)': {
+                                            },
+                                        }}
+                                        container
+                                        // direction="column"
+                                        // justifyContent="center"
+                                        // alignItems="center"
+                                        // fullWidth={true}
+                                        variant="outlined"
+                                        onClick={followTopic}>unfollow Topic</Button>
+                                </FollowButton>
+                            ) : (
+                                <Button
+                                    container
+                                    sx={{
+                                        direction: "column",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        '@media screen and (max-width: 768px)': {
+                                        },
+                                    }}
+                                    // fullWidth={true}
+                                    variant="outlined"
+                                    onClick={followTopic}>follow topic</Button>
+                            )}
+                        </div>
+                        <div>
+                            {hasBlocked ? (
                                 <FollowButton>
                                     <Button
                                         container
@@ -135,31 +195,24 @@ function Inner_topic() {
                                         justifyContent="center"
                                         alignItems="center"
                                         // fullWidth={true}
-
                                         variant="outlined"
-                                        onClick={followTopic}>unfollow Topic</Button>
+                                        onClick={blockTopic}>unblock Topic</Button>
                                 </FollowButton>
-
                             ) : (
-
                                 <Button
                                     container
                                     direction="column"
                                     justifyContent="center"
                                     alignItems="center"
                                     // fullWidth={true}
-
                                     variant="outlined"
-                                    onClick={followTopic}>follow topic</Button>
-
+                                    onClick={blockTopic}>block topic</Button>
                             )}
                         </div>
                     </Typography>
                     <PostDisplayContainer>
-
                         {postListsTopic.map((post) => {
                             return (
-
                                 <OnePost
                                     postid={post?.id}
                                     title={post?.title}
@@ -175,29 +228,23 @@ function Inner_topic() {
                                     FileURl={post?.FileURl}
                                     timestamp={post?.timestamp}
                                     likes={post?.likes}
-
                                 />
                             )
                         })}
-
                     </PostDisplayContainer>
-
                 </>
-
-
             );
         } else {
             return (
                 <>
                     <SidebarSection/>
                     <NavSection/>
-
+                    {/*TODO: finish when regular version is working*/}
                     <Typography style={{paddingTop: "5%", paddingLeft: "10%", background:'#121212'}}>
                         <h1 style={{color:'rgba(255,255,255,0.85)'}}>Topic Name: {state}</h1>
                         <h2 style={{color:'rgba(255,255,255,0.85)'}}>Topic Author: {topicAuthor}</h2>
                         <div style={{paddingBottom:'25px'}}>
                             {hasFollowed ? (
-
                                 <FollowButton>
                                     <Button
                                         container
@@ -205,33 +252,26 @@ function Inner_topic() {
                                         justifyContent="center"
                                         alignItems="center"
                                         // fullWidth={true}
-
                                         variant="outlined"
                                         style={{color:'lightblue'}}
                                         onClick={followTopic}>unfollow Topic</Button>
                                 </FollowButton>
-
                             ) : (
-
                                 <Button
                                     container
                                     direction="column"
                                     justifyContent="center"
                                     alignItems="center"
                                     // fullWidth={true}
-
                                     variant="outlined"
                                     style={{color:'lightblue'}}
                                     onClick={followTopic}>follow topic</Button>
-
                             )}
                         </div>
                     </Typography>
                     <PostDisplayContainerDark style={{paddingBottom:'800px'}}>
-
                         {postListsTopic.map((post) => {
                             return (
-
                                 <OnePost
                                     postid={post?.id}
                                     title={post?.title}
@@ -245,16 +285,11 @@ function Inner_topic() {
                                     FileURl={post?.FileURl}
                                     timestamp={post?.timestamp}
                                     likes={post?.likes}
-
                                 />
                             )
                         })}
-
                     </PostDisplayContainerDark>
-
                 </>
-
-
             );
         }
     } else if (error) {
@@ -262,7 +297,6 @@ function Inner_topic() {
     } else {
         return <div>There was an authentication error.</div>;
     }
-
 }
 
 export default Inner_topic;
