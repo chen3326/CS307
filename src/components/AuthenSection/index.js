@@ -5,13 +5,8 @@ import PropTypes from 'prop-types';
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -157,9 +152,9 @@ export default function Login() {
                 }}
             >
                 <Avatar sx={{width: 50, height: 60}} variant="square" src={AppLogo}/>
-                <div> <font color="#ffffff"> new line </font> </div>
+                <div> <font color="#ffffff"> . </font> </div>
 
-                <Typography component="h1" variant="h5">
+                <Typography component="h1" variant="h3" align="center">
                     Welcome to Boiler Breakouts!
                 </Typography>
 
@@ -199,6 +194,8 @@ export default function Login() {
                     >
                         Log In
                     </Button>
+                    <div> <font color="#ffffff"> . </font> </div>
+
 
                     {/*buttons for signup, logout, guest, forget password*/}
                     <Grid container>

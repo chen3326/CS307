@@ -4,8 +4,7 @@
 //local files
 import {auth, database, storage} from "../../firebase.js";
 import {login, logout, signup, useAuth} from "../../firebase";
-import Topics from './topicsWindow';
-import AppLogo from '../../images/Boiler Breakouts-logos.jpeg';
+import AppLogo from '../../images/simpleLogo.png';
 
 //MUX extentions
 import {
@@ -87,12 +86,7 @@ function SignUpUser() {
     //profile pic variables todo:default profile image
     const [profilePic, setProfilePic] = useState("https://firebasestorage.googleapis.com/v0/b/cs307-bdbca.appspot.com/o/files%2Fcat_pic.jpg?alt=media&token=86dc6a1d-f6a5-4f7e-be00-a25851f8e820");
     const [progress, setProgress] = useState(0);
-    //topic var
-    const [topic1, setTopic1] = useState("");
-    const [topic2, setTopic2] = useState("");
-    const [topic3, setTopic3] = useState("");
-    const [topic4, setTopic4] = useState("");
-    const [topic5, setTopic5] = useState("");
+
     // Keep track of loggedIn status
     // const [userOnline, setUserOnline] = useState(false);
 
@@ -209,23 +203,28 @@ function SignUpUser() {
 
     //DISPLAY PAGE
     return (
-        <Grid container className={"form"}>
-            <Grid item sm/>
-            <Grid item sm> {/*middle of grids so centered*/}
-                    {/* rn temp logo marker*/}
-                <Box
-                    display="flex"
-                    width={500} height={100}
-                >
-                    <Box m="auto">
-                        <Avatar sx={{ bgcolor: orange[500] }} variant="rounded">
-                            <HardwareIcon sx={{ color: indigo[500] }} />
-                        </Avatar>
+        <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <Box
+                sx={{
+                    marginTop: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
+            >
+                <Grid container className={"form"}>
+                    <Box
+                        display="flex"
+                        width={500} height={100}
+                    >
+                        <Box m="auto">
+                            <Avatar sx={{width: 50, height: 60}} variant="square" src={AppLogo}/>
+                        </Box>
                     </Box>
-                </Box>
 
-                    <Typography component="h1" variant="h3" align="center">
-                        Create an Account
+                    <Typography component="h1" variant="h4" align="center">
+                        Create a new Boiler Breakers Account
                     </Typography>
 
                     {/*form for all user inputs*/}
@@ -254,21 +253,21 @@ function SignUpUser() {
                                     setPassword(event.target.value);
                                 }}
                             />
-                            <Typography variant={"subtitle1"} display="inline">
-                                1. Minimum 6 characters
-                            </Typography>
-                            <Typography variant={"subtitle1"} display="inline">
-                                2. At least 1 upper case English letter
-                            </Typography>
-                            <Typography variant={"subtitle1"} display="inline">
-                                3. At least 1 lower case English letter
-                            </Typography>
-                            <Typography variant={"subtitle1"} display="inline">
-                                4. At least 1 letter
-                            </Typography>
-                            <Typography variant={"subtitle1"} display="inline">
-                                5. At least 1 special character (!,@,#,$,%,&,)");
-                            </Typography>
+                                <Typography variant={"caption"} display="inline">
+                                    1. Minimum 6 characters
+                                </Typography>
+                                <Typography variant={"caption"} display="inline">
+                                    2. At least 1 upper case English letter
+                                </Typography>
+                                <Typography variant={"caption"} display="inline">
+                                    3. At least 1 lower case English letter
+                                </Typography>
+                                <Typography variant={"caption"} display="inline">
+                                    4. At least 1 letter
+                                </Typography>
+                                <Typography variant={"caption"} display="inline">
+                                    5. At least 1 special character (!,@,#,$,%,&,)");
+                                </Typography>
                         </FormControl>
                     </div>
 
@@ -282,16 +281,16 @@ function SignUpUser() {
                                 Let us know more about you!
                             </Typography>
 
-                        <FormControl margin="normal" fullWidth>
-                            <form onChange={event => doUpload(event)}>
-                                <input type="file" className="input" />
+                            <FormControl margin="normal" fullWidth>
+                                <form onChange={event => doUpload(event)}>
+                                    <input type="file" className="input" />
 
-                            </form>
-                            <hr />
-                            <h4>Profile Picture Uploading {progress}% Done</h4>
-                        </FormControl>
+                                </form>
+                                <hr />
+                                <h4>Profile Picture Uploading {progress}% Done</h4>
+                            </FormControl>
 
-                        {/*Nickname*/}
+                            {/*Nickname*/}
                             <TextField
                                 id="outlined-basic"
                                 variant="outlined"
@@ -306,15 +305,15 @@ function SignUpUser() {
 
                         {/*bio*/}
                         <FormControl margin="normal" fullWidth>
-                        <TextField
-                            id="outlined-multiline-static"
-                            label="Bio"
-                            multiline
-                            rows={5}
-                            inputProps={{ maxLength: 200 }}
-                            onChange={(event) => {
-                                setBio(event.target.value);
-                            }}
+                            <TextField
+                                id="outlined-multiline-static"
+                                label="Bio"
+                                multiline
+                                rows={5}
+                                inputProps={{ maxLength: 200 }}
+                                onChange={(event) => {
+                                    setBio(event.target.value);
+                                }}
                             />
                         </FormControl>
 
@@ -389,95 +388,24 @@ function SignUpUser() {
                         </div>
                     </div>
 
-                    <div>{/*TOPICS SECTION (TEMPORARY)*/}
-                        <FormControl margin="normal" fullWidth>
-                            <Typography variant={"h6"} >
-                                Topics:
-                            </Typography>
-                            <Typography id="modal-modal-title" variant="subtitle1" component="subtitle1">
-                                Here you can add some of your interests, classes, clubs, etc. that will be tied to your account. Lets start off with five topics for now. You can add more later.
-                            </Typography>
+                    {/*SUBMIT button creates user id in authen and then pushes user inputs to users collection*/}
+                    <FormControl margin="normal" fullWidth>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
 
-                            <TextField
-                                id="outlined-basic"
-                                variant="outlined"
-                                label="Topic 1*"
-                                className={"textField"}
-                                inputProps={{ maxLength: 40 }}
-                                onChange={(event) => {
-                                    setTopic1(event.target.value);
-                                }}
-                            />
-                        </FormControl>
-                        <FormControl margin="normal" fullWidth>
-                            <TextField
-                                id="outlined-basic"
-                                variant="outlined"
-                                label="Topic 2*"
-                                className={"textField"}
-                                inputProps={{ maxLength: 40 }}
-                                onChange={(event) => {
-                                    setTopic2(event.target.value);
-                                }}
-                            />
-                        </FormControl>
-                        <FormControl margin="normal" fullWidth>
-                            <TextField
-                                id="outlined-basic"
-                                variant="outlined"
-                                label="Topic 3*"
-                                className={"textField"}
-                                inputProps={{ maxLength: 40 }}
-                                onChange={(event) => {
-                                    setTopic3(event.target.value);
-                                }}
-                            />
-                        </FormControl>
-                        <FormControl margin="normal" fullWidth>
-                            <TextField
-                                id="outlined-basic"
-                                variant="outlined"
-                                label="Topic 4*"
-                                className={"textField"}
-                                inputProps={{ maxLength: 40 }}
-                                onChange={(event) => {
-                                    setTopic4(event.target.value);
-                                }}
-                            />
-                        </FormControl>
-                        <FormControl margin="normal" fullWidth>
-                            <TextField
-                                id="outlined-basic"
-                                variant="outlined"
-                                label="Topic 5*"
-                                className={"textField"}
-                                inputProps={{ maxLength: 40 }}
-                                onChange={(event) => {
-                                    setTopic5(event.target.value);
-                                }}
-                            />
-                        </FormControl>
-                    </div>
+                            onClick={handleUserAuthen}
+                        >
+                            Next
+                        </Button>
+                    </FormControl>
+                </Grid>
 
 
-
-                {/*SUBMIT button creates user id in authen and then pushes user inputs to users collection*/}
-                <FormControl margin="normal" fullWidth>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-
-                        onClick={handleUserAuthen}
-                    >
-                        Next
-                    </Button>
-                </FormControl>
-
-            </Grid>
-            <Grid item sm/>
-        </Grid>
+            </Box>
+        </Container>
     );
 }
 export default withStyles(styles)(SignUpUser);
