@@ -1,21 +1,20 @@
-import AppLogo from '../../images/Boiler Breakouts-logos.jpeg';
+import AppLogo from '../../images/simpleLogo.png';
 import PropTypes from 'prop-types';
 
 //MUX extentions
-import withStyles from '@material-ui/core/styles/withStyles';
+import Avatar from '@mui/material/Avatar';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import {auth, database, login, logout, signup, useAuth} from "../../firebase";
 import React, {useEffect, useRef, useState} from "react";
-import {Container} from "@material-ui/core";
-import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
-import buttonInner from "@mui/material/Button";
-import Modal from "@mui/material/Modal";
 import {arrayUnion, collection, doc, onSnapshot, query, setDoc, updateDoc, where} from "firebase/firestore";
 import {getAuth} from "firebase/auth";
+import {useAuthState} from "react-firebase-hooks/auth";
 
 
 //main welcome page with login and link to signing in
@@ -30,21 +29,18 @@ const styles = {
     pageTitle: {
         margin: '10px auto 10px auto'
     },
-    textField: {
-        margin: '10px auto 10px auto'
-    },
     button: {
         marginTop: '10px auto 10px auto'
     }
 };
 
+
 export default function Login() {
     const [loading, setLoading] = useState(false);
     const currentUser = useAuth();
-    const emailRef = useRef();
-    const passwordRef = useRef();
     const [userOnline, setUserOnline] = useState(false);
-
+    const [alreadyLIStatement, setalreadyLIStatement] = useState("");;
+    const [gate, setGate] = useState(true);
     // useEffect(() => {
     //     setUserOnline(true)
     // }, [userOnline]);
@@ -61,15 +57,27 @@ export default function Login() {
         try {
             window.location = "/signup";
         } catch {
-            alert("Error!");
+            alert("routing to signup error!");
         }
         setLoading(false);
     }
 
-    async function handleLogin() {
+    //get form data for email and password when hit log in
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        console.log({
+            email: data.get('email'),
+            password: data.get('password'),
+        });
+        handleLogin(data.get('email'), data.get('password')); //pass data into login async function
+    };
+
+    //log in as a user
+    async function handleLogin(email, password) {
         setLoading(true);
         try {
-            await login(emailRef.current.value, passwordRef.current.value);
+            await login(email, password);
             setLoading(false);
             await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
                 loggedIn: true,
@@ -77,167 +85,128 @@ export default function Login() {
             window.location = "/home";
 
         } catch {
-            alert("Error!");
+            alert("Incorrect Email or Password input");
         }
         setLoading(false);
     }
 
+    //log in as a guest
     async function anonymous_login () {
         setLoading(true);
 
         try {
-            await login("anonymous@unkown.com", "secret1234");
+            await login("anonymous@unkown.com", "Secret1234!");
             setLoading(false);
             window.location = "/home";
         } catch {
-            alert("Error!");
+            alert("Error with logging in as anon");
         }
         setLoading(false);
     }
 
+    //log user out of app
     async function handleLogout() {
         setLoading(true);
         try {
             setUserOnline(false);
+            console.log("update doc...");
+
             await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
                 loggedIn: false,
             });
+            console.log("logout...");
             await logout();
+            console.log("logout success!");
+
         } catch {
-            alert("Error!");
+            alert("Logging out Error");
         }
         setLoading(false);
+        window.location = "/"; //reload page to get correct log in statement
     }
 
     async function handleFPClick() {
         window.location = "/forgot_password";
     }
 
+    //get log in statement
+    async function getalreadyLIStatement() {
+        //only show log in statement if there is a current user logged in
+        if (currentUser.email != null && gate) {
+            setalreadyLIStatement(`Logged in as ${currentUser.email}` ); //display logged in email
+            setGate(false);
+        }
+    }
 
+
+    getalreadyLIStatement(); //get log in statement
     return (
+        <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <Box
+                sx={{
+                    marginTop: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
+            >
+                <Avatar sx={{width: 50, height: 60}} variant="square" src={AppLogo}/>
+                <div> <font color="#ffffff"> . </font> </div>
 
-
-        <Grid container className={"form"}>
-            <Grid item sm/>
-            <Grid item sm> {/*middle of grids so centered*/}
-
-                {/**todo:get smaller logo*/}
-                <img src={AppLogo} alt="logo" width='150px'/>
-
-                <Typography variant="h2" className={"pageTitle"}>
-                    Login
+                <Typography component="h1" variant="h3" align="center">
+                    Welcome to Boiler Breakouts!
                 </Typography>
-                <div>Currently logged in as: {currentUser?.email} </div>
 
-                {/*<form>*/}
+                <div>{alreadyLIStatement} </div>
 
-                {/*    <input*/}
-                {/*        id="email"*/}
-                {/*        name="email"*/}
-                {/*        type="email"*/}
-                {/*        label="Email"*/}
-                {/*        className={"textField"}*/}
-                {/*        ref={emailRef}*/}
+                {/*form for loggin in*/}
+                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="email"
+                        label="Email Address"
+                        name="email"
+                        autoComplete="email"
+                        autoFocus
+                    />
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
+                    />
 
-                {/*        fullWidth*/}
-                {/*    />*/}
-                {/*    <input*/}
-                {/*        id="password"*/}
-                {/*        name="password"*/}
-                {/*        type="password"*/}
-                {/*        label="Password"*/}
-                {/*        ref={passwordRef}*/}
-                {/*        className={"textField"}*/}
-
-                {/*        fullWidth*/}
-                {/*    />*/}
-
-
-                {/*    <Button*/}
-                {/*        type="submit"*/}
-                {/*        variant="contained"*/}
-                {/*        color="primary"*/}
-                {/*        className={"button"}*/}
-                {/*        disabled={loading || currentUser} onClick={handleLogin}*/}
-                {/*    >*/}
-                {/*        Login*/}
-                {/*    </Button>*/}
-
-                {/*    <Button*/}
-                {/*        type="submit"*/}
-                {/*        variant="contained"*/}
-                {/*        color="primary"*/}
-                {/*        className={"button"}*/}
-                {/*        disabled={loading || currentUser} onClick={handleSignup}*/}
-                {/*    >*/}
-                {/*        sign up*/}
-                {/*    </Button>*/}
-
-                {/*    <Button*/}
-                {/*        type="submit"*/}
-                {/*        variant="contained"*/}
-                {/*        color="primary"*/}
-                {/*        className={"button"}*/}
-                {/*        disabled={loading || !currentUser} onClick={handleLogout}*/}
-                {/*    >*/}
-                {/*        logout*/}
-                {/*    </Button>*/}
-
-                {/*    /!*todo:link reset password page and signin page*!/*/}
-
-                {/*    /!*GUEST BUTTON*!/*/}
-                {/*    <Button*/}
-                {/*        href="home"*/}
-                {/*    >*/}
-                {/*        continue as guest*/}
-                {/*    </Button>*/}
-
-                {/*    /!*RESET PASSWORD BUTTON*!/*/}
-                {/*    <Button*/}
-                {/*        href="reset_password"*/}
-                {/*    >*/}
-                {/*        Forgot your password?*/}
-                {/*    </Button>*/}
-
-                {/*</form>*/}
+                    {/*login submit button*/}
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        sx={{ mt: 3, mb: 2 }}
+                        disabled={loading || currentUser}
+                    >
+                        Log In
+                    </Button>
+                    <div> <font color="#ffffff"> . </font> </div>
 
 
-                <div id="fields">
-                    <input ref={emailRef} placeholder="Email"/>
-                    <input ref={passwordRef} type="password" placeholder="Password"/>
-                </div>
-                <Button disabled={loading || currentUser} onClick={handleSignup}>Sign Up</Button>
-                <Button disabled={loading || currentUser} onClick={handleLogin}>Log In</Button>
-                <Button disabled={loading || !currentUser} onClick={handleLogout}>Log Out</Button>
-                <Button disabled={loading || currentUser} onClick={anonymous_login}> continue as guest</Button>
-                <Button disabled={loading || !currentUser} onClick={handleFPClick}>Forgot Password</Button>
-            </Grid>
-            <Grid item sm/>n
-        </Grid>
+                    {/*buttons for signup, logout, guest, forget password*/}
+                    <Grid container>
+                        <Button disabled={loading || currentUser} onClick={handleSignup}>Create Account</Button>
+                        <Button disabled={loading || !currentUser} onClick={handleLogout}>Log Out</Button>
+                        <Button disabled={loading || currentUser} onClick={anonymous_login}> continue as guest</Button>
+                        <Button disabled={loading || !currentUser} onClick={handleFPClick}>Forgot Password?</Button>
+                    </Grid>
+                </Box>
+            </Box>
+        </Container>
+
     );
 }
-
-// const config = {};
-// const firebase = require('firebase');
-// firebase.intializeApp(config);
-// // signup Route
-// app.post('/signup', (req, res) => {
-//     const newUser = {
-//         firstName : req.body.firstName,
-//         lastName : req.body.lastName,
-//         email: req.body.email,
-//         username: req.body.username,
-//         password: req.body.password,
-//         confirmPassword : req.body.confirmPassword,
-//     }
-//     //TODO: Validate Data
-//     firebase.auth().createUserWithEmailAndPassword(newUser.email, newUser.password)
-//         .then(data => {
-//             return res.status(200).json({message: `user ${data.user.uid} signed up successfully`})
-//         })
-//         .catch(err => {
-//             console.error(err);
-//             return res.status(500).json({error: err.code});
-//         })
-// })
-

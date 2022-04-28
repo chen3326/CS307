@@ -553,11 +553,11 @@ function ProfileSection() {
     const followUser = async () => {
         if (hasFollowed) {
             await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
-                following: arrayRemove({email: profileUser, id: profile_uid})
+                following: arrayRemove({nickName: nickName, id: profile_uid})
             });
         } else {
             await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
-                following: arrayUnion({email: profileUser, id: profile_uid})
+                following: arrayUnion({nickName: nickName, id: profile_uid})
             });
         }
     };
@@ -738,7 +738,7 @@ function ProfileSection() {
                                         {profile_following.map((this_user) => {
                                             return (
                                                 <Button onClick={() => handleProfClick(this_user.id)}>
-                                                    {this_user.email}
+                                                    {this_user.nickName}
                                                 </Button>
                                             )
                                         })}
@@ -927,8 +927,10 @@ function ProfileSection() {
 
                                         {profile_following.map((this_user) => {
                                             return (
-                                                <Button onClick={() => handleProfClick(this_user.id)}>
-                                                    {this_user.email}
+
+
+                                                <Button onClick={() => handleProfClick(this_user.id)} style={{color:'lightblue'}}>
+                                                    {this_user.nickName}
                                                 </Button>
                                             )
                                         })}
@@ -941,6 +943,7 @@ function ProfileSection() {
                                                     topicAuthor: this_topic.topicAuthor,
                                                     // your data array of objects
                                                 }}
+                                                      style={{color:'#F0E68C'}}
                                                 >
                                                     {this_topic.topicName}
                                                 </Link>
