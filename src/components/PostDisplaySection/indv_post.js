@@ -514,7 +514,7 @@ function IndvPost_display() {
                                                                     loading="lazy"
                                                                     height="100"
                                                                     width="100"
-                                                                 alt="No Image To Display"/>
+                                                                    alt="No Image To Display"/>
                                                             }
                                                         </ImageListItem>
                                                     </Stack>

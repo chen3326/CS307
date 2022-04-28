@@ -194,6 +194,7 @@ function FullWidthTabs() {
                                                 timestamp={post?.timestamp}
                                                 likes={post?.likes}
                                                 authorid={post?.author?.id}
+                                                allowComments={post?.allowComments}
                                             />
                                         ) : (
                                             <div/>
@@ -316,6 +317,7 @@ function FullWidthTabs() {
                                             timestamp={post?.timestamp}
                                             likes={post?.likes}
                                             authorid={post?.author?.id}
+                                            allowComments={post?.allowComments}
                                         />
                                     ) : (
                                         <div/>
@@ -348,6 +350,7 @@ function FullWidthTabs() {
                                             timestamp={post?.timestamp}
                                             likes={post?.likes}
                                             authorid={post?.author?.id}
+                                            allowComments={post?.allowComments}
                                         />
                                     ) : (
                                         <div/>
@@ -358,11 +361,6 @@ function FullWidthTabs() {
                         })}
                     </TabCard>
                 </TabPanel>
-                {/*<TabPanel value={value} index={2} dir={theme.direction}>
-                    <TabCard>
-                        <OutlinedCard/>
-                    </TabCard>
-                </TabPanel>*/}
                 <TabPanel value={value} index={2} dir={theme.direction}>
                     <TabCard>
                         {postLists1.map((post) => {
@@ -385,6 +383,7 @@ function FullWidthTabs() {
                                             timestamp={post?.timestamp}
                                             likes={post?.likes}
                                             authorid={post?.author?.id}
+                                            allowComments={post?.allowComments}
                                         />
                                     ) : (
                                         <div/>
@@ -403,54 +402,7 @@ function FullWidthTabs() {
     } else {
         return <div>There was an authentication error.</div>;
     }
-
 }
-
-// const card = (
-//     <React.Fragment>
-//         <CardContent>
-//
-//             <Typography variant="h6" component="div">
-//                 Lorem Ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-//                 dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-//                 ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-//                 fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-//                 deserunt mollit anim id est laborum.
-//             </Typography>
-//         </CardContent>
-//         <CardActions>
-//             <Container>
-//                 <Grid
-//                     container
-//                     direction="row"
-//                     justifyContent="flex-start"
-//                     alignItems="center">
-//                     <ThumbUpAltRoundedIcon/>
-//                     <TextsmsRoundedIcon/>
-//                 </Grid>
-//             </Container>
-//             <Container>
-//                 <Grid
-//                     container
-//                     direction="row"
-//                     justifyContent="flex-end"
-//                     alignItems="center">
-//                     <BookmarkRoundedIcon/>
-//                 </Grid>
-//             </Container>
-//         </CardActions>
-//     </React.Fragment>
-// );
-//
-//
-// function OutlinedCard() {
-//     return (
-//         <Box sx={{minWidth: 275}}>
-//             <Card variant="outlined">{card}</Card>
-//         </Box>
-//     );
-// }
-
 
 function ProfileSection() {
 
@@ -1139,42 +1091,6 @@ function ProfileSection() {
 
                                         </Grid>
                                     </Grid>
-                                    {/*<UserStats>*/}
-                                    {/*    <Grid*/}
-                                    {/*        // User Stats*/}
-                                    {/*        container*/}
-                                    {/*        direction="row"*/}
-                                    {/*        alignItems="center"*/}
-                                    {/*        justifyContent="center"*/}
-                                    {/*        spacing={2}*/}
-                                    {/*    >*/}
-                                    {/*        <Grid*/}
-                                    {/*            container*/}
-                                    {/*            direction="column"*/}
-                                    {/*            alignItems="center"*/}
-                                    {/*            justifyContent="center"*/}
-                                    {/*            item xs={4}*/}
-                                    {/*        >*/}
-
-                                    {/*        </Grid>*/}
-                                    {/*        <Grid container*/}
-                                    {/*              direction="column"*/}
-                                    {/*              alignItems="center"*/}
-                                    {/*              justifyContent="center"*/}
-                                    {/*              item xs={4}*/}
-                                    {/*        >*/}
-
-                                    {/*        </Grid>*/}
-                                    {/*        <Grid container*/}
-                                    {/*              direction="column"*/}
-                                    {/*              alignItems="center"*/}
-                                    {/*              justifyContent="center"*/}
-                                    {/*              item xs={4}*/}
-                                    {/*        >*/}
-
-                                    {/*        </Grid>*/}
-                                    {/*    </Grid>*/}
-                                    {/*</UserStats>*/}
                                     <FullWidthTabs/>
                                 </Grid>
                             </Grid>
