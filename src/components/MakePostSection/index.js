@@ -23,7 +23,7 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '90%',
+    width: '85%',
     height :'95%',
     bgcolor: 'background.paper',
     border: '2px solid darkblue',
@@ -360,7 +360,7 @@ function MakePost(){
     }
 
     return (
-        <Container styles={{color: 'darkblue', marginRight: '15%', marginBottom: '15%'}}>
+        <Container styles={{color: 'darkblue', marginRight: '5%', marginBottom: '15%'}}>
             <Button
                 tooltip="Click to make a new post"
                 styles={{backgroundColor: 'darkblue' , color : 'white', width: '7vw', height: '7vw'}}
