@@ -193,6 +193,7 @@ function FullWidthTabs() {
                                                 timestamp={post?.timestamp}
                                                 likes={post?.likes}
                                                 authorid={post?.author?.id}
+                                                allowComments={post?.allowComments}
                                             />
                                         ) : (
                                             <div/>
@@ -312,6 +313,7 @@ function FullWidthTabs() {
                                             timestamp={post?.timestamp}
                                             likes={post?.likes}
                                             authorid={post?.author?.id}
+                                            allowComments={post?.allowComments}
                                         />
                                     ) : (
                                         <div/>
@@ -343,6 +345,7 @@ function FullWidthTabs() {
                                             timestamp={post?.timestamp}
                                             likes={post?.likes}
                                             authorid={post?.author?.id}
+                                            allowComments={post?.allowComments}
                                         />
                                     ) : (
                                         <div/>
@@ -379,6 +382,7 @@ function FullWidthTabs() {
                                             timestamp={post?.timestamp}
                                             likes={post?.likes}
                                             authorid={post?.author?.id}
+                                            allowComments={post?.allowComments}
                                         />
                                     ) : (
                                         <div/>
