@@ -257,7 +257,7 @@ function OnePost({
     //         });
     //     });
     // }
-
+/*
     useEffect(() => {
         if (user) {
             onSnapshot(doc(database, "users", authorid), (snapshot) => {
@@ -266,7 +266,7 @@ function OnePost({
             // getUserStatus();
         }
     }, [authorid]);
-
+*/
 
     // useEffect(() => {
     //     setUserOnlineStatus(true)
@@ -566,7 +566,7 @@ function OnePost({
                                             <Paper>
 
                                                 <Typography variant="h6" component="h2" marginLeft='10px' marginTop='5px'
-                                                            width='450px'>
+                                                            width='70%'>
                                                     Add a Comment here
                                                 </Typography>
                                                 <Typography sx={{p: 2}}>
@@ -575,7 +575,7 @@ function OnePost({
 
                                                             <textarea
                                                                 style={{
-                                                                    width: '400px',
+                                                                    width: '85%',
                                                                     height: '80px',
                                                                     marginTop: '0px',
                                                                     marginBottom: '15px',
