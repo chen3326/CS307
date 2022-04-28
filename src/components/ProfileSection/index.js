@@ -164,19 +164,20 @@ function FullWidthTabs() {
                             variant="fullWidth"
                             aria-label="full width tabs example"
                         >
-                            <Tab label="Posts" {...a11yProps(0)} />
-                            <Tab label="Liked" {...a11yProps(1)} />
+                            <Tab key={0} label="Posts" {...a11yProps(0)} />
+                            <Tab key={1} label="Liked" {...a11yProps(1)} />
                             {/*<Tab label="Saved" {...a11yProps(2)} />*/}
-                            <Tab label="Comments" {...a11yProps(2)} />
+                            <Tab key={2} label="Comments" {...a11yProps(2)} />
                         </Tabs>
                     </AppBar>
                     <TabPanel value={value} index={0} dir={theme.direction}>
                         <TabCard class={"TabCard"}>
                             {postLists1.map((post) => {
                                 return (
-                                    <TabDiv class={"TabDiv"}>
+                                    <TabDiv key={post.id} class={"TabDiv"}>
                                         {post.author.id === profile_uid ? (
                                             <OnePost
+                                                key={post.id}
                                                 postid={post?.id}
                                                 title={post?.title}
                                                 location = {post?.location}
@@ -206,9 +207,10 @@ function FullWidthTabs() {
                         <TabCard>
                             {postLists1.map((post) => {
                                 return (
-                                    <div>
+                                    <TabDiv key={post.id} class={"TabDiv"}>
                                         {likedPosts.includes(post.id) ? (
                                             <OnePost
+                                                key={post.id}
                                                 postid={post?.id}
                                                 title={post?.title}
                                                 location = {post?.location}
@@ -231,7 +233,7 @@ function FullWidthTabs() {
                                             <div/>
 
                                         )}
-                                    </div>
+                                    </TabDiv>
                                 )
                             })}
                         </TabCard>
@@ -240,9 +242,10 @@ function FullWidthTabs() {
                         <TabCard>
                             {postLists1.map((post) => {
                                 return (
-                                    <div>
+                                    <TabDiv key={post.id} class={"TabDiv"}>
                                         {commentedPosts.includes(post.id) ? (
                                             <OnePost
+                                                key={post.id}
                                                 postid={post?.id}
                                                 title={post?.title}
                                                 location = {post?.location}
@@ -265,7 +268,7 @@ function FullWidthTabs() {
                                             <div/>
 
                                         )}
-                                    </div>
+                                    </TabDiv>
                                 )
                             })}
                         </TabCard>
@@ -295,9 +298,10 @@ function FullWidthTabs() {
                     <TabCard>
                         {postLists1.map((post) => {
                             return (
-                                <div>
+                                <TabDiv key={post.id} class={"TabDiv"}>
                                     {post.author.id === profile_uid ? (
                                         <OnePost
+                                            key={post.id}
                                             postid={post?.id}
                                             title={post?.title}
                                             location = {post?.location}
@@ -317,7 +321,7 @@ function FullWidthTabs() {
                                         <div/>
 
                                     )}
-                                </div>
+                                </TabDiv>
                             )
                         })}
                     </TabCard>
@@ -326,9 +330,10 @@ function FullWidthTabs() {
                     <TabCard>
                         {postLists1.map((post) => {
                             return (
-                                <div>
+                                <TabDiv key={post.id} class={"TabDiv"}>
                                     {likedPosts.includes(post.id) ? (
                                         <OnePost
+                                            key={post.id}
                                             postid={post?.id}
                                             title={post?.title}
                                             location = {post?.location}
@@ -348,7 +353,7 @@ function FullWidthTabs() {
                                         <div/>
 
                                     )}
-                                </div>
+                                </TabDiv>
                             )
                         })}
                     </TabCard>
@@ -362,9 +367,10 @@ function FullWidthTabs() {
                     <TabCard>
                         {postLists1.map((post) => {
                             return (
-                                <div>
+                                <TabDiv key={post.id} class={"TabDiv"}>
                                     {commentedPosts.includes(post.id) ? (
                                         <OnePost
+                                            key={post.id}
                                             postid={post?.id}
                                             title={post?.title}
                                             location = {post?.location}
@@ -384,7 +390,7 @@ function FullWidthTabs() {
                                         <div/>
 
                                     )}
-                                </div>
+                                </TabDiv>
                             )
                         })}
                     </TabCard>
@@ -621,6 +627,7 @@ function ProfileSection() {
     function StatusBadgeOnline() {
         return (
             <StyledBadge
+                disableRipple
                 overlap="circular"
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                 variant="dot"
@@ -638,6 +645,7 @@ function ProfileSection() {
     const StatusBadgeOffline = () => {
         return (
             <StyledBadge
+                disableRipple
                 overlap="circular"
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                 variant="dot"
@@ -783,7 +791,7 @@ function ProfileSection() {
                                         {/*TODO: Add list of people/topics that we're blocking too...*/}
                                         {profile_following.map((this_user) => {
                                             return (
-                                                <Button onClick={() => handleProfClick(this_user.id)}>
+                                                <Button disableRipple key={this_user.id} onClick={() => handleProfClick(this_user.id)}>
                                                     {this_user.nickName}
                                                 </Button>
                                             )
@@ -792,7 +800,7 @@ function ProfileSection() {
                                         <div>Following Topics</div>
                                         {topics_following.map((this_topic) => {
                                             return (
-                                                <Link to={{
+                                                <Link key={this_topic.id} to={{
                                                     pathname: "/inner_topic",
                                                     state: this_topic.topicName,
                                                     topicAuthor: this_topic.topicAuthor,
@@ -807,7 +815,7 @@ function ProfileSection() {
                                         <div>Blocking Users</div>
                                         {profile_blocking.map((this_user) => {
                                             return (
-                                                <Button onClick={() => handleProfClick(this_user.id)}>
+                                                <Button disableRipple key={this_user.id} onClick={() => handleProfClick(this_user.id)}>
                                                     {this_user.nickName}
                                                 </Button>
                                             )
@@ -816,7 +824,7 @@ function ProfileSection() {
                                         <div>Blocking Topics</div>
                                         {topics_blocking.map((this_topic) => {
                                             return (
-                                                <Link to={{
+                                                <Link key={this_topic.id} to={{
                                                     pathname: "/inner_topic",
                                                     state: this_topic.topicName,
                                                     topicAuthor: this_topic.topicAuthor,
@@ -845,6 +853,7 @@ function ProfileSection() {
                                                 {hasFollowed ? (
                                                     <FollowButton>
                                                         <Button
+                                                            disableRipple
                                                             container
                                                             direction="column"
                                                             justifyContent="center"
@@ -856,6 +865,7 @@ function ProfileSection() {
 
                                                 ) : (
                                                     <Button
+                                                        disableRipple
                                                         container
                                                         direction="column"
                                                         justifyContent="center"
@@ -871,6 +881,7 @@ function ProfileSection() {
                                                 {hasBlocked ? (
                                                     <FollowButton>
                                                         <Button
+                                                            disableRipple
                                                             container
                                                             direction="column"
                                                             justifyContent="center"
@@ -882,6 +893,7 @@ function ProfileSection() {
 
                                                 ) : (
                                                     <Button
+                                                        disableRipple
                                                         container
                                                         direction="column"
                                                         justifyContent="center"
@@ -1024,7 +1036,11 @@ function ProfileSection() {
 
                                         {profile_following.map((this_user) => {
                                             return (
-                                                <Button onClick={() => handleProfClick(this_user.id)} style={{color:'lightblue'}}>
+                                                <Button
+                                                    disableRipple
+                                                    key={this_user.id} onClick={() =>
+                                                    handleProfClick(this_user.id)
+                                                } style={{color:'lightblue'}}>
                                                     {this_user.nickName}
                                                 </Button>
                                             )
@@ -1032,7 +1048,7 @@ function ProfileSection() {
 
                                         {topics_following.map((this_topic) => {
                                             return (
-                                                <Link to={{
+                                                <Link key={this_topic.id} to={{
                                                     pathname: "/inner_topic",
                                                     state: this_topic.topicName,
                                                     topicAuthor: this_topic.topicAuthor,
@@ -1063,6 +1079,7 @@ function ProfileSection() {
                                                 {hasFollowed ? (
                                                     <FollowButton>
                                                         <Button
+                                                            disableRipple
                                                             container
                                                             direction="column"
                                                             justifyContent="center"
@@ -1076,6 +1093,7 @@ function ProfileSection() {
                                                 ) : (
                                                     // TODO: add <followButton> later
                                                     <Button
+                                                        disableRipple
                                                         container
                                                         direction="column"
                                                         justifyContent="center"
@@ -1092,6 +1110,7 @@ function ProfileSection() {
                                                 {hasBlocked ? (
                                                     <FollowButton>
                                                         <Button
+                                                            disableRipple
                                                             container
                                                             direction="column"
                                                             justifyContent="center"
@@ -1105,6 +1124,7 @@ function ProfileSection() {
                                                 ) : (
                                                     // TODO: add <followButton> later
                                                     <Button
+                                                        disableRipple
                                                         container
                                                         direction="column"
                                                         justifyContent="center"
