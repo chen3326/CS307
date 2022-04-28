@@ -10,7 +10,7 @@ function Settings() {
         <>
 
 
-            <SidebarSection/>
+            {/*<SidebarSection/>*/}
             <NavSection/>
             <SettingsSection/>
 

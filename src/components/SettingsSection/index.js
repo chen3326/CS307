@@ -4,8 +4,12 @@ import emailjs from '@emailjs/browser';
 import {
     Button, Container, Switch,
     InputLabel, Select,
-    FormControl, TextField, MenuItem, FormControlLabel, FormGroup, Popper, Fade, Paper, CardActions
+    FormControl, TextField, MenuItem, FormControlLabel, FormGroup, Popper, Fade, Paper, CardActions, Avatar
 } from "@mui/material";
+import {
+    Box, CssBaseline,
+} from '@material-ui/core';
+
 import Grid from '@mui/material/Grid';
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
@@ -40,34 +44,32 @@ import {
 } from './SettingsElements';
 import imageCompression from "browser-image-compression";
 import {useLocation} from "react-router-dom";
-//import PulseLoader from "react-spinners/PulseLoader";
-
-
-
-//years class
-const years = [
-    {
-        value: 'Freshman',
-        label: 'Freshman',
+import AppLogo from "../../images/simpleLogo.png";
+import withStyles from "@material-ui/core/styles/withStyles";
+//stying margins for ux
+const styles = theme => ({
+    main: {
+        width: 'auto',
+        display: 'block', // Fix IE 11 issue.
+        marginLeft: theme.spacing.unit * 3,
+        marginRight: theme.spacing.unit * 3,
+        [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
+            width: 400,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
     },
-    {
-        value: 'Sophomore',
-        label: 'Sophomore',
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing.unit,
     },
-    {
-        value: 'Junior',
-        label: 'Junior',
+    textField: {
+        width: '90%', marginLeft: 'auto', marginRight: 'auto', color: 'white', paddingBottom: 0, marginTop: 0, fontWeight: 500,
     },
-    {
-        value: 'Senior',
-        label: 'Senior',
+    submit: {
+        marginTop: theme.spacing.unit * 3,
     },
-    {
-        value: 'Super Senior',
-        label: 'Super Senior',
-    },
-];
-
+});
 
 //settings for the current user
 function SettingsSection() {
@@ -90,8 +92,13 @@ function SettingsSection() {
     const [queried, setQueried] = useState(false); //lock
     const min = 1; //minimum for age input
     const [loading, setLoading] = useState(false);
+
     let [loadColor, setLoadColor] = useState("#F5A623");
     const [open, setOpen] = React.useState(false);
+    const [openClick, setOpenClick] = React.useState(false);
+
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
     const [themeModeForCheckTheme, setThemeModeForCheckTheme] = useState(false);
     const [themeEmail, setThemeEmail] = useState("");
@@ -244,11 +251,11 @@ function SettingsSection() {
 
     //open delete account window
     const handleClickOpen = () => {
-        setOpen(true);
+        setOpenClick(true);
     };
     //close delete account window
-    const handleClose = () => {
-        setOpen(false);
+    const handleClickClose = () => {
+        setOpenClick(false);
     };
     async function deleteDocuments (colName, varName, checkName) {
         const postDeleteRef = collection(database, colName);
@@ -275,22 +282,6 @@ function SettingsSection() {
                 deleteArrayElement("users", "savedPosts", doc.id);
             }
             deleteDoc(doc.ref);
-        });
-    }
-
-    //go into nested and delete post from users side (followingTopics)
-    async function deleteFollowingTopics(topic) {
-        console.log("topic: ",topic);
-        const postDeleteRef = collection(database, "users");
-        const userSideq = query(postDeleteRef, where("followingTopics", "array-contains",
-            {topicName: topic, topicAuthor: ogEmail, id: auth.currentUser.uid}));
-
-        const querySnapshot = await getDocs(userSideq);
-        querySnapshot.forEach((doc) => {
-            console.log("DELETE FOLLOWING", "followingTopics", " => ", doc.data());
-            updateDoc(doc.ref, {
-                followingTopics: arrayRemove({topicName: topic, topicAuthor: ogEmail, id: auth.currentUser.uid})
-            });
         });
     }
 
@@ -427,6 +418,7 @@ function SettingsSection() {
         }
         setLoading(false);
     }
+
     const [openWindow, setOpenWindow] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [placement, setPlacement] = React.useState();
@@ -494,592 +486,266 @@ function SettingsSection() {
             );
         } else {
             if (!themeModeForCheckTheme) {
+                {/*LIGHTMODE*/}
                 return (
-                    <SettingsContainer>
-                        <Container
-                            fixed
-                            sx={{
-                                '@media screen and (max-width: 768px)': {
-                                    padding: "0",
-                                    marginY: "10px"
-                                },
-                            }}
-                        >
-                            <Grid
-                                container
-                                direction="row"
-                                justifyContent="center"
+                    <>
+                        <Container component="main" maxWidth="sm">
+                            <CssBaseline />
+                            <Stack
+                                direction="column"
+                                justifyContent="flex-start"
                                 alignItems="flex-start"
                                 spacing={2}
-                                // sx={{
-                                //     '@media screen and (max-width: 768px)': {
-                                //         alignItems: "center",
-                                //         margin: "0",
-                                //         spacing: 0,
-                                //         width: "100%",
-                                //     },
-                                // }}
                             >
-                                {/*LEFT COLUMN*/}
-                                <Grid
-                                    //profile picture here
-                                    container
-                                    direction="column"
-                                    justifyContent="flex-start"
-                                    alignItems="center"
-                                    item
-                                    xs={12} sm={4}
-                                >
+                                <Box display="flex" width={500} height={25}></Box>
+
+                                <Typography component="h1" variant="h4" align="center">Settings: {ogName}</Typography>
+
+                                {/*profile pic*/}
+                                <div>
                                     <ProfilePic src={profilePic}/>
+                                    {/*change profile pic*/}
                                     <FormControl margin="normal">
                                         <form onChange={event => doUpload(event)}>
                                             <input type="file" className="input"/>
                                         </form>
                                         <hr/>
-                                        {/*TODO: This should not be visible when not in use*/}
                                         <h4>Profile Picture Loading... {progress}%</h4>
                                     </FormControl>
-                                </Grid>
+                                </div>
 
+                            </Stack>
 
-                                {/*RIGHT COLUMN*/}
-                                <Grid
-                                    container
-                                    direction="column"
-                                    justifyContent="flex-start"
-                                    alignItems="stretch"
-                                    item
-                                    xs={12} sm={8}
-                                >
-                                    <Grid
-                                        //Display name
-                                        container
-                                        direction="column"
-                                        justifyContent="flex-start"
-                                        alignItems="flex-start"
-                                        sx={{
-                                            '@media screen and (max-width: 768px)': {
-                                                alignItems: "center",
-                                                marginY: "10px"
-                                            },
-                                        }}
+                            <Box
+                                sx={{
+                                    marginTop: 8,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <Grid container className={"form"}>
+                                    <Box
+                                        display="flex"
+                                        width={500} height={25}
                                     >
-                                        <UserName>Settings:</UserName>
-                                        <UserName>{ogName}</UserName>
-                                    </Grid>
+                                    </Box>
 
-                                    {/*SETTINGS*/}
-                                    <UserSettings>
-                                        <Grid
-                                            //Settings section
-                                            container
-                                            direction="row"
-                                            alignItems="center"
-                                            justifyContent="flex-start"
-                                            spacing={2}
-                                            sx={{
-                                                '@media screen and (max-width: 768px)': {
-                                                    direction: "column",
-                                                    justifyContent: "center",
-                                                    alignItems: "center",
-                                                    marginY: "10px"
-                                                },
-                                            }}
-                                        >
-                                            {/*privacy settings */}
-                                            <Grid container
-                                                  wrap="nowrap"
-                                                  spacing={2}
-                                                  justifyContent="center"
-                                                  item xs={10}
-                                            >
-                                                <Grid item xs>
-                                                    <FormGroup>
-                                                        <Stack direction="row" spacing={1} alignItems="center">
-                                                            <Typography>Public</Typography>
-                                                            <FormControlLabel control={
-                                                                <Switch checked={privateUser}
-                                                                        value={privateUser}
-                                                                        onChange={handlePrivateUser}
-                                                                />
-                                                            }
-                                                                              label=""
-                                                            />
-                                                            <Typography>Private</Typography>
-                                                        </Stack>
-                                                    </FormGroup>
-                                                </Grid>
-                                            </Grid>
-
-                                            <Grid container
-                                                  wrap="nowrap"
-                                                  spacing={2}
-                                                  justifyContent="center"
-                                                  item xs={10}
-                                            >
-                                                <Grid item xs>
-                                                    <FormGroup>
-                                                        <Stack direction="row" spacing={1} alignItems="center">
-                                                            <Typography>Light</Typography>
-                                                            <FormControlLabel control={
-                                                                <Switch checked={darkTheme}
-                                                                        value={darkTheme}
-                                                                        onChange={handleDarkTheme}
-                                                                />
-                                                            }
-                                                                              label=" "
-                                                            />
-                                                            <Typography>Dark</Typography>
-                                                        </Stack>
-                                                    </FormGroup>
-                                                </Grid>
-                                            </Grid>
-
-                                            {/*name*/}
-                                            <Grid container
-                                                  wrap="nowrap"
-                                                  spacing={2}
-                                                  justifyContent="center"
-                                                  item xs={10}
-                                            >
-                                                <Grid item>
-                                                    <p>Name:</p>
-                                                </Grid>
-                                                <Grid item xs>
-                                                    {/*TODO: clean up the id's on this page*/}
-                                                    <TextField
-                                                        id="filled-start-adornment"
-                                                        sx={{m: 1, width: '25ch'}}
-                                                        value={nickName}
-                                                        variant="filled"
-                                                        inputProps={{maxLength: 50}}
-                                                        onChange={(event) => {
-                                                            setnickName(event.target.value);
-                                                        }}
+                                    {/*switches*/}
+                                    <div>
+                                        {/*privacy settings */}
+                                        <FormGroup>
+                                            <Stack direction="row" spacing={1} alignItems="center">
+                                                <Typography>Public</Typography>
+                                                <FormControlLabel control={
+                                                    <Switch checked={privateUser}
+                                                            value={privateUser}
+                                                            onChange={handlePrivateUser}
                                                     />
-                                                </Grid>
-                                            </Grid>
+                                                }
+                                                                  label=""
+                                                />
+                                                <Typography>Private</Typography>
+                                            </Stack>
+                                        </FormGroup>
 
-                                            {/*email*/}
-                                            <Grid container
-                                                  wrap="nowrap"
-                                                  spacing={2}
-                                                  justifyContent="center"
-                                                  item xs={10}
-                                            >
-                                                <Grid item>
-                                                    <p>Email:</p>
-                                                </Grid>
-                                                <Container
-                                                    sx={{
-                                                        '@media screen and (max-width: 768px)': {
-                                                            flexDirection: "column",
-                                                            // direction: "column",
-                                                            justifyContent: "center",
-                                                            alignItems: "center",
-                                                            // marginY: "10px"
-                                                        },
-                                                    }}
-                                                >
-                                                    <Grid item xs>
-                                                        <TextField
-                                                            id="filled-start-adornment"
-                                                            sx={{m: 1, width: '25ch'}}
-                                                            variant="filled"
-                                                            value={email}
-                                                            inputProps={{maxLength: 50}}
-                                                            onChange={(event) => {
-                                                                setEmail(event.target.value);
-                                                            }}
-                                                        />
-                                                    </Grid>
-                                                    <Grid
-                                                        item
-                                                        xs
-                                                        sx={{
-                                                            '@media screen and (min-width: 768px)': {
-                                                                display: "none"
-                                                            },
-                                                        }}
-                                                    >
-                                                        <SaveButton>
-                                                            {emailVerified ? (
-                                                                <div/>
-                                                            ) : (
-                                                                <Button
-                                                                    container
-                                                                    direction="column"
-                                                                    justifyContent="center"
-                                                                    alignItems="center"
-                                                                    variant="outlined"
-                                                                    onClick={handleEVClick}
-                                                                >Verify Email
-                                                                </Button>
-                                                            )
-                                                            }
+                                        {/*display mode*/}
+                                        <FormGroup>
+                                            <Stack direction="row" spacing={1} alignItems="center">
+                                                <Typography>Light</Typography>
+                                                <FormControlLabel control={
+                                                    <Switch checked={darkTheme}
+                                                            value={darkTheme}
+                                                            onChange={handleDarkTheme}
+                                                    />
+                                                }
+                                                                  label=" "
+                                                />
+                                                <Typography>Dark</Typography>
+                                            </Stack>
+                                        </FormGroup>
+                                    </div>
 
-                                                        </SaveButton>
-                                                    </Grid>
-                                                </Container>
-                                                {/*<Grid item xs>*/}
-                                                {/*    <TextField*/}
-                                                {/*        id="filled-start-adornment"*/}
-                                                {/*        sx={{m: 1, width: '25ch'}}*/}
-                                                {/*        variant="filled"*/}
-                                                {/*        value={email}*/}
-                                                {/*        inputProps={{maxLength: 50}}*/}
-                                                {/*        onChange={(event) => {*/}
-                                                {/*            setEmail(event.target.value);*/}
-                                                {/*        }}*/}
-                                                {/*    />*/}
-                                                {/*</Grid>*/}
-                                                {/*<Grid */}
-                                                {/*    item */}
-                                                {/*    xs*/}
-                                                {/*    sx={{*/}
-                                                {/*        '@media screen and (min-width: 768px)': {*/}
-                                                {/*            display: "none"*/}
-                                                {/*        },*/}
-                                                {/*    }}*/}
-                                                {/*>*/}
-                                                {/*    <SaveButton>*/}
-                                                {/*        {emailVerified ? (*/}
-                                                {/*            <div/>*/}
-                                                {/*        ) : (*/}
-                                                {/*            <Button*/}
-                                                {/*                container*/}
-                                                {/*                direction="column"*/}
-                                                {/*                justifyContent="center"*/}
-                                                {/*                alignItems="center"*/}
-                                                {/*                variant="outlined"*/}
-                                                {/*                onClick={handleEVClick}*/}
-                                                {/*            >Verify Email*/}
-                                                {/*            </Button>*/}
-                                                {/*        )*/}
-                                                {/*        }*/}
+                                    {/*Email Address*/}
+                                    <FormControl margin="normal" fullWidth>
+                                        <TextField
+                                            id="outlined-basic"
+                                            variant="outlined"
+                                            label="Email Address*"
+                                            value={email}
+                                            className={"textField"}
+                                            onChange={(event) => {
+                                                setEmail(event.target.value);
+                                            }}
+                                        />
 
-                                                {/*    </SaveButton>*/}
-                                                {/*</Grid>*/}
-                                            </Grid>
-
+                                        {/*account setting buttons*/}
+                                        <Stack
+                                            direction="row"
+                                            justifyContent="space-between"
+                                            alignItems="center"
+                                            spacing={2}
+                                        >
+                                            {/*verify email button*/}
+                                            <SaveButton>
+                                                {emailVerified ? (
+                                                    <div/>
+                                                ) : (
+                                                    <Button
+                                                        container
+                                                        direction="column"
+                                                        justifyContent="center"
+                                                        alignItems="center"
+                                                        variant="outlined"
+                                                        onClick={handleEVClick}
+                                                    >Verify Email
+                                                    </Button>
+                                                )
+                                                }
+                                            </SaveButton>
 
                                             {/*change password*/}
-                                            <Grid container
-                                                  // wrap="nowrap"
-                                                  spacing={2}
-                                                  justifyContent="center"
-                                                  item
-                                                  xs={10}
-                                                  sx={{
-                                                      '@media screen and (max-width: 768px)': {
-                                                          // flexDirection: "column",
-                                                          // // direction: "column",
-                                                          // justifyContent: "center",
-                                                          // alignItems: "center",
-                                                          // // marginY: "10px"
-                                                      },
-                                                  }}
-                                            >
-                                                <Grid item>
-                                                    <p>Password:</p>
-                                                </Grid>
-                                                <Grid item xs>
-                                                    <SaveButton>
-                                                        <Button
-                                                            container
-                                                            direction="column"
-                                                            justifyContent="center"
-                                                            alignItems="center"
-                                                            variant="outlined"
-                                                            onClick={handleFPClick}
-                                                        >Change Password
-                                                        </Button>
-                                                    </SaveButton>
-                                                </Grid>
-                                                <Grid
-                                                    item xs
-                                                    sx={{
-                                                        '@media screen and (max-width: 768px)': {
-                                                            display: "none"
-                                                        },
-                                                    }}
-                                                >
-                                                    <SaveButton>
-                                                        {emailVerified ? (
-                                                            <div/>
-                                                        ) : (
-                                                            <Button
-                                                                container
-                                                                direction="column"
-                                                                justifyContent="center"
-                                                                alignItems="center"
-                                                                variant="outlined"
-                                                                onClick={handleEVClick}
-                                                            >Verify Email
-                                                            </Button>
-                                                        )
-                                                        }
+                                            <SaveButton>
+                                                <Button
+                                                    container
+                                                    direction="column"
+                                                    justifyContent="center"
+                                                    alignItems="center"
+                                                    variant="outlined"
+                                                    onClick={handleFPClick}
+                                                >Change Password
+                                                </Button>
+                                            </SaveButton>
+                                        </Stack>
+                                    </FormControl>
 
-                                                    </SaveButton>
-                                                </Grid>
-                                            </Grid>
 
-                                            {/*bio*/}
-                                            <Grid container
-                                                  wrap="nowrap"
-                                                  spacing={2}
-                                                  justifyContent="center"
-                                                  item xs={10}
-                                            >
-                                                <Grid item>
-                                                    <p>Bio:</p>
-                                                </Grid>
-                                                <Grid item xs>
-                                                    <TextField
-                                                        id="filled-start-adornment"
-                                                        variant="filled"
-                                                        value={bio}
-                                                        multiline
-                                                        rows={5}
-                                                        sx={{
-                                                            m: 1,
-                                                            width: '50ch',
-                                                            '@media screen and (max-width: 768px)': {
-                                                                width: '30ch',
-                                                            },
-                                                        }}
-                                                        inputProps={{maxLength: 200}}
-                                                        onChange={(event) => {
-                                                            setBio(event.target.value);
-                                                        }}
-                                                    />
-                                                </Grid>
-                                            </Grid>
+                                    {/*more form inputs*/}
+                                    <div>
+                                        {/*Nickname*/}
+                                        <FormControl margin="normal" fullWidth>
+                                            <TextField
+                                                id="outlined-basic"
+                                                variant="outlined"
+                                                label="Nickname*"
+                                                value={nickName}
+                                                className={"textField"}
+                                                inputProps={{ maxLength: 50 }}
+                                                onChange={(event) => {
+                                                    setnickName(event.target.value);
+                                                }}
+                                            />
+                                        </FormControl>
 
-                                            <Container
-                                                // direction="row"
-                                                // alignItems="center"
-                                                // justifyContent="flex-start"
-                                                // spacing={2}
-                                                sx={{
-                                                    '@media screen and (max-width: 768px)': {
-                                                        direction: "column",
-                                                        justifyContent: "center",
-                                                        alignItems: "center",
-                                                        marginY: "10px"
-                                                    },
+                                        {/*bio*/}
+                                        <FormControl margin="normal" fullWidth>
+                                            <TextField
+                                                id="outlined-multiline-static"
+                                                label="Bio"
+                                                value={bio}
+                                                multiline
+                                                rows={5}
+                                                inputProps={{ maxLength: 200 }}
+                                                onChange={(event) => {
+                                                    setBio(event.target.value);
+                                                }}
+                                            />
+                                        </FormControl>
+
+                                        {/*Major*/}
+                                        <FormControl margin="normal" fullWidth>
+                                            <TextField
+                                                id="outlined-basic"
+                                                variant="outlined"
+                                                label="Major*"
+                                                className={"textField"}
+                                                value={major}
+                                                inputProps={{ maxLength: 100 }}
+                                                onChange={(event) => {
+                                                    setMajor(event.target.value);
+                                                }}
+                                            />
+                                        </FormControl>
+
+                                        {/*Age*/}
+                                        <FormControl margin="normal">
+                                            <TextField
+                                                id="outlined-basic"
+                                                variant="outlined"
+                                                label="Age*"
+                                                className={"textField"}
+
+                                                //make sure that only unsigned int can be used as inputs
+                                                type={"number"}
+                                                inputProps={{ min }}
+                                                value={age}
+                                                onChange={(event) =>
+                                                {
+                                                    if (event.target.value === "") {
+                                                        setAge(event.target.value);
+                                                        return;
+                                                    }
+                                                    const value = +event.target.value;
+                                                    if (value < min) {
+                                                        setAge(min);
+                                                    } else {
+                                                        setAge(value);
+                                                    }
+                                                }}
+                                            />
+                                        </FormControl>
+
+                                        {/*Year*/}
+                                        <FormControl margin="normal" fullWidth>
+                                            <InputLabel id="demo-controlled-open-select-label">Year*</InputLabel>
+                                            <Select
+                                                labelId="demo-controlled-open-select-label"
+                                                id="demo-controlled-open-select"
+                                                open={open}
+                                                onClose={handleClose}
+                                                onOpen={handleOpen}
+                                                value={year}
+                                                label="Year*"
+                                                onChange={(event) => {
+                                                    setYear(event.target.value);
                                                 }}
                                             >
-                                            {/*Age*/}
-                                                <Grid container
-                                                      wrap="nowrap"
-                                                      spacing={2}
-                                                      justifyContent="center"
-                                                      item xs={10}
-                                                      sx={{
-                                                          '@media screen and (max-width: 768px)': {
-                                                              // paddingLeft: "0px ",
-                                                              marginLeft: "0px"
-                                                          },
-                                                      }}
-                                                >
-                                                    <Grid item>
-                                                        <p>Age:</p>
-                                                    </Grid>
-                                                    <Grid
-                                                        item
-                                                        xs
-                                                        id="filled-number"
-                                                        sx={{
-                                                            m: 1,
-                                                            width: '15ch',
-                                                            '@media screen and (max-width: 768px)': {
-                                                                // paddingLeft: "0px ",
-                                                                // marginLeft: "0px"
-                                                                width: '15ch',
-                                                                maxWidth: "250px"
-                                                            },
-                                                        }}
-                                                    >
-                                                        <TextField
-                                                            id="filled-number"
-                                                            sx={{
-                                                                m: 1,
-                                                                width: '15ch',
-                                                                '@media screen and (max-width: 768px)': {
-                                                                    // paddingLeft: "0px ",
-                                                                    // marginLeft: "0px"
-                                                                    width: '15ch',
-                                                                },
-                                                            }}
-                                                            //make sure that only unsigned int can be used as inputs
-                                                            type={"number"}
-                                                            inputProps={{min}} //min age
-                                                            value={age}
-                                                            onChange={(event) => {
-                                                                if (event.target.value === "") {
-                                                                    setAge(event.target.value);
-                                                                    return;
-                                                                }
-                                                                const value = +event.target.value;
-                                                                if (value < min) {
-                                                                    setAge(min);
-                                                                } else {
-                                                                    setAge(value);
-                                                                }
-                                                            }}
-                                                            variant="filled"
-                                                        />
-                                                    </Grid>
-                                                </Grid>
+                                                <MenuItem value="">
+                                                    <em>None</em>
+                                                </MenuItem>
+                                                <MenuItem value={"Freshman"}>Freshman</MenuItem>
+                                                <MenuItem value={"Sophmore"}>Sophmore</MenuItem>
+                                                <MenuItem value={"Junior"}>Junior</MenuItem>
+                                                <MenuItem value={"Senior"}>Senior</MenuItem>
+                                                <MenuItem value={"Super Senior"}>Super Senior</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </div>
 
-                                                {/*Year*/}
-                                                <Grid container
-                                                      wrap="nowrap"
-                                                      spacing={2}
-                                                      justifyContent="center"
-                                                      item xs={10}
-                                                      sx={{
-                                                          '@media screen and (max-width: 768px)': {
-                                                              // paddingLeft: "0px ",
-                                                              marginLeft: "0px"
-                                                          },
-                                                      }}
+                                    {/*end buttons*/}
+                                    <FormControl margin="normal" fullWidth>
+                                        {/*feedback button*/}
+                                        <FormControl margin="normal">
+                                            <CardActions>
+                                                <Button
+                                                    container
+                                                    direction="column"
+                                                    justifyContent="center"
+                                                    alignItems="center"
+                                                    variant="outlined"
+                                                    onClick={handleClickWindow('top-start')}
                                                 >
-                                                    <Grid item>
-                                                        <p>Year:</p>
-                                                    </Grid>
-                                                    <Grid
-                                                        item xs
-                                                        sx={{
-                                                            m: 1,
-                                                            '@media screen and (max-width: 768px)': {
-                                                                // paddingLeft: "0px ",
-                                                                // marginLeft: "0px"
-                                                                maxWidth: "250px"
-                                                            },
-                                                        }}
-                                                    >
-                                                        <FormControl variant="filled" sx={{m: 1, minWidth: 120}}>
-                                                            <InputLabel id="select-filled-label"></InputLabel>
-                                                            <Select
-                                                                labelId="select-filled-label"
-                                                                id="select-filled"
-                                                                value={year}
-                                                                onChange={(event) => {
-                                                                    setYear(event.target.value);
-                                                                }}
-                                                            >
-                                                                <MenuItem value="">
-                                                                    <em>None</em>
-                                                                </MenuItem>
-                                                                {years.map((option) => (
-                                                                    <MenuItem key={option.value} value={option.value}>
-                                                                        {option.label}
-                                                                    </MenuItem>
-                                                                ))}
-                                                            </Select>
-                                                        </FormControl>
-                                                    </Grid>
-                                                </Grid>
-                                            </Container>
-                                            {/*Major*/}
-                                            <Grid container
-                                                  wrap="nowrap"
-                                                  spacing={2}
-                                                  justifyContent="center"
-                                                  item xs={10}
-                                                  sx={{
-                                                      // m: 1,
-                                                      '@media screen and (max-width: 768px)': {
+                                                    Give feedback
+                                                </Button>
+                                                <Popper open={openWindow} anchorEl={anchorEl} placement={placement} transition>
+                                                    {({TransitionProps}) => (
+                                                        <Fade {...TransitionProps} timeout={350}>
 
-                                                          justifyContent: "flex-start"
-                                                      },
-                                                  }}
-                                            >
-                                                <Grid
-                                                    item
-                                                    sx={{
-                                                        // m: 1,
-                                                        '@media screen and (max-width: 768px)': {
-                                                            // // paddingLeft: "0px ",
-                                                            // // marginLeft: "0px"
-                                                            // // pl: 0,
-                                                            // padding: "0",
-                                                            // // padding: "0px",
-                                                            pl: '0px'
-                                                        },
-                                                    }}
-                                                >
-                                                    <p>Major:</p>
-                                                </Grid>
-                                                <Grid
-                                                    item xs
-                                                    sx={{
-                                                        m: 1,
-                                                        '@media screen and (max-width: 768px)': {
-                                                            // paddingLeft: "0px ",
-                                                            // marginLeft: "0px"
-                                                            // pl: 0,
-                                                            padding: "0",
-                                                            // padding: "0px",
-                                                            maxWidth: "250px"
-                                                        },
-                                                    }}
-                                                >
-                                                    {/*<TextField*/}
-                                                    {/*    id="filled-start-adornment"*/}
-                                                    {/*    variant="filled"*/}
-                                                    {/*    value={bio}*/}
-                                                    {/*    multiline*/}
-                                                    {/*    rows={5}*/}
-                                                    {/*    sx={{*/}
-                                                    {/*        m: 1,*/}
-                                                    {/*        width: '50ch',*/}
-                                                    {/*        '@media screen and (max-width: 768px)': {*/}
-                                                    {/*            width: '30ch',*/}
-                                                    {/*        },*/}
-                                                    {/*    }}*/}
-                                                    {/*    inputProps={{maxLength: 200}}*/}
-                                                    {/*    onChange={(event) => {*/}
-                                                    {/*        setBio(event.target.value);*/}
-                                                    {/*    }}*/}
-                                                    {/*/>*/}
-                                                    <TextField
-                                                        id="filled-number"
-                                                        sx={{
-                                                            m: 1,
-                                                            width: '50ch',
-                                                            '@media screen and (max-width: 768px)': {
-                                                                // paddingLeft: "0px ",
-                                                                // marginLeft: "0px"
-                                                                width: '20ch',
-                                                                // maxWidth: "250px"
-                                                            },
-                                                        }}
-                                                        variant="filled"
-                                                        value={major}
-                                                        inputProps={{maxLength: 100}}
-                                                        onChange={(event) => {
-                                                            setMajor(event.target.value);
-                                                        }}
-                                                    />
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                            <Stack>
-                                                <CardActions>
-                                                    <Button variant={"contained"} style={{maxWidth:'200px', background:'#8B74BD' }} onClick={handleClickWindow('top-start')}
-                                                    >Give feedback</Button>
-                                                    <Popper open={openWindow} anchorEl={anchorEl} placement={placement} transition>
-                                                        {({TransitionProps}) => (
-                                                            <Fade {...TransitionProps} timeout={350}>
-
-                                                                <Paper>
-                                                                    <label style={{marginLeft:'15px', marginRight:'15px'}}>
-                                                                        Give Feedback to us here (Feedback will be assumed to be anonymous)
-                                                                    </label>
-                                                                    <form ref={form} onSubmit={sendEmail}>
+                                                            <Paper>
+                                                                <label style={{marginLeft:'15px', marginRight:'15px'}}>
+                                                                    Give Feedback to us here (Feedback will be assumed to be anonymous)
+                                                                </label>
+                                                                <form ref={form} onSubmit={sendEmail}>
                                                                         <textarea
                                                                             style={{
                                                                                 width: '400px',
@@ -1090,88 +756,95 @@ function SettingsSection() {
                                                                                 marginRight:'15px',
                                                                                 border: '2px solid #0D67B5',
                                                                                 borderRadius: '5px'
-                                                                                }}
+                                                                            }}
                                                                             placeholder=" Feedback..."
                                                                             name= "message"
                                                                             className='form-control'
                                                                         />
-                                                                        <input
-                                                                            style={{ marginBottom:'10px'}}
-                                                                            type="submit"
-                                                                            value="Submit"
-                                                                            className='form-control'
-                                                                        />
-                                                                    </form>
-                                                                </Paper>
+                                                                    <input
+                                                                        style={{ marginBottom:'10px'}}
+                                                                        type="submit"
+                                                                        value="Submit"
+                                                                        className='form-control'
+                                                                    />
+                                                                </form>
+                                                            </Paper>
 
-                                                            </Fade>
-                                                        )}
-                                                    </Popper>
-                                                </CardActions>
-                                            </Stack>
+                                                        </Fade>
+                                                    )}
+                                                </Popper>
+                                            </CardActions>
+                                        </FormControl>
 
-                                    </UserSettings>
+                                        <Box display="flex" width={500} height={25}></Box> {/*space*/}
+
+                                        {/*BUTTONS*/}
+                                        <Stack
+                                            direction="row"
+                                            justifyContent="space-between"
+                                            alignItems="center"
+                                            spacing={2}
+                                        >
+                                            {/*DELETE ACCOUNT*/}
+                                            <div>
+                                                <Button variant={"contained"} style={{background:'#b8041c' }} onClick={handleClickOpen}>
+                                                    Delete Account
+                                                </Button>
+                                                <Dialog open={openClick} onClose={handleClickClose}>
+                                                    <DialogTitle>Delete Account</DialogTitle>
+                                                    <DialogContent>
+                                                        <DialogContentText>
+                                                            Are you sure you want to delete your Boiler Breakouts Account?
+                                                            To delete your account, please enter your password.
+                                                            We'll take care of the rest.
+                                                        </DialogContentText>
+                                                        <TextField
+                                                            autoFocus
+                                                            value={password}
+                                                            margin="dense"
+                                                            id="deletion-password"
+                                                            label="Password"
+                                                            fullWidth
+                                                            variant="standard"
+                                                            onChange={(event) => {
+                                                                setPassword(event.target.value);
+                                                            }}
+                                                        />
+                                                    </DialogContent>
+                                                    <DialogActions>
+                                                        <Button onClick={handleClickClose}>Cancel</Button>
+                                                        <Button onClick={handelDelete}>Delete Account</Button>
+                                                    </DialogActions>
+                                                </Dialog>
+                                            </div>
+
+                                            {/*SAVE CHANGES*/}
+                                            <FormControl margin="normal">
+                                                <SaveButton>
+                                                    <Button
+                                                        container
+                                                        variant="contained"
+                                                        onClick={handleUserSettings}
+                                                    >
+                                                        Save Settings
+                                                    </Button>
+                                                </SaveButton>
+                                            </FormControl>
+                                        </Stack>
+
+                                    </FormControl>
 
 
-                                    {/*BUTTONS*/}
-                                    <Stack direction="row" spacing={30} alignItems="center">
-                                        {/*SAVE CHANGES*/}
-                                        <SaveButton>
-                                            <Button
-                                                container
-                                                direction="column"
-                                                justifyContent="center"
-                                                alignItems="center"
-                                                variant="contained"
-                                                onClick={handleUserSettings}
-                                            >
-                                                Save Settings
-                                            </Button>
-                                        </SaveButton>
-
-                                        {/*DELETE ACCOUNT*/}
-                                        <div>
-                                            <Button variant="text" onClick={handleClickOpen}>
-                                                Delete Account
-                                            </Button>
-                                            <Dialog open={open} onClose={handleClose}>
-                                                <DialogTitle>Delete Account</DialogTitle>
-                                                <DialogContent>
-                                                    <DialogContentText>
-                                                        Are you sure you want to delete your Boiler Breakouts Account?
-                                                        To delete your account, please enter your password.
-                                                        We'll take care of the rest.
-                                                    </DialogContentText>
-                                                    <TextField
-                                                        autoFocus
-                                                        value={password}
-                                                        margin="dense"
-                                                        id="deletion-password"
-                                                        label="Password"
-                                                        fullWidth
-                                                        variant="standard"
-                                                        onChange={(event) => {
-                                                            setPassword(event.target.value);
-                                                        }}
-                                                    />
-                                                </DialogContent>
-                                                <DialogActions>
-                                                    <Button onClick={handleClose}>Cancel</Button>
-                                                    <Button onClick={handelDelete}>Delete Account</Button>
-                                                </DialogActions>
-                                            </Dialog>
-                                        </div>
-
-                                    </Stack>
                                 </Grid>
-                            </Grid>
+                            </Box>
                         </Container>
-                    </SettingsContainer>
+                    </>
                 );
             } else {
+                {/*DARKMODE*/}
                 return (
                     <SettingsContainerBlack style={{padding:'80px'}}>
-                        <Container fixed>
+                        <Container fluid>
                             <Grid
                                 container
                                 direction="row"
@@ -1430,38 +1103,7 @@ function SettingsSection() {
                                             </Grid>
 
                                             {/*Year*/}
-                                            <Grid container
-                                                  wrap="nowrap"
-                                                  spacing={2}
-                                                  justifyContent="center"
-                                                  item xs={4}
-                                            >
-                                                <Grid item>
-                                                    <p style={{color:'rgba(255, 255, 255, 0.85)'}}>Year:</p>
-                                                </Grid>
-                                                <Grid item xs>
-                                                    <FormControl variant="filled" sx={{m: 1, minWidth: 120, background:'grey', borderRadius:'8px'}}>
-                                                        <InputLabel id="select-filled-label"></InputLabel>
-                                                        <Select
-                                                            labelId="select-filled-label"
-                                                            id="select-filled"
-                                                            value={year}
-                                                            onChange={(event) => {
-                                                                setYear(event.target.value);
-                                                            }}
-                                                        >
-                                                            <MenuItem value="">
-                                                                <em>None</em>
-                                                            </MenuItem>
-                                                            {years.map((option) => (
-                                                                <MenuItem key={option.value} value={option.value}>
-                                                                    {option.label}
-                                                                </MenuItem>
-                                                            ))}
-                                                        </Select>
-                                                    </FormControl>
-                                                </Grid>
-                                            </Grid>
+
 
                                             {/*Major*/}
                                             <Grid container
@@ -1511,7 +1153,7 @@ function SettingsSection() {
                                             <Button variant="text" onClick={handleClickOpen}>
                                                 Delete Account
                                             </Button>
-                                            <Dialog open={open} onClose={handleClose}>
+                                            <Dialog open={openClick} onClose={handleClose}>
                                                 <DialogTitle>Delete Account</DialogTitle>
                                                 <DialogContent>
                                                     <DialogContentText>
@@ -1533,7 +1175,7 @@ function SettingsSection() {
                                                     />
                                                 </DialogContent>
                                                 <DialogActions>
-                                                    <Button onClick={handleClose}>Cancel</Button>
+                                                    <Button onClick={handleClickClose}>Cancel</Button>
                                                     <Button onClick={handelDelete}>Delete Account</Button>
                                                 </DialogActions>
                                             </Dialog>
@@ -1556,4 +1198,4 @@ function SettingsSection() {
 
 }
 
-export default SettingsSection;
+export default withStyles(styles)(SettingsSection);
