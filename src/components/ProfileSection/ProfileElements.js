@@ -2,33 +2,56 @@ import React, { CSSProperties } from 'react';
 import styled from 'styled-components';
 
 export const ProfileContainer = styled.div`
-  
   display: flex;
+  padding: 80px;
   //align-items: center;
   //height: 1050px;
   //margin-top: 80px;
   background: white;
   //margin: 80px auto 0 auto;
   //max-width: 1200px;
-  
-
- 
+  @media screen and (max-width: 768px) {
+    //width: 90%;
+    padding: 0px;
+  }
 `;
 
 export const ProfileContainerBlack = styled.div`
   
   display: flex;
+  padding: 80px;
   //align-items: center;
   height: 100%;
   background: #121212;
   //margin: 80px auto 0 auto;
   //max-width: 1200px;
-
+  @media screen and (max-width: 768px) {
+    //width: 90%;
+    padding: 0px;
+  }
  
 `;
 
-export const ProfileContentContainer = styled.div`
+export const NameStatusIconContainer = styled.div`
+  display: flex;
+  //align-items: center;
+  height: 100%;
+  //background: #121212;
+  //margin: 80px auto 0 auto;
+  //max-width: 1200px;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 5px 0px;
+`;
 
+
+
+export const ProfileContentContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -38,7 +61,6 @@ export const ProfileContentContainer = styled.div`
 `;
 
 export const ProfilePicContainer = styled.div`
-
   display: flex;
   flex-direction: column;
   //position: relative;
@@ -49,14 +71,12 @@ export const ProfilePicContainer = styled.div`
 `;
 
 export const ProfilePic = styled.img`
-  
   display: flex;
   flex-direction: column;
   align-items: stretch;
   justify-content: flex-start;
   height: 20vh;
   border-radius: 10px;
-  
 `;
 
 export const ProfileContent = styled.div`
@@ -65,22 +85,20 @@ export const ProfileContent = styled.div`
   //justify-content: center;
   position: relative;
   align-items: center;
-
   //height: 900px;
   width: 100%;
-  
-
 `
 export const UserName = styled.div`
 {/*display: flex;
   flex-direction: row;
   justify-content: center;
 */}
-
-  width: 30vw;
+  //width: 23vw;
   color: black;
   font-size: 4rem;
   font-weight: bold;
+  @media screen and (max-width: 768px) {
+    font-size: 2rem;
 `
 
 export const UserNameBlack = styled.div`
@@ -88,11 +106,12 @@ export const UserNameBlack = styled.div`
   flex-direction: row;
   justify-content: center;
 */}
-
-  width: 30vw;
+  width: 23vw;
   color: rgba(255, 255, 255, 0.85);
   font-size: 4rem;
   font-weight: bold;
+  @media screen and (max-width: 768px) {
+    font-size: 2rem;
 `
 
 export const ProfileText = styled.div`
@@ -104,44 +123,49 @@ export const ProfileText = styled.div`
   max-width: 1200px;
 `
 
-
-export const ProfileStats = styled.div`
-
-`;
-
 export const UserStats = styled.div`
-  
   margin: 10px 0px 10px 0px;
-
-    
 ` ;
 
-export const PostsStat = styled.div`
-
-`;
-export const FollowersStat = styled.div`
-
-`;
-export const FollowingStat = styled.div`
-
-`;
 export const PostContainer = styled.div`
 
 `;
-export const Tabs = styled.div`
 
+export const TabPanelBox = styled.div`
+  padding: 24px;
+  
+  @media screen and (max-width: 768px) {
+    padding: 0px;
 `;
-export const Posts = styled.div`
 
+export const TabBox = styled.div`
+  background-color: orange;
+  
+  @media screen and (max-width: 768px) {
+    width: 95vw;
+    margin: auto;
+    background-color: orange;
+    border-radius: 10px;
+    //font-size: 2rem;
 `;
-export const Liked = styled.div`
 
+export const TabDiv = styled.div`
+  @media screen and (max-width: 768px) {
+    margin: 0px;
+    padding: 0px;
 `;
+
 export const TabCard = styled.div`
   margin: 10px 0px 10px 0px;
-
+  @media screen and (max-width: 768px) {
+    //margin: 10px 0px 20px 0px;
+    padding: 0px;
+    margin: 0px;
 `;
+
 export const FollowButton = styled.div`
+    margin: 10px 0px 20px 0px;
+  @media screen and (max-width: 768px) {
     margin: 10px 0px 20px 0px;
 `;
 

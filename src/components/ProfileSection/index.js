@@ -17,13 +17,15 @@ import {
 import ThumbUpAltRoundedIcon from '@mui/icons-material/ThumbUpAltRounded';
 import TextsmsRoundedIcon from '@mui/icons-material/TextsmsRounded';
 import BookmarkRoundedIcon from '@mui/icons-material/BookmarkRounded';
+import CircleRoundedIcon from '@mui/icons-material/CircleRounded';
 import PropTypes from 'prop-types';
 import OnePost from "../PostDisplaySection/Post";
+import { green } from '@mui/material/colors';
 
 import {
-    FollowButton,
+    FollowButton, NameStatusIconContainer,
     ProfileContainer, ProfileContainerBlack,
-    ProfilePic, TabCard, UserName, UserNameBlack, UserStats,
+    ProfilePic, TabBox, TabCard, TabDiv, TabPanelBox, UserName, UserNameBlack, UserStats,
 } from './ProfileElements';
 
 import pic from "../../images/cat_pic.jpg";
@@ -46,6 +48,9 @@ import {Link, useParams} from "react-router-dom";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
+import {Item} from "react-floating-button";
+import {styled} from "@mui/material/styles";
+import Badge from "@mui/material/Badge";
 
 //props code from material ui
 function TabPanel(props) {
@@ -60,9 +65,11 @@ function TabPanel(props) {
             {...other}
         >
             {value === index && (
-                <Box sx={{p: 3}}>
+                <TabPanelBox>
+                {/*<TabPanelBox sx={{p: 0}}>*/}
+                {/*<Box sx={{p: 3}}>*/}
                     <Typography>{children}</Typography>
-                </Box>
+                </TabPanelBox>
             )}
         </div>
     );
@@ -147,8 +154,7 @@ function FullWidthTabs() {
         if (!themeModeForCheckTheme) {
 
             return (
-
-                <Box sx={{bgcolor: 'orange', borderRadius: '10px'}}>
+                <TabBox>
                     <AppBar position="static" sx={{borderRadius: '10px'}}>
                         <Tabs
                             value={value}
@@ -165,10 +171,10 @@ function FullWidthTabs() {
                         </Tabs>
                     </AppBar>
                     <TabPanel value={value} index={0} dir={theme.direction}>
-                        <TabCard>
+                        <TabCard class={"TabCard"}>
                             {postLists1.map((post) => {
                                 return (
-                                    <div>
+                                    <TabDiv class={"TabDiv"}>
                                         {post.author.id === profile_uid ? (
                                             <OnePost
                                                 postid={post?.id}
@@ -190,9 +196,8 @@ function FullWidthTabs() {
                                             />
                                         ) : (
                                             <div/>
-
                                         )}
-                                    </div>
+                                    </TabDiv>
                                 )
                             })}
                         </TabCard>
@@ -265,7 +270,7 @@ function FullWidthTabs() {
                             })}
                         </TabCard>
                     </TabPanel>
-                </Box>
+                </TabBox>
             );
         } else {
             // Dark mode
@@ -395,50 +400,50 @@ function FullWidthTabs() {
 
 }
 
-const card = (
-    <React.Fragment>
-        <CardContent>
-
-            <Typography variant="h6" component="div">
-                Lorem Ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                deserunt mollit anim id est laborum.
-            </Typography>
-        </CardContent>
-        <CardActions>
-            <Container>
-                <Grid
-                    container
-                    direction="row"
-                    justifyContent="flex-start"
-                    alignItems="center">
-                    <ThumbUpAltRoundedIcon/>
-                    <TextsmsRoundedIcon/>
-                </Grid>
-            </Container>
-            <Container>
-                <Grid
-                    container
-                    direction="row"
-                    justifyContent="flex-end"
-                    alignItems="center">
-                    <BookmarkRoundedIcon/>
-                </Grid>
-            </Container>
-        </CardActions>
-    </React.Fragment>
-);
-
-
-function OutlinedCard() {
-    return (
-        <Box sx={{minWidth: 275}}>
-            <Card variant="outlined">{card}</Card>
-        </Box>
-    );
-}
+// const card = (
+//     <React.Fragment>
+//         <CardContent>
+//
+//             <Typography variant="h6" component="div">
+//                 Lorem Ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+//                 dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+//                 ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+//                 fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+//                 deserunt mollit anim id est laborum.
+//             </Typography>
+//         </CardContent>
+//         <CardActions>
+//             <Container>
+//                 <Grid
+//                     container
+//                     direction="row"
+//                     justifyContent="flex-start"
+//                     alignItems="center">
+//                     <ThumbUpAltRoundedIcon/>
+//                     <TextsmsRoundedIcon/>
+//                 </Grid>
+//             </Container>
+//             <Container>
+//                 <Grid
+//                     container
+//                     direction="row"
+//                     justifyContent="flex-end"
+//                     alignItems="center">
+//                     <BookmarkRoundedIcon/>
+//                 </Grid>
+//             </Container>
+//         </CardActions>
+//     </React.Fragment>
+// );
+//
+//
+// function OutlinedCard() {
+//     return (
+//         <Box sx={{minWidth: 275}}>
+//             <Card variant="outlined">{card}</Card>
+//         </Box>
+//     );
+// }
 
 
 function ProfileSection() {
@@ -462,6 +467,7 @@ function ProfileSection() {
     const [themeModeForCheckTheme, setThemeModeForCheckTheme] = useState(false);
     const [themeEmail, setThemeEmail] = useState("");
     const [queriedTheme, setQueriedTheme] = useState(false);
+    const [userOnlineStatus, setUserOnlineStatus] = useState(false);
 
     async function getUserTheme(){
         const q = query(collection(database, "users"), where("email", "==", themeEmail));
@@ -474,7 +480,8 @@ function ProfileSection() {
                 setMajor(doc.data().author.major)
                 setYear(doc.data().author.year);
                 setProfilePic(doc.data().author.profilePic);
-                setPrivateProfile(doc.data().author.privateUser)
+                setPrivateProfile(doc.data().author.privateUser);
+                // setUserOnlineStatus(doc.data().loggedIn);
             });
         });
     }
@@ -489,6 +496,15 @@ function ProfileSection() {
         });
     }
 
+    async function getUserStatus(){
+        //compare email to other users in collection
+        const q = query(collection(database, "users"), where("email", "==", profileUser));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                setUserOnlineStatus(doc.data().loggedIn)
+            });
+        });
+    }
 
 
 
@@ -535,9 +551,7 @@ function ProfileSection() {
 
 
     const followUser = async () => {
-
         if (hasFollowed) {
-
             await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
                 following: arrayRemove({email: profileUser, id: profile_uid})
             });
@@ -545,10 +559,53 @@ function ProfileSection() {
             await updateDoc(doc(database, "users", getAuth().currentUser.uid), {
                 following: arrayUnion({email: profileUser, id: profile_uid})
             });
-
         }
-
     };
+
+    const StyledBadge = styled(Badge)(() => ({
+        "& .MuiBadge-badge": {
+            backgroundColor: "#44b700",
+            color: "#44b700",
+            width: 12,
+            height: 12,
+            borderRadius: "50%",
+            // boxShadow: "0 0 0 2" ${theme.palette.background.paper}
+        }
+    }));
+
+    function StatusBadgeOnline() {
+        return (
+            <StyledBadge
+                overlap="circular"
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                variant="dot"
+                sx={{
+                    "& .MuiBadge-badge": {
+                        backgroundColor: "#44b700",
+                        color: "#44b700",
+                    }
+                }}
+            >
+            </StyledBadge>
+        );
+    }
+
+    const StatusBadgeOffline = () => {
+        return (
+            <StyledBadge
+                overlap="circular"
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                variant="dot"
+                sx={{
+                    "& .MuiBadge-badge": {
+                    backgroundColor: '#8f8f8f',
+                    color: '#8f8f8f',
+                    }
+                }}
+            >
+            </StyledBadge>
+        );
+    }
 
     useEffect(() => {
         if (user) {
@@ -560,15 +617,26 @@ function ProfileSection() {
                 setMajor(snapshot.data().author.major);
                 setYear(snapshot.data().author.year);
                 setProfilePic(snapshot.data().author.profilePic);
+                setUserOnlineStatus(snapshot.data().loggedIn);
                 })
         }
     }, [user, profileUser]);
+
+    useEffect(() => {
+        if (user) {
+            onSnapshot(doc(database, "users", profile_uid), (snapshot) => {
+                setUserOnlineStatus(snapshot.data().loggedIn);
+            })
+            getUserStatus();
+        }
+    }, [profileUser]);
 
 
     if (loading) {
         return <div> Loading... </div>;
     } else if (user) {
         getprivatemode()
+        getUserStatus()
         if (user.email===profileUser || !privateProfile ){
 
 
@@ -583,80 +651,100 @@ function ProfileSection() {
             if (!themeModeForCheckTheme) {
                 return (
                     //Light Mode
-                    <ProfileContainer style={{padding: '80px'}}>
-                        <Container fixed>
-
+                    <ProfileContainer>
+                        <Container
+                            fixed
+                            sx={{
+                                '@media screen and (max-width: 768px)': {
+                                    padding: "0",
+                                    marginY: "10px"
+                                },
+                            }}
+                        >
                             <Grid
                                 container
                                 direction="row"
                                 justifyContent="center"
                                 alignItems="flex-start"
                                 spacing={2}
+                                sx={{
+                                    '@media screen and (max-width: 768px)': {
+                                        alignItems: "center",
+                                        margin: "0",
+                                        spacing: 0,
+                                        width: "100%",
+                                    },
+                                }}
                             >
-
                                 <Grid
                                     // LHS Column
                                     container
                                     direction="column"
                                     justifyContent="flex-start"
                                     alignItems="center"
-                                    item xs={4}
+                                    xs={12} sm={4}
                                 >
                                     {/*profile section*/}
                                     <Stack direction="column"
                                            justifyContent="center"
                                            alignItems="flex-start"
-                                           spacing={2}>
+                                           spacing={2}
+                                    >
                                         <ProfilePic src={profilePic}/>
                                         <div>Bio: {bio}</div>
                                         <div>Age: {age}</div>
                                         <div>Year: {year}</div>
                                         <div>Major: {major}</div>
-
                                     </Stack>
-
                                 </Grid>
-
                                 <Grid
                                     // RHS Column
                                     container
                                     direction="column"
                                     justifyContent="flex-start"
                                     alignItems="stretch"
-                                    item xs={8}
-
+                                    xs={12} sm={8}
+                                    sx={{
+                                        '@media screen and (max-width: 768px)': {
+                                            alignItems: "center",
+                                            margin: "auto",
+                                        },
+                                    }}
                                 >
-
                                     <Grid
                                         // Name and Follow Button
                                         container
                                         direction="column"
                                         justifyContent="flex-start"
                                         alignItems="flex-start"
+                                        sx={{
+                                            '@media screen and (max-width: 768px)': {
+                                                alignItems: "center",
+                                                marginY: "10px"
+                                            },
+                                        }}
                                     >
-                                        <UserName>{nickName}</UserName>
-
+                                        {/*TODO: this may need to be updated later on wrt styling*/}
+                                        <NameStatusIconContainer>
+                                            <UserName>{nickName}</UserName>
+                                            {userOnlineStatus ? (
+                                                <StatusBadgeOnline />
+                                            ) : (
+                                                <StatusBadgeOffline />
+                                            )
+                                            }
+                                        </NameStatusIconContainer>
 
                                         {profile_following.map((this_user) => {
-
                                             return (
-
-
                                                 <Button onClick={() => handleProfClick(this_user.id)}>
                                                     {this_user.email}
                                                 </Button>
-
-
                                             )
-
-
                                         })}
 
                                         {topics_following.map((this_topic) => {
-
                                             return (
-
-
                                                 <Link to={{
                                                     pathname: "/inner_topic",
                                                     state: this_topic.topicName,
@@ -666,13 +754,8 @@ function ProfileSection() {
                                                 >
                                                     {this_topic.topicName}
                                                 </Link>
-
-
                                             )
-
-
                                         })}
-
 
                                         <Grid
                                             // Follow Button container
@@ -680,11 +763,15 @@ function ProfileSection() {
                                             direction="column"
                                             justifyContent="flex-start"
                                             alignItems="flex-start"
+                                            sx={{
+                                                '@media screen and (max-width: 768px)': {
+                                                    alignItems: "center",
+                                                    marginTop: "10px"
+                                                },
+                                            }}
                                         >
-
                                             <div>
                                                 {hasFollowed ? (
-
                                                     <FollowButton>
                                                         <Button
                                                             container
@@ -692,70 +779,59 @@ function ProfileSection() {
                                                             justifyContent="center"
                                                             alignItems="center"
                                                             // fullWidth={true}
-
                                                             variant="outlined"
                                                             onClick={followUser}>unfollow</Button>
                                                     </FollowButton>
 
                                                 ) : (
-
                                                     <Button
                                                         container
                                                         direction="column"
                                                         justifyContent="center"
                                                         alignItems="center"
                                                         // fullWidth={true}
-
                                                         variant="outlined"
                                                         onClick={followUser}>follow</Button>
-
                                                 )}
                                             </div>
-
                                         </Grid>
                                     </Grid>
+                                    {/*<UserStats>*/}
+                                    {/*    /!*<Grid*!/*/}
+                                    {/*    /!*    // User Stats*!/*/}
+                                    {/*    /!*    container*!/*/}
+                                    {/*    /!*    direction="row"*!/*/}
+                                    {/*    /!*    alignItems="center"*!/*/}
+                                    {/*    /!*    justifyContent="center"*!/*/}
+                                    {/*    /!*    spacing={2}*!/*/}
+                                    {/*    /!*>*!/*/}
+                                    {/*    /!*    <Grid*!/*/}
+                                    {/*    /!*        container*!/*/}
+                                    {/*    /!*        direction="column"*!/*/}
+                                    {/*    /!*        alignItems="center"*!/*/}
+                                    {/*    /!*        justifyContent="center"*!/*/}
+                                    {/*    /!*        item xs={4}*!/*/}
+                                    {/*    /!*    >*!/*/}
 
+                                    {/*    /!*    </Grid>*!/*/}
+                                    {/*    /!*    <Grid container*!/*/}
+                                    {/*    /!*          direction="column"*!/*/}
+                                    {/*    /!*          alignItems="center"*!/*/}
+                                    {/*    /!*          justifyContent="center"*!/*/}
+                                    {/*    /!*          item xs={4}*!/*/}
+                                    {/*    /!*    >*!/*/}
 
-                                    <UserStats>
-                                        <Grid
-                                            // User Stats
-                                            container
-                                            direction="row"
-                                            alignItems="center"
-                                            justifyContent="center"
-                                            spacing={2}
-                                        >
-                                            <Grid
-                                                container
-                                                direction="column"
-                                                alignItems="center"
-                                                justifyContent="center"
-                                                item xs={4}
-                                            >
-
-                                            </Grid>
-                                            <Grid container
-                                                  direction="column"
-                                                  alignItems="center"
-                                                  justifyContent="center"
-                                                  item xs={4}
-                                            >
-
-                                            </Grid>
-                                            <Grid container
-                                                  direction="column"
-                                                  alignItems="center"
-                                                  justifyContent="center"
-                                                  item xs={4}
-                                            >
-
-                                            </Grid>
-                                        </Grid>
-                                    </UserStats>
-
-
+                                    {/*    /!*    </Grid>*!/*/}
+                                    {/*    /!*    <Grid container*!/*/}
+                                    {/*    /!*          direction="column"*!/*/}
+                                    {/*    /!*          alignItems="center"*!/*/}
+                                    {/*    /!*          justifyContent="center"*!/*/}
+                                    {/*    /!*          item xs={4}*!/*/}
+                                    {/*    /!*    >*!/*/}
+                                    {/*    /!*    </Grid>*!/*/}
+                                    {/*    </Grid>*/}
+                                    {/*</UserStats>*/}
                                     <FullWidthTabs/>
-
                                 </Grid>
                             </Grid>
                         </Container>
@@ -764,84 +840,111 @@ function ProfileSection() {
             } else {
                 //DARK MODE
                 return (
-                    <ProfileContainerBlack style={{padding: '100px'}}>
-                        <Container fixed>
-
+                    <ProfileContainerBlack>
+                        <Container
+                            fixed
+                            sx={{
+                                '@media screen and (max-width: 768px)': {
+                                    padding: "0",
+                                    marginY: "10px"
+                                },
+                            }}
+                        >
                             <Grid
                                 container
                                 direction="row"
                                 justifyContent="center"
                                 alignItems="flex-start"
                                 spacing={2}
+                                sx={{
+                                    '@media screen and (max-width: 768px)': {
+                                        alignItems: "center",
+                                        margin: "0",
+                                        spacing: 0,
+                                        width: "100%",
+                                    },
+                                }}
                             >
-
                                 <Grid
                                     // LHS Column
                                     container
                                     direction="column"
                                     justifyContent="flex-start"
                                     alignItems="center"
-                                    item xs={4}
+                                    xs={12} sm={4}
                                 >
-                                    <ProfilePic src={profilePic}/>
-
+                                    {/*profile section*/}
+                                    <Stack direction="column"
+                                           justifyContent="center"
+                                           alignItems="flex-start"
+                                           spacing={2}
+                                    >
+                                        <ProfilePic src={profilePic}/>
+                                        <div>Bio: {bio}</div>
+                                        <div>Age: {age}</div>
+                                        <div>Year: {year}</div>
+                                        <div>Major: {major}</div>
+                                    </Stack>
                                 </Grid>
-
                                 <Grid
                                     // RHS Column
                                     container
                                     direction="column"
                                     justifyContent="flex-start"
                                     alignItems="stretch"
-                                    item xs={8}
-
+                                    xs={12} sm={8}
+                                    sx={{
+                                        '@media screen and (max-width: 768px)': {
+                                            alignItems: "center",
+                                            margin: "auto",
+                                        },
+                                    }}
                                 >
-
                                     <Grid
                                         // Name and Follow Button
                                         container
                                         direction="column"
                                         justifyContent="flex-start"
                                         alignItems="flex-start"
+                                        sx={{
+                                            '@media screen and (max-width: 768px)': {
+                                                alignItems: "center",
+                                                marginY: "10px"
+                                            },
+                                        }}
                                     >
-                                        <UserNameBlack>{profileUser}</UserNameBlack>
+                                        {/*TODO: this may need to be updated later on wrt styling*/}
+                                        <NameStatusIconContainer>
+                                            <UserNameBlack>{nickName}</UserNameBlack>
+                                            {userOnlineStatus ? (
+                                                <StatusBadgeOnline />
+                                            ) : (
+                                                <StatusBadgeOffline />
+                                            )
+                                            }
+                                        </NameStatusIconContainer>
 
 
                                         {profile_following.map((this_user) => {
-
                                             return (
-
-
-                                                <Button onClick={() => handleProfClick(this_user.id)} style={{color:'lightblue'}}>
+                                                <Button onClick={() => handleProfClick(this_user.id)}>
                                                     {this_user.email}
                                                 </Button>
-
-
                                             )
-
-
                                         })}
 
                                         {topics_following.map((this_topic) => {
-
                                             return (
-
-
                                                 <Link to={{
                                                     pathname: "/inner_topic",
                                                     state: this_topic.topicName,
                                                     topicAuthor: this_topic.topicAuthor,
                                                     // your data array of objects
                                                 }}
-                                                      style={{color:'#F0E68C'}}
                                                 >
                                                     {this_topic.topicName}
                                                 </Link>
-
-
                                             )
-
-
                                         })}
 
 
@@ -851,8 +954,13 @@ function ProfileSection() {
                                             direction="column"
                                             justifyContent="flex-start"
                                             alignItems="flex-start"
+                                            sx={{
+                                                '@media screen and (max-width: 768px)': {
+                                                    alignItems: "center",
+                                                    marginTop: "10px"
+                                                },
+                                            }}
                                         >
-
                                             <div>
                                                 {hasFollowed ? (
 
@@ -887,65 +995,52 @@ function ProfileSection() {
 
                                         </Grid>
                                     </Grid>
+                                    {/*<UserStats>*/}
+                                    {/*    <Grid*/}
+                                    {/*        // User Stats*/}
+                                    {/*        container*/}
+                                    {/*        direction="row"*/}
+                                    {/*        alignItems="center"*/}
+                                    {/*        justifyContent="center"*/}
+                                    {/*        spacing={2}*/}
+                                    {/*    >*/}
+                                    {/*        <Grid*/}
+                                    {/*            container*/}
+                                    {/*            direction="column"*/}
+                                    {/*            alignItems="center"*/}
+                                    {/*            justifyContent="center"*/}
+                                    {/*            item xs={4}*/}
+                                    {/*        >*/}
 
+                                    {/*        </Grid>*/}
+                                    {/*        <Grid container*/}
+                                    {/*              direction="column"*/}
+                                    {/*              alignItems="center"*/}
+                                    {/*              justifyContent="center"*/}
+                                    {/*              item xs={4}*/}
+                                    {/*        >*/}
 
-                                    <UserStats>
-                                        <Grid
-                                            // User Stats
-                                            container
-                                            direction="row"
-                                            alignItems="center"
-                                            justifyContent="center"
-                                            spacing={2}
-                                        >
-                                            <Grid
-                                                container
-                                                direction="column"
-                                                alignItems="center"
-                                                justifyContent="center"
-                                                item xs={4}
-                                            >
+                                    {/*        </Grid>*/}
+                                    {/*        <Grid container*/}
+                                    {/*              direction="column"*/}
+                                    {/*              alignItems="center"*/}
+                                    {/*              justifyContent="center"*/}
+                                    {/*              item xs={4}*/}
+                                    {/*        >*/}
 
-                                            </Grid>
-                                            <Grid container
-                                                  direction="column"
-                                                  alignItems="center"
-                                                  justifyContent="center"
-                                                  item xs={4}
-                                            >
-
-                                            </Grid>
-                                            <Grid container
-                                                  direction="column"
-                                                  alignItems="center"
-                                                  justifyContent="center"
-                                                  item xs={4}
-                                            >
-
-                                            </Grid>
-                                        </Grid>
-                                    </UserStats>
-
-
+                                    {/*        </Grid>*/}
+                                    {/*    </Grid>*/}
+                                    {/*</UserStats>*/}
                                     <FullWidthTabs/>
-
                                 </Grid>
                             </Grid>
                         </Container>
                     </ProfileContainerBlack>
                 )
             }
-
-
-        }else {
-
+        } else {
             return (<div> This is a private profile</div>)
         }
-
-
-
-
-
     } else if (error) {
         return <div>There was an authentication error.</div>;
     } else {

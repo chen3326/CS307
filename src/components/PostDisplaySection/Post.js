@@ -1,5 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {NewLine, Post, PostDark, PostDisplayContainer, PostHeader, PostHeaderTitle} from "./PostDisplayElements";
+import {
+    LikeButton,
+    NewLine,
+    Post,
+    PostDark,
+    PostDisplayContainer,
+    PostHeader,
+    PostHeaderTitle,
+    PostHeaderTop, PostHeaderTopButtons, SaveButton
+} from "./PostDisplayElements";
 
 
 import {
@@ -372,8 +381,52 @@ function OnePost({
                 <Post>
                     <PostHeader>
                         <PostHeaderTitle>
-                            <h1> {title}</h1>
-                            <h7> {location!== "" && location}</h7>
+                            <PostHeaderTop>
+                                <div>
+                                    <h1> {title}</h1>
+                                    {/*TODO: should this go underneath the title?*/}
+                                    <h7> {location!== "" && location}</h7>
+                                </div>
+
+                                {/*like button*/}
+                                <PostHeaderTopButtons>
+                                    <div>
+                                        {hasLiked ? (
+                                            <LikeButton
+                                            // <Button
+                                                // className={"heartCounter"}
+                                                // onClick={likePost}
+                                                // href=""
+                                                // sx={{
+                                                //     px: 0,
+                                                //     // paddingLeft: 0,
+                                                //     // paddingRight: 0,
+                                                //     // height: 30
+                                                // }}
+                                            > <FavoriteIcon style={{color: 'red'}}/>
+                                                <div className={"likeCounter"}>{likes.length}</div>
+                                            {/*</Button>*/}
+                                            </LikeButton>
+                                        ) : (
+                                            <LikeButton onClick={likePost} href=""> <FavoriteBorderIcon/>
+                                                <div className={"likeCounter"}>{likes.length}</div>
+                                            </LikeButton>
+                                        )}
+                                    </div>
+                                    {/*save button*/}
+                                    <div>
+                                        {hasSaved ? (
+                                            <SaveButton onClick={savePost}>
+                                                <SavedIcon style={{color: 'blue'}}/>
+                                            </SaveButton>
+                                        ) : (
+                                            <SaveButton onClick={savePost}>
+                                                <SavedIcon/>
+                                            </SaveButton>
+                                        )}
+                                    </div>
+                                </PostHeaderTopButtons>
+                            </PostHeaderTop>
 
                             <Stack direction="row" alignItems="center" spacing={1}>
 
@@ -422,28 +475,29 @@ function OnePost({
                             </Stack>
 
 
-                        </PostHeaderTitle>
+                        {/*</PostHeaderTitle>*/}
                         {/*like button*/}
-                        <div>
-                            {hasLiked ? (
-                                <Button onClick={likePost} href=""> <FavoriteIcon style={{color: 'red'}}/>
-                                    <div className={"likeCounter"}>{likes.length}</div>
-                                </Button>
-                            ) : (
-                                <Button onClick={likePost} href=""> <FavoriteBorderIcon/>
-                                    <div className={"likeCounter"}>{likes.length}</div>
-                                </Button>
-                            )}
-                        </div>
-                        {/*save button*/}
-                        <div>
-                            {hasSaved ? (
-                                <Button onClick={savePost}> <SavedIcon style={{color: 'blue'}}/> </Button>
+                        {/*<div>*/}
+                        {/*    {hasLiked ? (*/}
+                        {/*        <Button onClick={likePost} href=""> <FavoriteIcon style={{color: 'red'}}/>*/}
+                        {/*            <div className={"likeCounter"}>{likes.length}</div>*/}
+                        {/*        </Button>*/}
+                        {/*    ) : (*/}
+                        {/*        <Button onClick={likePost} href=""> <FavoriteBorderIcon/>*/}
+                        {/*            <div className={"likeCounter"}>{likes.length}</div>*/}
+                        {/*        </Button>*/}
+                        {/*    )}*/}
+                        {/*</div>*/}
+                        {/*/!*save button*!/*/}
+                        {/*<div>*/}
+                        {/*    {hasSaved ? (*/}
+                        {/*        <Button onClick={savePost}> <SavedIcon style={{color: 'blue'}}/> </Button>*/}
 
-                            ) : (
-                                <Button onClick={savePost}> <SavedIcon/></Button>
-                            )}
-                        </div>
+                        {/*    ) : (*/}
+                        {/*        <Button onClick={savePost}> <SavedIcon/></Button>*/}
+                        {/*    )}*/}
+                        {/*</div>*/}
+                        </PostHeaderTitle>
                     </PostHeader>
 
                     <PostDisplayContainer>

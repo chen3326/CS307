@@ -495,14 +495,30 @@ function SettingsSection() {
         } else {
             if (!themeModeForCheckTheme) {
                 return (
-                    <SettingsContainer style={{padding:'80px'}}>
-                        <Container fixed>
+                    <SettingsContainer>
+                        <Container
+                            fixed
+                            sx={{
+                                '@media screen and (max-width: 768px)': {
+                                    padding: "0",
+                                    marginY: "10px"
+                                },
+                            }}
+                        >
                             <Grid
                                 container
                                 direction="row"
                                 justifyContent="center"
                                 alignItems="flex-start"
                                 spacing={2}
+                                // sx={{
+                                //     '@media screen and (max-width: 768px)': {
+                                //         alignItems: "center",
+                                //         margin: "0",
+                                //         spacing: 0,
+                                //         width: "100%",
+                                //     },
+                                // }}
                             >
                                 {/*LEFT COLUMN*/}
                                 <Grid
@@ -511,7 +527,8 @@ function SettingsSection() {
                                     direction="column"
                                     justifyContent="flex-start"
                                     alignItems="center"
-                                    item xs={4}
+                                    item
+                                    xs={12} sm={4}
                                 >
                                     <ProfilePic src={profilePic}/>
                                     <FormControl margin="normal">
@@ -519,6 +536,7 @@ function SettingsSection() {
                                             <input type="file" className="input"/>
                                         </form>
                                         <hr/>
+                                        {/*TODO: This should not be visible when not in use*/}
                                         <h4>Profile Picture Loading... {progress}%</h4>
                                     </FormControl>
                                 </Grid>
@@ -530,7 +548,8 @@ function SettingsSection() {
                                     direction="column"
                                     justifyContent="flex-start"
                                     alignItems="stretch"
-                                    item xs={8}
+                                    item
+                                    xs={12} sm={8}
                                 >
                                     <Grid
                                         //Display name
@@ -538,6 +557,12 @@ function SettingsSection() {
                                         direction="column"
                                         justifyContent="flex-start"
                                         alignItems="flex-start"
+                                        sx={{
+                                            '@media screen and (max-width: 768px)': {
+                                                alignItems: "center",
+                                                marginY: "10px"
+                                            },
+                                        }}
                                     >
                                         <UserName>Settings:</UserName>
                                         <UserName>{ogName}</UserName>
@@ -552,6 +577,14 @@ function SettingsSection() {
                                             alignItems="center"
                                             justifyContent="flex-start"
                                             spacing={2}
+                                            sx={{
+                                                '@media screen and (max-width: 768px)': {
+                                                    direction: "column",
+                                                    justifyContent: "center",
+                                                    alignItems: "center",
+                                                    marginY: "10px"
+                                                },
+                                            }}
                                         >
                                             {/*privacy settings */}
                                             <Grid container
@@ -637,27 +670,115 @@ function SettingsSection() {
                                                 <Grid item>
                                                     <p>Email:</p>
                                                 </Grid>
-                                                <Grid item xs>
-                                                    <TextField
-                                                        id="filled-start-adornment"
-                                                        sx={{m: 1, width: '25ch'}}
-                                                        variant="filled"
-                                                        value={email}
-                                                        inputProps={{maxLength: 50}}
-                                                        onChange={(event) => {
-                                                            setEmail(event.target.value);
+                                                <Container
+                                                    sx={{
+                                                        '@media screen and (max-width: 768px)': {
+                                                            flexDirection: "column",
+                                                            // direction: "column",
+                                                            justifyContent: "center",
+                                                            alignItems: "center",
+                                                            // marginY: "10px"
+                                                        },
+                                                    }}
+                                                >
+                                                    <Grid item xs>
+                                                        <TextField
+                                                            id="filled-start-adornment"
+                                                            sx={{m: 1, width: '25ch'}}
+                                                            variant="filled"
+                                                            value={email}
+                                                            inputProps={{maxLength: 50}}
+                                                            onChange={(event) => {
+                                                                setEmail(event.target.value);
+                                                            }}
+                                                        />
+                                                    </Grid>
+                                                    <Grid
+                                                        item
+                                                        xs
+                                                        sx={{
+                                                            '@media screen and (min-width: 768px)': {
+                                                                display: "none"
+                                                            },
                                                         }}
-                                                    />
-                                                </Grid>
+                                                    >
+                                                        <SaveButton>
+                                                            {emailVerified ? (
+                                                                <div/>
+                                                            ) : (
+                                                                <Button
+                                                                    container
+                                                                    direction="column"
+                                                                    justifyContent="center"
+                                                                    alignItems="center"
+                                                                    variant="outlined"
+                                                                    onClick={handleEVClick}
+                                                                >Verify Email
+                                                                </Button>
+                                                            )
+                                                            }
+
+                                                        </SaveButton>
+                                                    </Grid>
+                                                </Container>
+                                                {/*<Grid item xs>*/}
+                                                {/*    <TextField*/}
+                                                {/*        id="filled-start-adornment"*/}
+                                                {/*        sx={{m: 1, width: '25ch'}}*/}
+                                                {/*        variant="filled"*/}
+                                                {/*        value={email}*/}
+                                                {/*        inputProps={{maxLength: 50}}*/}
+                                                {/*        onChange={(event) => {*/}
+                                                {/*            setEmail(event.target.value);*/}
+                                                {/*        }}*/}
+                                                {/*    />*/}
+                                                {/*</Grid>*/}
+                                                {/*<Grid */}
+                                                {/*    item */}
+                                                {/*    xs*/}
+                                                {/*    sx={{*/}
+                                                {/*        '@media screen and (min-width: 768px)': {*/}
+                                                {/*            display: "none"*/}
+                                                {/*        },*/}
+                                                {/*    }}*/}
+                                                {/*>*/}
+                                                {/*    <SaveButton>*/}
+                                                {/*        {emailVerified ? (*/}
+                                                {/*            <div/>*/}
+                                                {/*        ) : (*/}
+                                                {/*            <Button*/}
+                                                {/*                container*/}
+                                                {/*                direction="column"*/}
+                                                {/*                justifyContent="center"*/}
+                                                {/*                alignItems="center"*/}
+                                                {/*                variant="outlined"*/}
+                                                {/*                onClick={handleEVClick}*/}
+                                                {/*            >Verify Email*/}
+                                                {/*            </Button>*/}
+                                                {/*        )*/}
+                                                {/*        }*/}
+
+                                                {/*    </SaveButton>*/}
+                                                {/*</Grid>*/}
                                             </Grid>
 
 
                                             {/*change password*/}
                                             <Grid container
-                                                  wrap="nowrap"
+                                                  // wrap="nowrap"
                                                   spacing={2}
                                                   justifyContent="center"
-                                                  item xs={10}
+                                                  item
+                                                  xs={10}
+                                                  sx={{
+                                                      '@media screen and (max-width: 768px)': {
+                                                          // flexDirection: "column",
+                                                          // // direction: "column",
+                                                          // justifyContent: "center",
+                                                          // alignItems: "center",
+                                                          // // marginY: "10px"
+                                                      },
+                                                  }}
                                             >
                                                 <Grid item>
                                                     <p>Password:</p>
@@ -675,7 +796,14 @@ function SettingsSection() {
                                                         </Button>
                                                     </SaveButton>
                                                 </Grid>
-                                                <Grid item xs>
+                                                <Grid
+                                                    item xs
+                                                    sx={{
+                                                        '@media screen and (max-width: 768px)': {
+                                                            display: "none"
+                                                        },
+                                                    }}
+                                                >
                                                     <SaveButton>
                                                         {emailVerified ? (
                                                             <div/>
@@ -709,11 +837,17 @@ function SettingsSection() {
                                                 <Grid item xs>
                                                     <TextField
                                                         id="filled-start-adornment"
-                                                        sx={{m: 1, width: '50ch'}}
                                                         variant="filled"
                                                         value={bio}
                                                         multiline
                                                         rows={5}
+                                                        sx={{
+                                                            m: 1,
+                                                            width: '50ch',
+                                                            '@media screen and (max-width: 768px)': {
+                                                                width: '30ch',
+                                                            },
+                                                        }}
                                                         inputProps={{maxLength: 200}}
                                                         onChange={(event) => {
                                                             setBio(event.target.value);
@@ -722,89 +856,207 @@ function SettingsSection() {
                                                 </Grid>
                                             </Grid>
 
+                                            <Container
+                                                // direction="row"
+                                                // alignItems="center"
+                                                // justifyContent="flex-start"
+                                                // spacing={2}
+                                                sx={{
+                                                    '@media screen and (max-width: 768px)': {
+                                                        direction: "column",
+                                                        justifyContent: "center",
+                                                        alignItems: "center",
+                                                        marginY: "10px"
+                                                    },
+                                                }}
+                                            >
                                             {/*Age*/}
-                                            <Grid container
-                                                  wrap="nowrap"
-                                                  spacing={2}
-                                                  justifyContent="center"
-                                                  item xs={4}
-                                            >
-                                                <Grid item>
-                                                    <p>Age:</p>
-                                                </Grid>
-                                                <Grid item xs>
-                                                    <TextField
+                                                <Grid container
+                                                      wrap="nowrap"
+                                                      spacing={2}
+                                                      justifyContent="center"
+                                                      item xs={10}
+                                                      sx={{
+                                                          '@media screen and (max-width: 768px)': {
+                                                              // paddingLeft: "0px ",
+                                                              marginLeft: "0px"
+                                                          },
+                                                      }}
+                                                >
+                                                    <Grid item>
+                                                        <p>Age:</p>
+                                                    </Grid>
+                                                    <Grid
+                                                        item
+                                                        xs
                                                         id="filled-number"
-                                                        sx={{m: 1, width: '15ch'}}
-                                                        //make sure that only unsigned int can be used as inputs
-                                                        type={"number"}
-                                                        inputProps={{min}} //min age
-                                                        value={age}
-                                                        onChange={(event) => {
-                                                            if (event.target.value === "") {
-                                                                setAge(event.target.value);
-                                                                return;
-                                                            }
-                                                            const value = +event.target.value;
-                                                            if (value < min) {
-                                                                setAge(min);
-                                                            } else {
-                                                                setAge(value);
-                                                            }
+                                                        sx={{
+                                                            m: 1,
+                                                            width: '15ch',
+                                                            '@media screen and (max-width: 768px)': {
+                                                                // paddingLeft: "0px ",
+                                                                // marginLeft: "0px"
+                                                                width: '15ch',
+                                                                maxWidth: "250px"
+                                                            },
                                                         }}
-                                                        variant="filled"
-                                                    />
-                                                </Grid>
-                                            </Grid>
-
-                                            {/*Year*/}
-                                            <Grid container
-                                                  wrap="nowrap"
-                                                  spacing={2}
-                                                  justifyContent="center"
-                                                  item xs={4}
-                                            >
-                                                <Grid item>
-                                                    <p>Year:</p>
-                                                </Grid>
-                                                <Grid item xs>
-                                                    <FormControl variant="filled" sx={{m: 1, minWidth: 120}}>
-                                                        <InputLabel id="select-filled-label"></InputLabel>
-                                                        <Select
-                                                            labelId="select-filled-label"
-                                                            id="select-filled"
-                                                            value={year}
-                                                            onChange={(event) => {
-                                                                setYear(event.target.value);
+                                                    >
+                                                        <TextField
+                                                            id="filled-number"
+                                                            sx={{
+                                                                m: 1,
+                                                                width: '15ch',
+                                                                '@media screen and (max-width: 768px)': {
+                                                                    // paddingLeft: "0px ",
+                                                                    // marginLeft: "0px"
+                                                                    width: '15ch',
+                                                                },
                                                             }}
-                                                        >
-                                                            <MenuItem value="">
-                                                                <em>None</em>
-                                                            </MenuItem>
-                                                            {years.map((option) => (
-                                                                <MenuItem key={option.value} value={option.value}>
-                                                                    {option.label}
-                                                                </MenuItem>
-                                                            ))}
-                                                        </Select>
-                                                    </FormControl>
+                                                            //make sure that only unsigned int can be used as inputs
+                                                            type={"number"}
+                                                            inputProps={{min}} //min age
+                                                            value={age}
+                                                            onChange={(event) => {
+                                                                if (event.target.value === "") {
+                                                                    setAge(event.target.value);
+                                                                    return;
+                                                                }
+                                                                const value = +event.target.value;
+                                                                if (value < min) {
+                                                                    setAge(min);
+                                                                } else {
+                                                                    setAge(value);
+                                                                }
+                                                            }}
+                                                            variant="filled"
+                                                        />
+                                                    </Grid>
                                                 </Grid>
-                                            </Grid>
 
+                                                {/*Year*/}
+                                                <Grid container
+                                                      wrap="nowrap"
+                                                      spacing={2}
+                                                      justifyContent="center"
+                                                      item xs={10}
+                                                      sx={{
+                                                          '@media screen and (max-width: 768px)': {
+                                                              // paddingLeft: "0px ",
+                                                              marginLeft: "0px"
+                                                          },
+                                                      }}
+                                                >
+                                                    <Grid item>
+                                                        <p>Year:</p>
+                                                    </Grid>
+                                                    <Grid
+                                                        item xs
+                                                        sx={{
+                                                            m: 1,
+                                                            '@media screen and (max-width: 768px)': {
+                                                                // paddingLeft: "0px ",
+                                                                // marginLeft: "0px"
+                                                                maxWidth: "250px"
+                                                            },
+                                                        }}
+                                                    >
+                                                        <FormControl variant="filled" sx={{m: 1, minWidth: 120}}>
+                                                            <InputLabel id="select-filled-label"></InputLabel>
+                                                            <Select
+                                                                labelId="select-filled-label"
+                                                                id="select-filled"
+                                                                value={year}
+                                                                onChange={(event) => {
+                                                                    setYear(event.target.value);
+                                                                }}
+                                                            >
+                                                                <MenuItem value="">
+                                                                    <em>None</em>
+                                                                </MenuItem>
+                                                                {years.map((option) => (
+                                                                    <MenuItem key={option.value} value={option.value}>
+                                                                        {option.label}
+                                                                    </MenuItem>
+                                                                ))}
+                                                            </Select>
+                                                        </FormControl>
+                                                    </Grid>
+                                                </Grid>
+                                            </Container>
                                             {/*Major*/}
                                             <Grid container
                                                   wrap="nowrap"
                                                   spacing={2}
                                                   justifyContent="center"
                                                   item xs={10}
+                                                  sx={{
+                                                      // m: 1,
+                                                      '@media screen and (max-width: 768px)': {
+
+                                                          justifyContent: "flex-start"
+                                                      },
+                                                  }}
                                             >
-                                                <Grid item>
+                                                <Grid
+                                                    item
+                                                    sx={{
+                                                        // m: 1,
+                                                        '@media screen and (max-width: 768px)': {
+                                                            // // paddingLeft: "0px ",
+                                                            // // marginLeft: "0px"
+                                                            // // pl: 0,
+                                                            // padding: "0",
+                                                            // // padding: "0px",
+                                                            pl: '0px'
+                                                        },
+                                                    }}
+                                                >
                                                     <p>Major:</p>
                                                 </Grid>
-                                                <Grid item xs>
+                                                <Grid
+                                                    item xs
+                                                    sx={{
+                                                        m: 1,
+                                                        '@media screen and (max-width: 768px)': {
+                                                            // paddingLeft: "0px ",
+                                                            // marginLeft: "0px"
+                                                            // pl: 0,
+                                                            padding: "0",
+                                                            // padding: "0px",
+                                                            maxWidth: "250px"
+                                                        },
+                                                    }}
+                                                >
+                                                    {/*<TextField*/}
+                                                    {/*    id="filled-start-adornment"*/}
+                                                    {/*    variant="filled"*/}
+                                                    {/*    value={bio}*/}
+                                                    {/*    multiline*/}
+                                                    {/*    rows={5}*/}
+                                                    {/*    sx={{*/}
+                                                    {/*        m: 1,*/}
+                                                    {/*        width: '50ch',*/}
+                                                    {/*        '@media screen and (max-width: 768px)': {*/}
+                                                    {/*            width: '30ch',*/}
+                                                    {/*        },*/}
+                                                    {/*    }}*/}
+                                                    {/*    inputProps={{maxLength: 200}}*/}
+                                                    {/*    onChange={(event) => {*/}
+                                                    {/*        setBio(event.target.value);*/}
+                                                    {/*    }}*/}
+                                                    {/*/>*/}
                                                     <TextField
                                                         id="filled-number"
-                                                        sx={{m: 1, width: '50ch'}}
+                                                        sx={{
+                                                            m: 1,
+                                                            width: '50ch',
+                                                            '@media screen and (max-width: 768px)': {
+                                                                // paddingLeft: "0px ",
+                                                                // marginLeft: "0px"
+                                                                width: '20ch',
+                                                                // maxWidth: "250px"
+                                                            },
+                                                        }}
                                                         variant="filled"
                                                         value={major}
                                                         inputProps={{maxLength: 100}}
@@ -814,11 +1066,8 @@ function SettingsSection() {
                                                     />
                                                 </Grid>
                                             </Grid>
-
                                         </Grid>
-
                                             <Stack>
-
                                                 <CardActions>
                                                     <Button variant={"contained"} style={{maxWidth:'200px', background:'#8B74BD' }} onClick={handleClickWindow('top-start')}
                                                     >Give feedback</Button>
