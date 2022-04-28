@@ -258,14 +258,14 @@ function OnePost({
     //     });
     // }
 /*
-    useEffect(() => {
-        if (user) {
-            onSnapshot(doc(database, "users", authorid), (snapshot) => {
-                setUserOnlineStatus(snapshot.data().loggedIn);
-            })
-            // getUserStatus();
-        }
-    }, [authorid]);
+    // useEffect(() => {
+    //     if (user) {
+    //         onSnapshot(doc(database, "users", authorid), (snapshot) => {
+    //             setUserOnlineStatus(snapshot.data().loggedIn);
+    //         })
+    //         // getUserStatus();
+    //     }
+    // }, [authorid]);
 */
 
     // useEffect(() => {
@@ -309,45 +309,47 @@ function OnePost({
 
     function StatusBadgeOnline() {
         return (
-            <StyledBadge
-                overlap="circular"
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                variant="dot"
-                sx={{
-                    "& .MuiBadge-badge": {
-                        backgroundColor: "#44b700",
-                        color: "#44b700",
-                    }
-                }}
-            >
+            // <StyledBadge
+            //     overlap="circular"
+            //     anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+            //     variant="dot"
+            //     sx={{
+            //         "& .MuiBadge-badge": {
+            //             backgroundColor: "#44b700",
+            //             color: "#44b700",
+            //         }
+            //     }}
+            // >
                 <Avatar
                     sx={{width: 30, height: 30}}
-                    alt={authorEmail}
-                    src={authorProfilePic}
+                    // alt={authorEmail}
+                    // src={authorProfilePic}
+                    src="/static/images/avatar/1.jpg"
                 />
-            </StyledBadge>
+            // </StyledBadge>
         );
     }
 
     const StatusBadgeOffline = () => {
         return (
-            <StyledBadge
-                overlap="circular"
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                variant="dot"
-                sx={{
-                    "& .MuiBadge-badge": {
-                    backgroundColor: '#8f8f8f',
-                    color: '#8f8f8f',
-                    }
-                }}
-            >
+            // <StyledBadge
+            //     overlap="circular"
+            //     anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+            //     variant="dot"
+            //     sx={{
+            //         "& .MuiBadge-badge": {
+            //         backgroundColor: '#8f8f8f',
+            //         color: '#8f8f8f',
+            //         }
+            //     }}
+            // >
                 <Avatar
                     sx={{width: 30, height: 30}}
-                    alt={authorEmail}
-                    src={authorProfilePic}
+                    // alt={authorEmail}
+                    // src={authorProfilePic}
+                    src="/static/images/avatar/1.jpg"
                 />
-            </StyledBadge>
+            ///*</StyledBadge>*/
         );
     }
 
@@ -385,7 +387,8 @@ function OnePost({
                                 <div>
                                     <h1> {title}</h1>
                                     {/*TODO: should this go underneath the title?*/}
-                                    <h7> {location!== "" && location}</h7>
+                                    <h5> {location!== "" && location}</h5>
+                                    {/*<h7> {location!== "" && location}</h7>*/}
                                 </div>
 
                                 {/*like button*/}
@@ -448,12 +451,14 @@ function OnePost({
                                 {/*    />*/}
                                 {/*</StyledBadge>*/}
 
-                                {userOnlineStatus ? (
-                                    <StatusBadgeOnline />
-                                ) : (
-                                    <StatusBadgeOffline />
-                                    )
-                                }
+                                <StatusBadgeOnline />
+
+                                {/*{userOnlineStatus ? (*/}
+                                {/*    <StatusBadgeOnline />*/}
+                                {/*) : (*/}
+                                {/*    <StatusBadgeOffline />*/}
+                                {/*    )*/}
+                                {/*}*/}
 
                                 <Button onClick={handleProfClick}>
                                     {authorNickName}

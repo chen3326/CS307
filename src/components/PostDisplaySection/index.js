@@ -63,8 +63,8 @@ function PostDisplaySection() {
 
                     {postLists.map((post) => {
                         return (
-
                             <OnePost
+                                key={post.id}
                                 postid={post?.id}
                                 title={post?.title}
                                 location={post?.location}
@@ -96,6 +96,7 @@ function PostDisplaySection() {
                         return (
 
                             <OnePost
+                                key={post.id}
                                 postid={post?.id}
                                 title={post?.title}
                                 topic={post?.topic}
