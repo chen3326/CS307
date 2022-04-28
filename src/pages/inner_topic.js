@@ -36,6 +36,8 @@ function Inner_topic() {
     const [postListsTopic, setPostListTopic] = useState([]);
     const [topicAuthor, setTopicAuthor] = useState("");
     const [topicAuthoruid, setTopicAuthoruid] = useState("");
+    const [topicAuthorName, setTopicAuthorName] = useState("");
+
 
     const postsTopicCollectionRef = collection(database, "posts");
     const q = query(postsTopicCollectionRef, where("topic", "==", state), limit(1));
@@ -132,6 +134,17 @@ function Inner_topic() {
         });
     }
 
+    async function getTopicAuthorName() {
+        //gets the nickname of the topic author
+        const q = query(collection(database, "users"), where("email", "==", topicAuthor));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                //console.log("!!topic email:", topicAuthor);
+                setTopicAuthorName(doc.data().author.nickName);
+            });
+        });
+    }
+
     if (loading) {
         return <div> Loading... </div>;
     } else if (user) {
@@ -140,9 +153,14 @@ function Inner_topic() {
             if (user&&!queriedTheme) {
                 setThemeEmail(user.email); //sets user's email to email
                 getUserTheme();
+
                 setQueriedTheme(true); //stops overwriting var from firebase backend
             }
         });
+        if (topicAuthor != null) { //get topic author's real name
+            //console.log("topic email:", topicAuthor);
+            getTopicAuthorName(); //no email shown!! only real name
+        }
         if (!themeModeForCheckTheme) {
             return (
                 <>
@@ -151,7 +169,7 @@ function Inner_topic() {
 
                     <Typography style={{marginTop: "5%", marginLeft: "10%"}}>
                         <h1>Topic Name: {state}</h1>
-                        <h2>Topic Author: {topicAuthor}</h2>
+                        <h2>Topic Author: {topicAuthorName}</h2>
                         <div>
                             {hasFollowed ? (
                                 <FollowButton>
@@ -216,6 +234,7 @@ function Inner_topic() {
                                 <OnePost
                                     postid={post?.id}
                                     title={post?.title}
+                                    location={post?.location}
                                     topic={post?.topic}
                                     topicAuthor={post?.topicAuthor?.email}
                                     postText={post?.postText}
@@ -228,6 +247,8 @@ function Inner_topic() {
                                     FileURl={post?.FileURl}
                                     timestamp={post?.timestamp}
                                     likes={post?.likes}
+                                    authorid={post?.author?.id}
+                                    allowComments={post?.allowComments}
                                 />
                             )
                         })}
@@ -275,16 +296,21 @@ function Inner_topic() {
                                 <OnePost
                                     postid={post?.id}
                                     title={post?.title}
+                                    location={post?.location}
                                     topic={post?.topic}
                                     topicAuthor={post?.topicAuthor?.email}
                                     postText={post?.postText}
                                     authorEmail={post?.author?.email}
+                                    authorNickName={post?.author?.display?.nickName}
+                                    authorProfilePic={post?.author?.display?.profilePic}
                                     imageUrl={post?.imageUrl}
                                     imageUrl2={post?.imageUrl2}
                                     imageUrl3={post?.imageUrl3}
                                     FileURl={post?.FileURl}
                                     timestamp={post?.timestamp}
                                     likes={post?.likes}
+                                    authorid={post?.author?.id}
+                                    allowComments={post?.allowComments}
                                 />
                             )
                         })}
