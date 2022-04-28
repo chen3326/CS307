@@ -47,7 +47,7 @@ import {useAuthState} from "react-firebase-hooks/auth";
 import {HeroContainer, HeroContainer2, HeroContent, HeroH1_2, HeroSLogo} from "../HeroSection/HeroElements";
 import logo from "../../images/Boiler Breakouts-logos.jpeg";
 import Avatar from "@mui/material/Avatar";
-import { styled } from '@mui/material/styles';
+import {styled} from '@mui/material/styles';
 import Badge from '@mui/material/Badge';
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
 import imageCompression from "browser-image-compression";
@@ -257,16 +257,16 @@ function OnePost({
     //         });
     //     });
     // }
-/*
-    // useEffect(() => {
-    //     if (user) {
-    //         onSnapshot(doc(database, "users", authorid), (snapshot) => {
-    //             setUserOnlineStatus(snapshot.data().loggedIn);
-    //         })
-    //         // getUserStatus();
-    //     }
-    // }, [authorid]);
-*/
+
+        useEffect(() => {
+            if (user) {
+                onSnapshot(doc(database, "users", authorid), (snapshot) => {
+                    setUserOnlineStatus(snapshot.data().loggedIn);
+                })
+                // getUserStatus();
+            }
+        }, [authorid]);
+
 
     // useEffect(() => {
     //     setUserOnlineStatus(true)
@@ -296,7 +296,7 @@ function OnePost({
         });
     }
 
-    const StyledBadge = styled(Badge)(({ theme }) => ({
+    const StyledBadge = styled(Badge)(({theme}) => ({
         "& .MuiBadge-badge": {
             backgroundColor: "#44b700",
             color: "#44b700",
@@ -309,47 +309,37 @@ function OnePost({
 
     function StatusBadgeOnline() {
         return (
-            // <StyledBadge
-            //     overlap="circular"
-            //     anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-            //     variant="dot"
-            //     sx={{
-            //         "& .MuiBadge-badge": {
-            //             backgroundColor: "#44b700",
-            //             color: "#44b700",
-            //         }
-            //     }}
-            // >
-                <Avatar
-                    sx={{width: 30, height: 30}}
-                    // alt={authorEmail}
-                    // src={authorProfilePic}
-                    src="/static/images/avatar/1.jpg"
-                />
-            // </StyledBadge>
+            <StyledBadge
+                overlap="circular"
+                anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
+                variant="dot"
+                sx={{
+                    "& .MuiBadge-badge": {
+                        backgroundColor: "#44b700",
+                        color: "#44b700",
+                    }
+                }}
+            >
+
+            </StyledBadge>
         );
     }
 
     const StatusBadgeOffline = () => {
         return (
-            // <StyledBadge
-            //     overlap="circular"
-            //     anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-            //     variant="dot"
-            //     sx={{
-            //         "& .MuiBadge-badge": {
-            //         backgroundColor: '#8f8f8f',
-            //         color: '#8f8f8f',
-            //         }
-            //     }}
-            // >
-                <Avatar
-                    sx={{width: 30, height: 30}}
-                    // alt={authorEmail}
-                    // src={authorProfilePic}
-                    src="/static/images/avatar/1.jpg"
-                />
-            ///*</StyledBadge>*/
+            <StyledBadge
+                overlap="circular"
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                variant="dot"
+                sx={{
+                    "& .MuiBadge-badge": {
+                    backgroundColor: '#8f8f8f',
+                    color: '#8f8f8f',
+                    }
+                }}
+            >
+
+            </StyledBadge>
         );
     }
 
@@ -387,7 +377,7 @@ function OnePost({
                                 <div>
                                     <h1> {title}</h1>
                                     {/*TODO: should this go underneath the title?*/}
-                                    <h5> {location!== "" && location}</h5>
+                                    <h5> {location !== "" && location}</h5>
                                     {/*<h7> {location!== "" && location}</h7>*/}
                                 </div>
 
@@ -396,7 +386,7 @@ function OnePost({
                                     <div>
                                         {hasLiked ? (
                                             <LikeButton
-                                            // <Button
+                                                // <Button
                                                 // className={"heartCounter"}
                                                 // onClick={likePost}
                                                 // href=""
@@ -408,7 +398,7 @@ function OnePost({
                                                 // }}
                                             > <FavoriteIcon style={{color: 'red'}}/>
                                                 <div className={"likeCounter"}>{likes.length}</div>
-                                            {/*</Button>*/}
+                                                {/*</Button>*/}
                                             </LikeButton>
                                         ) : (
                                             <LikeButton onClick={likePost} href=""> <FavoriteBorderIcon/>
@@ -451,14 +441,26 @@ function OnePost({
                                 {/*    />*/}
                                 {/*</StyledBadge>*/}
 
-                                <StatusBadgeOnline />
 
-                                {/*{userOnlineStatus ? (*/}
-                                {/*    <StatusBadgeOnline />*/}
-                                {/*) : (*/}
-                                {/*    <StatusBadgeOffline />*/}
-                                {/*    )*/}
-                                {/*}*/}
+                                {/*<StatusBadgeOnline />*/}
+
+                                <Avatar
+                                    sx={{width: 30, height: 30}}
+
+                                    src={authorProfilePic}
+
+                                />
+
+                                {userOnlineStatus ? (
+                                    <StatusBadgeOnline />
+                                ) : (
+                                    <StatusBadgeOffline />
+                                    )
+                                }
+
+
+
+
 
                                 <Button onClick={handleProfClick}>
                                     {authorNickName}
@@ -480,28 +482,28 @@ function OnePost({
                             </Stack>
 
 
-                        {/*</PostHeaderTitle>*/}
-                        {/*like button*/}
-                        {/*<div>*/}
-                        {/*    {hasLiked ? (*/}
-                        {/*        <Button onClick={likePost} href=""> <FavoriteIcon style={{color: 'red'}}/>*/}
-                        {/*            <div className={"likeCounter"}>{likes.length}</div>*/}
-                        {/*        </Button>*/}
-                        {/*    ) : (*/}
-                        {/*        <Button onClick={likePost} href=""> <FavoriteBorderIcon/>*/}
-                        {/*            <div className={"likeCounter"}>{likes.length}</div>*/}
-                        {/*        </Button>*/}
-                        {/*    )}*/}
-                        {/*</div>*/}
-                        {/*/!*save button*!/*/}
-                        {/*<div>*/}
-                        {/*    {hasSaved ? (*/}
-                        {/*        <Button onClick={savePost}> <SavedIcon style={{color: 'blue'}}/> </Button>*/}
+                            {/*</PostHeaderTitle>*/}
+                            {/*like button*/}
+                            {/*<div>*/}
+                            {/*    {hasLiked ? (*/}
+                            {/*        <Button onClick={likePost} href=""> <FavoriteIcon style={{color: 'red'}}/>*/}
+                            {/*            <div className={"likeCounter"}>{likes.length}</div>*/}
+                            {/*        </Button>*/}
+                            {/*    ) : (*/}
+                            {/*        <Button onClick={likePost} href=""> <FavoriteBorderIcon/>*/}
+                            {/*            <div className={"likeCounter"}>{likes.length}</div>*/}
+                            {/*        </Button>*/}
+                            {/*    )}*/}
+                            {/*</div>*/}
+                            {/*/!*save button*!/*/}
+                            {/*<div>*/}
+                            {/*    {hasSaved ? (*/}
+                            {/*        <Button onClick={savePost}> <SavedIcon style={{color: 'blue'}}/> </Button>*/}
 
-                        {/*    ) : (*/}
-                        {/*        <Button onClick={savePost}> <SavedIcon/></Button>*/}
-                        {/*    )}*/}
-                        {/*</div>*/}
+                            {/*    ) : (*/}
+                            {/*        <Button onClick={savePost}> <SavedIcon/></Button>*/}
+                            {/*    )}*/}
+                            {/*</div>*/}
                         </PostHeaderTitle>
                     </PostHeader>
 
@@ -556,27 +558,27 @@ function OnePost({
 
                         {/*adding a comment button*/}
 
-                            <CardActions>
-                                {allowComments ? (
-                                    <Button variant='outlined' color='primary' onClick={handleClick('bottom')}
-                                    > Add a Comment </Button>
-                                ) : (
-                                    <Button variant='outlined' color='secondary'
-                                    > Comments not allowed </Button>
-                                )}
+                        <CardActions>
+                            {allowComments ? (
+                                <Button variant='outlined' color='primary' onClick={handleClick('bottom')}
+                                > Add a Comment </Button>
+                            ) : (
+                                <Button variant='outlined' color='secondary'
+                                > Comments not allowed </Button>
+                            )}
 
-                                <Popper open={open} anchorEl={anchorEl} placement={placement} transition>
-                                    {({TransitionProps}) => (
-                                        <Fade {...TransitionProps} timeout={350}>
-                                            <Paper>
+                            <Popper open={open} anchorEl={anchorEl} placement={placement} transition>
+                                {({TransitionProps}) => (
+                                    <Fade {...TransitionProps} timeout={350}>
+                                        <Paper>
 
-                                                <Typography variant="h6" component="h2" marginLeft='10px' marginTop='5px'
-                                                            width='70%'>
-                                                    Add a Comment here
-                                                </Typography>
-                                                <Typography sx={{p: 2}}>
-                                                    click the 'Add a Comment' button again to close
-                                                    <div className="inputGp">
+                                            <Typography variant="h6" component="h2" marginLeft='10px' marginTop='5px'
+                                                        width='70%'>
+                                                Add a Comment here
+                                            </Typography>
+                                            <Typography sx={{p: 2}}>
+                                                click the 'Add a Comment' button again to close
+                                                <div className="inputGp">
 
                                                             <textarea
                                                                 style={{
@@ -594,29 +596,29 @@ function OnePost({
                                                                     setCommentText(event.target.value);
                                                                 }}
                                                             />
-                                                    </div>
-                                                    <Stack spacing={1} direction="row">
-                                                        <form onChange={event => doUpload(event)}>
-                                                            <input type="file" className="input" />
-                                                        </form>
-                                                    </Stack>
-                                                    <Stack spacing={1} direction="row">
-                                                        <h5>Uploading done {progress}%</h5>
-                                                    </Stack>
-                                                    <Stack spacing={1} direction="row">
-                                                        <label>
-                                                            <Button onClick={createComment}
-                                                                    style={{color: '#0D67B5'}}>SUBMIT</Button>
-                                                        </label>
+                                                </div>
+                                                <Stack spacing={1} direction="row">
+                                                    <form onChange={event => doUpload(event)}>
+                                                        <input type="file" className="input"/>
+                                                    </form>
+                                                </Stack>
+                                                <Stack spacing={1} direction="row">
+                                                    <h5>Uploading done {progress}%</h5>
+                                                </Stack>
+                                                <Stack spacing={1} direction="row">
+                                                    <label>
+                                                        <Button onClick={createComment}
+                                                                style={{color: '#0D67B5'}}>SUBMIT</Button>
+                                                    </label>
 
 
-                                                    </Stack>
-                                                </Typography>
-                                            </Paper>
-                                        </Fade>
-                                    )}
-                                </Popper>
-                            </CardActions>
+                                                </Stack>
+                                            </Typography>
+                                        </Paper>
+                                    </Fade>
+                                )}
+                            </Popper>
+                        </CardActions>
 
 
                         <div
@@ -735,28 +737,28 @@ function OnePost({
 
                         {/*adding a comment button*/}
 
-                            <CardActions>
+                        <CardActions>
 
 
-                                {allowComments ? (
-                                    <Button variant='outlined' color='primary' onClick={handleClick('bottom')}
-                                    > Add a Comment </Button>
-                                ) : (
-                                    <Button variant='outlined' color='secondary'
-                                    > Comments not allowed </Button>
-                                )}
-                                <Popper open={open} anchorEl={anchorEl} placement={placement} transition>
-                                    {({TransitionProps}) => (
-                                        <Fade {...TransitionProps} timeout={350}>
-                                            <Paper>
-                                                <Typography variant="h6" component="h2" marginLeft='10px'
-                                                            marginTop='5px'
-                                                            width='450px'>
-                                                    Add a Comment here
-                                                </Typography>
-                                                <Typography sx={{p: 2}}>
-                                                    click the 'Add a Comment' button again to close
-                                                    <div className="inputGp">
+                            {allowComments ? (
+                                <Button variant='outlined' color='primary' onClick={handleClick('bottom')}
+                                > Add a Comment </Button>
+                            ) : (
+                                <Button variant='outlined' color='secondary'
+                                > Comments not allowed </Button>
+                            )}
+                            <Popper open={open} anchorEl={anchorEl} placement={placement} transition>
+                                {({TransitionProps}) => (
+                                    <Fade {...TransitionProps} timeout={350}>
+                                        <Paper>
+                                            <Typography variant="h6" component="h2" marginLeft='10px'
+                                                        marginTop='5px'
+                                                        width='450px'>
+                                                Add a Comment here
+                                            </Typography>
+                                            <Typography sx={{p: 2}}>
+                                                click the 'Add a Comment' button again to close
+                                                <div className="inputGp">
 
                                                             <textarea
                                                                 style={{
@@ -774,21 +776,21 @@ function OnePost({
                                                                     setCommentText(event.target.value);
                                                                 }}
                                                             />
-                                                    </div>
-                                                    <Stack spacing={1} direction="row">
-                                                        <label>
-                                                            <Button onClick={createComment}
-                                                                    style={{color: '#0D67B5'}}>SUBMIT</Button>
-                                                        </label>
+                                                </div>
+                                                <Stack spacing={1} direction="row">
+                                                    <label>
+                                                        <Button onClick={createComment}
+                                                                style={{color: '#0D67B5'}}>SUBMIT</Button>
+                                                    </label>
 
 
-                                                    </Stack>
-                                                </Typography>
-                                            </Paper>
-                                        </Fade>
-                                    )}
-                                </Popper>
-                            </CardActions>
+                                                </Stack>
+                                            </Typography>
+                                        </Paper>
+                                    </Fade>
+                                )}
+                            </Popper>
+                        </CardActions>
                         }
 
 
