@@ -1,0 +1,21 @@
+{
+  "id": "b1187e84-69c0-4e23-979b-1c2cc3017c70",
+  "version": "2.0",
+  "name": "cs307 sprin3 autotest",
+  "url": "",
+  "tests": [{
+    "id": "4b3c1b91-9850-4ba2-88ee-539b796e89d1",
+    "name": "Untitled",
+    "commands": []
+  }],
+  "suites": [{
+    "id": "d6ffcb9c-eac7-40ef-97f0-5d7da2e9361f",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["4b3c1b91-9850-4ba2-88ee-539b796e89d1"]
+  }],
+  "urls": [],
+  "plugins": []
+}
