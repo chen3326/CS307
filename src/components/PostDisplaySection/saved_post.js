@@ -110,16 +110,21 @@ function SavedPost_display() {
                                     <OnePost
                                         postid={post?.id}
                                         title={post?.title}
+                                        location = {post?.location}
                                         topic={post?.topic}
                                         topicAuthor={post?.topicAuthor?.email}
                                         postText={post?.postText}
                                         authorEmail={post?.author?.email}
+                                        authorNickName={post?.author?.display?.nickName}
+                                        authorProfilePic={post?.author?.display?.profilePic}
                                         imageUrl={post?.imageUrl}
                                         imageUrl2={post?.imageUrl2}
                                         imageUrl3={post?.imageUrl3}
                                         FileURl={post?.FileURl}
                                         timestamp={post?.timestamp}
                                         likes={post?.likes}
+                                        authorid={post?.author?.id}
+                                        allowComments={post?.allowComments}
                                     />
                                 ) : (
                                     <div/>
