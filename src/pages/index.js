@@ -34,10 +34,8 @@ function Home() {
             <NavSection/>
 
             <HeroSection/>
+
             <PostDisplayContainer>
-
-            <HeroSection/>
-
                 {allposts ? (
                     <Button
                         variant="outlined"
@@ -53,6 +51,7 @@ function Home() {
                 )}
 
             </PostDisplayContainer>
+
             {allposts ? (
                 <PostDisplaySection/>
             ) : (
