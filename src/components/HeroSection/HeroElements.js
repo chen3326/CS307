@@ -29,6 +29,17 @@ export const HeroContainer2 = styled.div`
   -moz-osx-font-smoothing: grayscale;
 `;
 
+export const HeroContainer2_sm = styled.div`
+  background: #121212;//rgb(234,159,68);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: 5vh;
+  font-family: 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+`;
+
 export const HeroContent = styled.div`
   display: flex;
   flex-direction: column;
