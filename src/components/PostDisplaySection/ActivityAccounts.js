@@ -108,7 +108,6 @@ function ActivityCard({
         );
     } else if (user) {
         //get current user's email and settings data
-        console.log("START AGAIN");
         onAuthStateChanged(auth, (user) => {
             if (user&&!queriedTheme) {
                 setThemeEmail(user.email); //sets user's email to email
