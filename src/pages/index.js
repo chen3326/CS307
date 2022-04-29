@@ -34,7 +34,30 @@ function Home() {
             <NavSection/>
 
             <HeroSection/>
+            <PostDisplayContainer>
 
+            <HeroSection/>
+
+                {allposts ? (
+                    <Button
+                        variant="outlined"
+                        onClick={setdisplaymode} href="">
+                        <div> displaying all the posts</div>
+                    </Button>
+                ) : (
+                    <Button
+                        variant="outlined"
+                        onClick={setdisplaymode} href="">
+                        <div> displaying posts in the timeline</div>
+                    </Button>
+                )}
+
+            </PostDisplayContainer>
+            {allposts ? (
+                <PostDisplaySection/>
+            ) : (
+                <TimelineSection/>
+            )}
 
 
             <MakePost/>

@@ -406,6 +406,7 @@ function FullWidthTabs() {
 
 function ProfileSection() {
 
+    const [welcome, setWelcome] = useState("");
     const [email, setEmail] = useState(""); //email for user auth
     const [nickName, setnickName] = useState("");
     const [major, setMajor] = useState("");
@@ -472,6 +473,11 @@ function ProfileSection() {
     async function handleProfClick(id) {
         window.location = `/profile/${id}`;
     }
+
+    async function welcomeHome() {
+        setWelcome(`Welcome ${auth.currentUser.email}`);
+    }
+
 
     useEffect(() => {
         if (user) {
@@ -624,7 +630,12 @@ function ProfileSection() {
                 setProfilePic(snapshot.data().author.profilePic);
                 setUserOnlineStatus(snapshot.data().loggedIn);
                 })
+            if (user.email===profileUser) {
+                welcomeHome();
+                console.log("HOME");
+            }
         }
+
     }, [user, profileUser]);
 
     // useEffect(() => {
@@ -644,7 +655,6 @@ function ProfileSection() {
         // getUserStatus()
         if (user.email===profileUser || !privateProfile ){
 
-
             onAuthStateChanged(auth, (user) => {
                 if (user&&!queriedTheme) {
                     setThemeEmail(user.email); //sets user's email to email
@@ -652,6 +662,7 @@ function ProfileSection() {
                     setQueriedTheme(true); //stops overwriting var from firebase backend
                 }
             });
+
 
             if (!themeModeForCheckTheme) {
                 return (
@@ -696,6 +707,10 @@ function ProfileSection() {
                                            spacing={2}
                                     >
                                         <ProfilePic src={profilePic}/>
+                                        <div>
+                                            {welcome}
+                                        </div>
+
                                         <div>Bio: {bio}</div>
                                         <div>Age: {age}</div>
                                         <div>Year: {year}</div>

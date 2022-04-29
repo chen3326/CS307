@@ -186,31 +186,7 @@ function HeroSection() {
                         </div>
                     </HeroContainer2>
 
-                    <div>
-                        <PostDisplayContainer>
 
-                            {allposts ? (
-                                <Button
-                                    variant="outlined"
-                                    onClick={setdisplaymode} href="">
-                                    <div> displaying all the posts</div>
-                                </Button>
-                            ) : (
-                                <Button
-                                    variant="outlined"
-                                    onClick={setdisplaymode} href="">
-                                    <div> displaying posts in the timeline</div>
-                                </Button>
-                            )}
-
-                        </PostDisplayContainer>
-
-                        {allposts ? (
-                            <PostDisplaySection/>
-                        ) : (
-                            <TimelineSection/>
-                        )}
-                    </div>
                 </div>
             )
         }
