@@ -1,6 +1,8 @@
 import SavedPost_display from "../components/PostDisplaySection/saved_post";
 import SidebarSection from "../components/SidebarSection";
 import NavSection from "../components/NavbarSection";
+import BottomNavbarSection from "../components/BottomNavbarSection/BottomNavbarSection";
+import * as React from "react";
 
 
 function SavedPost_page() {
@@ -10,6 +12,7 @@ function SavedPost_page() {
             <SidebarSection/>
             <NavSection/>
             <SavedPost_display/>
+            <BottomNavbarSection/>
 
         </>
     );

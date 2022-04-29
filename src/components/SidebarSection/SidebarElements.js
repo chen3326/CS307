@@ -34,8 +34,9 @@ export const SideDark = styled.nav`
   position: fixed;
   top: 0;
   z-index: 10;
-
-
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 
 export const SidebarContainer = styled.div`

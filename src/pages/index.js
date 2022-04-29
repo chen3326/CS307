@@ -4,6 +4,7 @@ import NavSection from "../components/NavbarSection";
 import SidebarSection from "../components/SidebarSection";
 
 import MakePost from "../components/MakePostSection";
+import BottomNavbarSection from "../components/BottomNavbarSection/BottomNavbarSection";
 
 import * as React from "react";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -56,6 +57,7 @@ function Home() {
 
             <MakePost/>
 
+            <BottomNavbarSection/>
         </>
     );
 }
