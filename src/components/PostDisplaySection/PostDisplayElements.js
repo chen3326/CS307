@@ -88,6 +88,14 @@ export const PostHeaderTopButtons = styled.div`
   align-items: center;
 `
 
+export const PostHeaderTopButtonsDark = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  background-color:rgb(75, 75, 75) ;
+`
+
 export const LikeButton = styled.button`
   display: flex;
   flex-direction: row;

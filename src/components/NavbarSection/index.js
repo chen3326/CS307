@@ -170,7 +170,7 @@ import {
     // NavBtnLinkR, NavDark
 } from './NavbarElements';
 
-const pages = ['Settings', 'Profile', 'Logout'];
+const pages = ['Home', 'Saved', 'Activity', 'Settings', 'Profile', 'Logout'];
 const settings = ['Profile'];
 
 const Navbar = () => {
@@ -223,6 +223,10 @@ const Navbar = () => {
     async function handleMenuClick(pageName) {
         if (pageName === "Home") {
             window.location.href = `/home`;
+        } else if (pageName === "Saved") {
+            window.location.href = `/saved`;
+        } else if (pageName === "Activity") {
+            window.location.href = `/interactions`;
         } else if (pageName === "Settings") {
             window.location.href = `/settings`;
         } else if (pageName === "Profile") {

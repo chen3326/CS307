@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {
     HeroContainer, HeroContent,
-    HeroSLogo, HeroContainer2,HeroH1_2,
+    HeroSLogo, HeroContainer2, HeroH1_2, HeroContainer2_sm,
 } from './HeroElements';
 import logo from '../../images/Boiler Breakouts-logos.jpeg';
 import logoDark from '../../images/Boiler Breakouts-logos_transparent.png';
@@ -15,8 +15,10 @@ import OnePost from "../PostDisplaySection/Post";
 import {
     Link
 } from "react-router-dom";
-import {NewLine} from "../PostDisplaySection/PostDisplayElements";
-
+import {NewLine, PostDisplayContainer} from "../PostDisplaySection/PostDisplayElements";
+import Button from "@material-ui/core/Button";
+import PostDisplaySection from "../PostDisplaySection";
+import TimelineSection from "../PostDisplaySection/timeline";
 
 
 
@@ -35,6 +37,11 @@ function HeroSection() {
     const postsCollectionRef = collection(database, "posts");
     const topics = [];
     const justTopics = [];
+
+    const [allposts, setAllposts] = useState(false); //choose what posts you want to see
+    const setdisplaymode = async () => {
+        setAllposts(!allposts)
+    };
 
     useEffect(() => {
         onSnapshot(query(postsCollectionRef, orderBy('timestamp', 'desc')), snapshot => {
@@ -155,27 +162,54 @@ function HeroSection() {
                             <HeroSLogo src={logoDark}/>
 
                         </HeroContent>
-
                     </HeroContainer2>
-                    <div align={"center"}>
-                        <HeroH1_2> Topics On Boiler Breakout: </HeroH1_2>
-                        {topics.map((topic) => {
-                            return (
-                                <div>
-                                    <NewLine>
-                                        <Link to={{
-                                            pathname: "/inner_topic",
-                                            state: topic[0],
-                                            topicAuthor: topic[1],
-                                            // your data array of objects
-                                        }}
-                                        >
-                                            {topic[0]}
-                                        </Link>
-                                    </NewLine>
-                                </div>
-                            )
-                        })}
+                    <HeroContainer2>
+                        <div align={"center"}>
+                            <HeroH1_2> Topics On Boiler Breakout: </HeroH1_2>
+                            {topics.map((topic) => {
+                                return (
+                                    <div>
+                                        <NewLine>
+                                            <Link to={{
+                                                pathname: "/inner_topic",
+                                                state: topic[0],
+                                                topicAuthor: topic[1],
+                                                // your data array of objects
+                                            }}
+                                            >
+                                                {topic[0]}
+                                            </Link>
+                                        </NewLine>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </HeroContainer2>
+
+                    <div>
+                        <PostDisplayContainer>
+
+                            {allposts ? (
+                                <Button
+                                    variant="outlined"
+                                    onClick={setdisplaymode} href="">
+                                    <div> displaying all the posts</div>
+                                </Button>
+                            ) : (
+                                <Button
+                                    variant="outlined"
+                                    onClick={setdisplaymode} href="">
+                                    <div> displaying posts in the timeline</div>
+                                </Button>
+                            )}
+
+                        </PostDisplayContainer>
+
+                        {allposts ? (
+                            <PostDisplaySection/>
+                        ) : (
+                            <TimelineSection/>
+                        )}
                     </div>
                 </div>
             )

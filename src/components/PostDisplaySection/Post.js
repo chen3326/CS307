@@ -630,15 +630,101 @@ function OnePost({
             );
         } else {
             return (
-                <PostDark>
+
+                <Post>
                     <PostHeader>
                         <PostHeaderTitle>
-                            <h1> {title}</h1>
+                            <PostHeaderTop>
+                                <div>
+                                    <h1> {title}</h1>
+                                    {/*TODO: should this go underneath the title?*/}
+                                    <h5> {location !== "" && location}</h5>
+                                    {/*<h7> {location!== "" && location}</h7>*/}
+                                </div>
+
+                                {/*like button*/}
+                                <PostHeaderTopButtons>
+                                    <div>
+                                        {hasLiked ? (
+                                            <LikeButton
+                                                // <Button
+                                                // className={"heartCounter"}
+                                                // onClick={likePost}
+                                                // href=""
+                                                // sx={{
+                                                //     px: 0,
+                                                //     // paddingLeft: 0,
+                                                //     // paddingRight: 0,
+                                                //     // height: 30
+                                                // }}
+                                            > <FavoriteIcon style={{color: 'red'}}/>
+                                                <div className={"likeCounter"}>{likes.length}</div>
+                                                {/*</Button>*/}
+                                            </LikeButton>
+                                        ) : (
+                                            <LikeButton onClick={likePost} href=""> <FavoriteBorderIcon/>
+                                                <div className={"likeCounter"}>{likes.length}</div>
+                                            </LikeButton>
+                                        )}
+                                    </div>
+                                    {/*save button*/}
+                                    <div>
+                                        {hasSaved ? (
+                                            <SaveButton onClick={savePost}>
+                                                <SavedIcon style={{color: 'blue'}}/>
+                                            </SaveButton>
+                                        ) : (
+                                            <SaveButton onClick={savePost}>
+                                                <SavedIcon/>
+                                            </SaveButton>
+                                        )}
+                                    </div>
+                                </PostHeaderTopButtons>
+                            </PostHeaderTop>
 
                             <Stack direction="row" alignItems="center" spacing={1}>
 
-                                <Button onClick={handleProfClick} style={{color: '#FFDAB9'}}>
-                                    {authorEmail}
+                                {/*<StyledBadge*/}
+                                {/*    overlap="circular"*/}
+                                {/*    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}*/}
+                                {/*    variant="dot"*/}
+                                {/*    sx={{*/}
+                                {/*        "& .MuiBadge-badge": {*/}
+                                {/*            backgroundColor: "#44b700",*/}
+                                {/*            color: "#44b700",*/}
+                                {/*        }*/}
+                                {/*    }}*/}
+                                {/*>*/}
+                                {/*    <Avatar*/}
+                                {/*        sx={{width: 30, height: 30}}*/}
+                                {/*        alt={authorEmail}*/}
+                                {/*        src={authorProfilePic}*/}
+                                {/*    />*/}
+                                {/*</StyledBadge>*/}
+
+
+                                {/*<StatusBadgeOnline />*/}
+
+                                <Avatar
+                                    sx={{width: 30, height: 30}}
+
+                                    src={authorProfilePic}
+
+                                />
+
+                                {userOnlineStatus ? (
+                                    <StatusBadgeOnline />
+                                ) : (
+                                    <StatusBadgeOffline />
+                                )
+                                }
+
+
+
+
+
+                                <Button onClick={handleProfClick}>
+                                    {authorNickName}
                                 </Button>
 
                                 <div>|</div>
@@ -647,10 +733,9 @@ function OnePost({
                                     <Link to={{
                                         pathname: "/inner_topic",
                                         state: topic,
-                                        //topicAuthor: topicAuthor,
+                                        topicAuthor: topicAuthor,
                                         // your data array of objects
                                     }}
-                                          style={{color: '#F0E68C'}}
                                     >
                                         {topic}
                                     </Link>
@@ -658,32 +743,29 @@ function OnePost({
                             </Stack>
 
 
-                        </PostHeaderTitle>
-                        {/*like button*/}
-                        <div>
-                            {hasLiked ? (
-                                <Button onClick={likePost} style={{color: 'rgba(255, 255, 255, 0.85)'}} href="">
-                                    <FavoriteIcon style={{color: 'red'}}/>
-                                    <div className={"likeCounter"}>{likes.length}</div>
-                                </Button>
-                            ) : (
-                                <Button onClick={likePost} style={{color: 'rgba(255, 255, 255, 0.85)'}} href="">
-                                    <FavoriteBorderIcon/>
-                                    <div className={"likeCounter"}>{likes.length}</div>
-                                </Button>
-                            )}
-                        </div>
-                        {/*save button*/}
-                        <div>
-                            {hasSaved ? (
-                                <Button onClick={savePost} style={{color: 'rgba(255, 255, 255, 0.85)'}}> <SavedIcon
-                                    style={{color: 'blue'}}/> </Button>
+                            {/*</PostHeaderTitle>*/}
+                            {/*like button*/}
+                            {/*<div>*/}
+                            {/*    {hasLiked ? (*/}
+                            {/*        <Button onClick={likePost} href=""> <FavoriteIcon style={{color: 'red'}}/>*/}
+                            {/*            <div className={"likeCounter"}>{likes.length}</div>*/}
+                            {/*        </Button>*/}
+                            {/*    ) : (*/}
+                            {/*        <Button onClick={likePost} href=""> <FavoriteBorderIcon/>*/}
+                            {/*            <div className={"likeCounter"}>{likes.length}</div>*/}
+                            {/*        </Button>*/}
+                            {/*    )}*/}
+                            {/*</div>*/}
+                            {/*/!*save button*!/*/}
+                            {/*<div>*/}
+                            {/*    {hasSaved ? (*/}
+                            {/*        <Button onClick={savePost}> <SavedIcon style={{color: 'blue'}}/> </Button>*/}
 
-                            ) : (
-                                <Button onClick={savePost} style={{color: 'rgba(255, 255, 255, 0.85)'}}>
-                                    <SavedIcon/></Button>
-                            )}
-                        </div>
+                            {/*    ) : (*/}
+                            {/*        <Button onClick={savePost}> <SavedIcon/></Button>*/}
+                            {/*    )}*/}
+                            {/*</div>*/}
+                        </PostHeaderTitle>
                     </PostHeader>
 
                     <PostDisplayContainer>
@@ -738,8 +820,6 @@ function OnePost({
                         {/*adding a comment button*/}
 
                         <CardActions>
-
-
                             {allowComments ? (
                                 <Button variant='outlined' color='primary' onClick={handleClick('bottom')}
                                 > Add a Comment </Button>
@@ -747,13 +827,14 @@ function OnePost({
                                 <Button variant='outlined' color='secondary'
                                 > Comments not allowed </Button>
                             )}
+
                             <Popper open={open} anchorEl={anchorEl} placement={placement} transition>
                                 {({TransitionProps}) => (
                                     <Fade {...TransitionProps} timeout={350}>
                                         <Paper>
-                                            <Typography variant="h6" component="h2" marginLeft='10px'
-                                                        marginTop='5px'
-                                                        width='450px'>
+
+                                            <Typography variant="h6" component="h2" marginLeft='10px' marginTop='5px'
+                                                        width='70%'>
                                                 Add a Comment here
                                             </Typography>
                                             <Typography sx={{p: 2}}>
@@ -762,7 +843,7 @@ function OnePost({
 
                                                             <textarea
                                                                 style={{
-                                                                    width: '400px',
+                                                                    width: '85%',
                                                                     height: '80px',
                                                                     marginTop: '0px',
                                                                     marginBottom: '15px',
@@ -778,6 +859,14 @@ function OnePost({
                                                             />
                                                 </div>
                                                 <Stack spacing={1} direction="row">
+                                                    <form onChange={event => doUpload(event)}>
+                                                        <input type="file" className="input"/>
+                                                    </form>
+                                                </Stack>
+                                                <Stack spacing={1} direction="row">
+                                                    <h5>Uploading done {progress}%</h5>
+                                                </Stack>
+                                                <Stack spacing={1} direction="row">
                                                     <label>
                                                         <Button onClick={createComment}
                                                                 style={{color: '#0D67B5'}}>SUBMIT</Button>
@@ -791,14 +880,15 @@ function OnePost({
                                 )}
                             </Popper>
                         </CardActions>
-                        }
 
 
+                        <div
+                            align="left">{timestamp.toDate().getDate().toString() + "/" + (timestamp.toDate().getMonth() + 1).toString() + "/" + timestamp.toDate().getFullYear().toString() + " | " + timestamp.toDate().getHours().toString() + ":" + timestamp.toDate().getMinutes().toString()}</div>
                     </PostDisplayContainer>
 
 
-                </PostDark>
-            )
+                </Post>
+            );
         }
 
     } else if (error) {

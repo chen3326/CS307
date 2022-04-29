@@ -92,6 +92,9 @@ function Sidebar(){
                             <SideBtn>
                                 <SideBtnLink href="/saved"> <SavedIcon/></SideBtnLink>
                             </SideBtn>
+                            <SideBtn>
+                                <SideBtnLink href="/interactions"> <ContactsIcon/></SideBtnLink>
+                            </SideBtn>
 
                         </SidebarContainer>
                     </SideDark>
